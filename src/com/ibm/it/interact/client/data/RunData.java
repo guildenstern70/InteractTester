@@ -10,6 +10,7 @@ package com.ibm.it.interact.client.data;
 
 import com.ibm.it.interact.client.Utils;
 
+import java.io.File;
 import java.io.Serializable;
 
 /**
@@ -24,7 +25,7 @@ public class RunData implements Serializable
     private transient InteractConnection interactURL;
 
     // Session data
-    private String runDataName;
+    private String fullFilePath;
     private boolean hasBeenModified;
 
     // Panels data
@@ -123,14 +124,30 @@ public class RunData implements Serializable
         this.sessionId = sessionId;
     }
 
-    public String getRunDataName()
+    public String getRunDataFilePath()
     {
-        return runDataName;
+        return this.fullFilePath;
     }
 
-    public void setRunDataName(String runDataName)
+    public String getRunDataName()
     {
-        this.runDataName = runDataName;
+        String fileName = "";
+
+        if (this.fullFilePath != null)
+        {
+            fileName = new File(this.fullFilePath).getName();
+            if (fileName.endsWith(".itf"))
+            {
+                fileName = fileName.substring(0, fileName.length() - 4);
+            }
+        }
+
+        return fileName;
+    }
+
+    public void setRunDataFilePath(String runDataFullPath)
+    {
+        this.fullFilePath = runDataFullPath;
     }
 
     public boolean isHasBeenModified()

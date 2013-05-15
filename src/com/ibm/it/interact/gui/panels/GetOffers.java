@@ -183,8 +183,7 @@ public final class GetOffers implements ITabbedPanel
         {
             if (this.isReadyToRun()) // validation
             {
-                RunData rd = new RunData(this.parent.getInteractServer(),
-                        this.parent.getSessionId());
+                RunData rd = new RunData(this.parent.getInteractServer(), this.parent.getSessionId());
                 GetOffersData god = this.getDataFromUI();
                 if (god != null)
                 {

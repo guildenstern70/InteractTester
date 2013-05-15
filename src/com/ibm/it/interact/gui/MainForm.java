@@ -36,6 +36,8 @@ import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -69,6 +71,7 @@ public final class MainForm
     // Business logic
     private Client client;
     private Settings settings;
+    private RunData currentRunData;
 
     // Panels
     private StartSession startSessionPanel;
@@ -285,6 +288,22 @@ public final class MainForm
         jMenuHelpAbout = new javax.swing.JMenuItem();
 
         jMenuFile.setText("File");
+        jMenuFile.addMenuListener(new MenuListener()
+        {
+
+            public void menuSelected(MenuEvent e)
+            {
+                updateMenu();
+            }
+
+            public void menuDeselected(MenuEvent e)
+            {
+            }
+
+            public void menuCanceled(MenuEvent e)
+            {
+            }
+        });
 
         jMenuFileNew.setText("New");
         jMenuFileNew.addActionListener(new java.awt.event.ActionListener()
@@ -296,7 +315,7 @@ public final class MainForm
 
             private void jMenuFileNewActionPerformed(ActionEvent evt)
             {
-                resetControlsAndNew();
+                newAndReset();
             }
         });
         jMenuFile.add(jMenuFileNew);
@@ -326,7 +345,7 @@ public final class MainForm
 
             private void jMenuFileSaveActionPerformed(ActionEvent evt)
             {
-                //Implement menu handler event here.
+                save();
             }
         });
         jMenuFile.add(jMenuFileSave);
@@ -341,7 +360,7 @@ public final class MainForm
 
             private void jMenuFileSaveAsActionPerformed(ActionEvent evt)
             {
-                save();
+                saveAs();
             }
         });
         jMenuFile.add(jMenuFileSaveAs);
@@ -609,7 +628,7 @@ public final class MainForm
 
     private void testConnection()
     {
-        RunData rd = new RunData(this.getInteractServer(), null);
+        RunData rd = this.getCurrentRunData();
         client.testConnection(rd);
     }
 
@@ -648,14 +667,19 @@ public final class MainForm
 
     }
 
-    private void resetControlsAndNew()
+    private void newAndReset()
     {
         // Console
-        this.txtConsole.setText("");
-        this.client.getLogger().log("Welcome to Unica Interact Tester.");
+        this.client.getLogger().log("New test. Zeroing out parameters.");
+
+        // Business Logic
+        this.currentRunData = new RunData(this.getInteractServer(), null);
 
         // Session ID
         this.sessionTextField.setText("");
+
+        // Title
+        this.frame.setTitle(TITLE);
 
         // Panels
         this.startSessionPanel.clear();
@@ -707,13 +731,16 @@ public final class MainForm
     private void saveRunData(String filePath)
     {
         RunData runData = this.getCurrentRunData();
+        runData.setRunDataFilePath(filePath);
         RunDataSerializer.Serialize(runData, filePath, this.client.getLogger());
+        this.updateTitle(runData);
     }
 
     private void loadRunData(String filePath)
     {
         RunData runData = RunDataSerializer.Deserialize(filePath, this.client.getLogger());
         this.updateUI(runData);
+        this.currentRunData = runData;
     }
 
     private void endSession()
@@ -737,8 +764,20 @@ public final class MainForm
         this.initializeControls();
     }
 
+    private void updateTitle(RunData runData)
+    {
+        String fileName = runData.getRunDataName();
+        if (Utils.isNotNullNotEmptyNotWhiteSpace(fileName))
+        {
+            this.frame.setTitle(TITLE + " - [" + fileName + "]");
+        }
+    }
+
     private void updateUI(RunData runData)
     {
+        // Title
+        this.updateTitle(runData);
+
         // Session Data
         this.startSessionPanel.updateUIFromData(runData.getStartSessionData());
 
@@ -773,7 +812,14 @@ public final class MainForm
         InteractConnection url = (InteractConnection) this.interactURLComboBox.getSelectedItem();
         String sessionId = this.sessionTextField.getText();
 
+        String runDataName;
         RunData runData = new RunData(url, sessionId);
+
+        if (this.currentRunData != null)
+        {
+            runDataName = this.currentRunData.getRunDataFilePath();
+            runData.setRunDataFilePath(runDataName);
+        }
 
         // Start Session Data
         runData.setStartSessionData(this.startSessionPanel.getDataFromUI());
@@ -847,7 +893,36 @@ public final class MainForm
 
     }
 
+    private void updateMenu()
+    {
+        boolean enableSave = false;
+
+        if (this.currentRunData != null)
+        {
+            String fileName = this.currentRunData.getRunDataName();
+            if (Utils.isNotNullNotEmptyNotWhiteSpace(fileName))
+            {
+                enableSave = true;
+            }
+        }
+        this.jMenuFileSave.setEnabled(enableSave);
+    }
+
     private void save()
+    {
+        XLog logger = this.client.getLogger();
+        String filePath = this.currentRunData.getRunDataFilePath();
+        this.save(logger, filePath);
+    }
+
+    private void save(XLog logger, String filePath)
+    {
+        logger.log("Saving data to " + filePath + "...");
+        this.saveRunData(filePath);
+        logger.log("Saved. ");
+    }
+
+    private void saveAs()
     {
         XLog logger = this.client.getLogger();
         this.fileChooser.setDialogTitle("Save session data");
@@ -875,9 +950,7 @@ public final class MainForm
                 }
             }
 
-            logger.log("Saving data to " + filePath + "...");
-            this.saveRunData(filePath);
-            logger.log("Saved. ");
+            this.save(logger, filePath);
         }
         else
         {

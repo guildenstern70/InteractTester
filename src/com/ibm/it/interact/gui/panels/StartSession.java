@@ -194,8 +194,7 @@ public final class StartSession implements ITabbedPanel
 
             if (this.isReadyToRun()) // validation
             {
-                RunData rd = new RunData(this.parent.getInteractServer(),
-                        this.parent.getSessionId());
+                RunData rd = new RunData(this.parent.getInteractServer(), this.parent.getSessionId());
                 rd.setStartSessionData(this.getDataFromUI());
                 this.client.runStartSession(rd, true);
             }

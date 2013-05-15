@@ -170,8 +170,7 @@ public final class PostEvent implements ITabbedPanel
         {
             if (this.isReadyToRun()) // validation
             {
-                RunData rd = new RunData(this.parent.getInteractServer(),
-                        this.parent.getSessionId());
+                RunData rd = new RunData(this.parent.getInteractServer(), this.parent.getSessionId());
                 PostEventData pod = this.getDataFromUI();
                 if (pod != null)
                 {
@@ -205,8 +204,7 @@ public final class PostEvent implements ITabbedPanel
         {
             if (Utils.isNotNullNotEmptyNotWhiteSpace(interactionPoint))
             {
-                RunData rd = new RunData(this.parent.getInteractServer(),
-                        this.parent.getSessionId());
+                RunData rd = new RunData(this.parent.getInteractServer(), this.parent.getSessionId());
                 GetOffersData god = new GetOffersData();
                 god.setInteractionPoint(interactionPoint);
                 god.setNumberOfOffers(20);  // We try and get all offers here

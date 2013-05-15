@@ -25,6 +25,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Set;
@@ -64,32 +66,112 @@ public class ConnectionManager extends JDialog
                 super.focusLost(e);
             }
         });
+        interactServerURLTextField.addFocusListener(new FocusAdapter()
+        {
+            @Override
+            public void focusLost(FocusEvent e)
+            {
+                modifyUrl();
+                super.focusLost(e);
+            }
+        });
+    }
+
+    private void modifyUrl()
+    {
+        String newUrl = this.interactServerURLTextField.getText();
+
+        try
+        {
+            URL tryUrl = new URL(newUrl);
+            if (Utils.isNotNullNotEmptyNotWhiteSpace(newUrl))
+            {
+                this.modifyConnection();
+            }
+        }
+        catch (MalformedURLException e)
+        {
+            JOptionPane.showMessageDialog(this,
+                    "The URL is not valid.",
+                    "Unrecognized URL format.", JOptionPane.ERROR_MESSAGE);
+            this.interactServerURLTextField.setText("");
+        }
+
+
     }
 
     private void modifyName()
     {
         String newConnectionName = this.connectionNameTextField.getText();
-        if (newConnectionName.contains(" "))
+
+        if (Utils.isNotNullNotEmptyNotWhiteSpace(newConnectionName))
         {
-            JOptionPane.showMessageDialog(this,
-                    "Connection name cannot contain spaces.",
-                    "Invalid name", JOptionPane.ERROR_MESSAGE);
-        } else
-        {
-            InteractConnection oldConn = (InteractConnection) this.connectionsList.getSelectedValue();
-            if (oldConn != null)
+            if (newConnectionName.contains(" "))
             {
-                InteractConnection newConn = new InteractConnection(newConnectionName,
-                        this.interactServerURLTextField.getText());
-                this.modifyConnection(oldConn, newConn);
+                JOptionPane.showMessageDialog(this,
+                        "Connection name cannot contain spaces.",
+                        "Invalid name", JOptionPane.ERROR_MESSAGE);
+            }
+            else
+            {
+                this.modifyConnection();
                 DefaultListModel model = (DefaultListModel) this.connectionsList.getModel();
                 this.connectionsList.setSelectedIndex(model.getSize() - 1);
             }
         }
     }
 
-    private void modifyConnection(InteractConnection oldConn, InteractConnection newConn)
+    private void modifyConnection()
     {
+        InteractConnection oldServer = (InteractConnection) this.connectionsList.getSelectedValue();
+
+        if (oldServer != null)
+        {
+            String connectionName = this.connectionNameTextField.getText();
+            String connectionUrl = this.interactServerURLTextField.getText();
+            InteractConnection newServer = new InteractConnection(connectionName, connectionUrl);
+            this.replaceOrAddServer(oldServer, newServer);
+        }
+        else
+        {
+            System.out.println("A server is not selected from the list.");
+        }
+
+    }
+
+    private void replaceOrAddServer(InteractConnection oldServer, InteractConnection newServer)
+    {
+        DefaultListModel model = (DefaultListModel) this.connectionsList.getModel();
+        int connections = model.getSize();
+
+        // Build a list of servers. If the oldServer is found, it is not added
+        // to the list: it will be added the new one. If it is not found, then
+        // the new one will be added.
+        ArrayList<InteractConnection> connectionArrayList = new ArrayList<InteractConnection>(connections);
+        for (int j = 0; j < model.getSize(); j++)
+        {
+            InteractConnection tempConn = (InteractConnection) model.getElementAt(j);
+            if (!tempConn.equals(oldServer))
+            {
+                System.out.println("Found existing connection " + oldServer.toString());
+                connectionArrayList.add(tempConn);
+            }
+        }
+        connectionArrayList.add(newServer);
+
+        // Clear the list and replace with the new one
+        model.clear();
+        for (InteractConnection conn : connectionArrayList)
+        {
+            model.addElement(conn);
+        }
+
+    }
+
+    private void modifyConnection(String newConnectionName, InteractConnection oldConn)
+    {
+        InteractConnection newConn = new InteractConnection(newConnectionName,
+                this.interactServerURLTextField.getText());
         DefaultListModel model = (DefaultListModel) this.connectionsList.getModel();
         int connections = model.getSize();
         ArrayList<InteractConnection> connectionArrayList = new ArrayList<InteractConnection>(connections);
@@ -273,7 +355,8 @@ public class ConnectionManager extends JDialog
         {
             this.connectionNameTextField.setText(ic.getConnectionName());
             this.interactServerURLTextField.setText(ic.getConnectionUrl().toString());
-        } else
+        }
+        else
         {
             this.connectionNameTextField.setText("");
             this.interactServerURLTextField.setText("");
@@ -295,7 +378,8 @@ public class ConnectionManager extends JDialog
                     JOptionPane.showMessageDialog(this,
                             "Connection test: OK",
                             "Test connection", JOptionPane.INFORMATION_MESSAGE);
-                } else
+                }
+                else
                 {
                     JOptionPane.showMessageDialog(this,
                             "Connection test: KO",

@@ -73,7 +73,8 @@ public class ParameterDialog extends JDialog
             this.labelLabel.setVisible(false);
             this.datePicker.setVisible(true);
             this.labelDate.setVisible(true);
-        } else
+        }
+        else
         {
             this.datePicker.setVisible(false);
             this.labelDate.setVisible(false);
@@ -105,10 +106,12 @@ public class ParameterDialog extends JDialog
         if (nvp.isNumeric())
         {
             this.typeComboBox.setSelectedIndex(1);
-        } else if (nvp.isString())
+        }
+        else if (nvp.isString())
         {
             this.typeComboBox.setSelectedIndex(0);
-        } else
+        }
+        else
         {
             this.typeComboBox.setSelectedIndex(2);
         }
@@ -172,7 +175,8 @@ public class ParameterDialog extends JDialog
                 JOptionPane.showMessageDialog(this,
                         "Invalid Key",
                         "Key not recognized", JOptionPane.ERROR_MESSAGE);
-            } else if (!Utils.isNotNullNotEmptyNotWhiteSpace(nvpd.getValue()))
+            }
+            else if (!Utils.isNotNullNotEmptyNotWhiteSpace(nvpd.getValue()))
             {
                 okToGo = false;
                 JOptionPane.showMessageDialog(this,

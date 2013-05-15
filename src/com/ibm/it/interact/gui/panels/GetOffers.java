@@ -3,6 +3,7 @@ package com.ibm.it.interact.gui.panels;
 import com.ibm.it.interact.client.Client;
 import com.ibm.it.interact.client.Utils;
 import com.ibm.it.interact.client.data.GetOffersData;
+import com.ibm.it.interact.client.data.NameValuePairDecor;
 import com.ibm.it.interact.client.data.RunData;
 import com.ibm.it.interact.gui.MainForm;
 import com.ibm.it.interact.gui.UIUtils;
@@ -167,7 +168,8 @@ public final class GetOffers implements ITabbedPanel
             OfferParams op = this.offers.get(1);
             UIUtils.fillParamsList(this.offerParametersList, op.getOfferDetails(), false);
             selectOfferComboBox.setEnabled(true);
-        } else
+        }
+        else
         {
             selectOfferComboBox.setEnabled(false);
         }
@@ -191,7 +193,8 @@ public final class GetOffers implements ITabbedPanel
                     this.fillOffersData(resp);
                 }
             }
-        } else
+        }
+        else
         {
             System.err.println("Critical: client is NULL.");
         }
@@ -210,7 +213,8 @@ public final class GetOffers implements ITabbedPanel
             JOptionPane.showMessageDialog(this.getPanel(),
                     "Interaction Point cannot be null",
                     "Invalid InteractionPoint", JOptionPane.OK_OPTION);
-        } else if (!Utils.isNotNullNotEmptyNotWhiteSpace(numOffers))
+        }
+        else if (!Utils.isNotNullNotEmptyNotWhiteSpace(numOffers))
         {
             readyToRun = false;
             JOptionPane.showMessageDialog(this.getPanel(),
@@ -239,6 +243,6 @@ public final class GetOffers implements ITabbedPanel
 
         this.offerParametersList.setName("Offers");
 
-        this.offerParametersList.setModel(new DefaultListModel());
+        this.offerParametersList.setModel(new DefaultListModel<NameValuePairDecor>());
     }
 }

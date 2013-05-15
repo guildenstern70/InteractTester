@@ -24,8 +24,8 @@ public class RunData implements Serializable
     private transient InteractConnection interactURL;
 
     // Session data
-    //private String runDataName;
-    //private boolean hasBeenModified;
+    private String runDataName;
+    private boolean hasBeenModified;
 
     // Panels data
     private StartSessionData startSessionData;
@@ -59,7 +59,8 @@ public class RunData implements Serializable
         if (this.interactURL == null)
         {
             isValid = false;
-        } else if (!Utils.isNotNullNotEmptyNotWhiteSpace(this.startSessionData.getInteractiveChannel()))
+        }
+        else if (!Utils.isNotNullNotEmptyNotWhiteSpace(this.startSessionData.getInteractiveChannel()))
         {
             isValid = false;
         }
@@ -120,6 +121,26 @@ public class RunData implements Serializable
     public void setSessionId(String sessionId)
     {
         this.sessionId = sessionId;
+    }
+
+    public String getRunDataName()
+    {
+        return runDataName;
+    }
+
+    public void setRunDataName(String runDataName)
+    {
+        this.runDataName = runDataName;
+    }
+
+    public boolean isHasBeenModified()
+    {
+        return hasBeenModified;
+    }
+
+    public void setHasBeenModified(boolean hasBeenModified)
+    {
+        this.hasBeenModified = hasBeenModified;
     }
 
     @Override

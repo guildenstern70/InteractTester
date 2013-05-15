@@ -75,6 +75,70 @@ public final class MainForm
     private GetOffers getOffersPanel;
     private PostEvent postEventPanel;
 
+    // Controls
+    private JFileChooser fileChooser;
+    private JFrame frame;
+    private JPanel pnlMain;
+    private JLabel lblStatusBar;
+    private JTabbedPane tabbedPane;
+    private JTextArea txtConsole;
+    private JComboBox interactURLComboBox;
+    private JTextField sessionTextField;
+    private JButton generateIdButton;
+    private JButton connManagerButton;
+
+    // Menu
+    private JMenuBar jMenuBar;
+    private JMenu jMenuFile;
+    private JMenuItem jMenuFileNew;
+    private JMenuItem jMenuFileOpen;
+
+    // Private methods
+    private JMenuItem jMenuFileSave;
+    private JMenuItem jMenuFileSaveAs;
+    private JMenuItem jMenuFileExportData;
+    private JSeparator jSeparator1;
+    private JSeparator jSeparator2;
+    private JSeparator jSeparator3;
+    private JSeparator jSeparator4;
+    private JSeparator jSeparator5;
+    private JSeparator jSeparator6;
+    private JMenuItem jMenuFileExit;
+    private JMenuItem jMenuSettings;
+    private JMenu jMenuTools;
+    private JMenuItem jMenuToolsSaveLog;
+    private JMenuItem jMenuToolsTestConnection;
+    private JMenuItem jMenuToolsConnManager;
+    private JMenu jMenuHelp;
+    private JMenuItem jMenuHelpIBMHome;
+    private JMenuItem jMenuHelpUnicaHome;
+    private JMenuItem jMenuHelpUnicaManual;
+    private JMenuItem jMenuHelpUnicaInteractHome;
+    private JMenuItem jMenuHelpAbout;
+    private JMenuItem jMenuToolsEndSession;
+
+    private MainForm(JFrame frm)
+    {
+        System.out.println("Welcome to Interact Tester v." + Settings.VERSION);
+        this.frame = frm;
+        connManagerButton.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                showConnectionManager();
+            }
+        });
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.addWindowListener(new WindowAdapter()
+        {
+            public void windowClosing(WindowEvent e)
+            {
+                shutdown();
+            }
+        });
+    }
+
     /**
      * Main Form display
      *
@@ -112,28 +176,6 @@ public final class MainForm
                 (screenSize.height - size.height) / 2);
         frame.setSize(size);
         frame.setVisible(true);
-    }
-
-    private MainForm(JFrame frm)
-    {
-        System.out.println("Welcome to Interact Tester v." + Settings.VERSION);
-        this.frame = frm;
-        connManagerButton.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                showConnectionManager();
-            }
-        });
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.frame.addWindowListener(new WindowAdapter()
-        {
-            public void windowClosing(WindowEvent e)
-            {
-                shutdown();
-            }
-        });
     }
 
     public JPanel getMainPanel()
@@ -193,8 +235,6 @@ public final class MainForm
         console.append("\n");
         console.setCaretPosition(console.getText().length() - 1);
     }
-
-    // Private methods
 
     private void initializeTabs()
     {
@@ -555,11 +595,13 @@ public final class MainForm
                     logger.log("ERROR Saving data to " + filePath + "...");
                     logger.log(ioe.getMessage());
                 }
-            } else
+            }
+            else
             {
                 logger.log("Save command cancelled by user.");
             }
-        } else
+        }
+        else
         {
             logger.log("Nothing to save.");
         }
@@ -570,7 +612,6 @@ public final class MainForm
         RunData rd = new RunData(this.getInteractServer(), null);
         client.testConnection(rd);
     }
-
 
     public void generateRandomSessionId()
     {
@@ -758,7 +799,8 @@ public final class MainForm
             logger.log("Loading from " + file.getAbsolutePath() + "...");
             this.loadRunData(file.getAbsolutePath());
             logger.log("Loaded. ");
-        } else
+        }
+        else
         {
             logger.log("Load command cancelled by user.");
         }
@@ -797,7 +839,8 @@ public final class MainForm
             logger.log("Saving log to " + filePath + "...");
             this.saveLog(filePath, logger);
             logger.log("Saved. ");
-        } else
+        }
+        else
         {
             logger.log("Save command cancelled by user.");
         }
@@ -835,7 +878,8 @@ public final class MainForm
             logger.log("Saving data to " + filePath + "...");
             this.saveRunData(filePath);
             logger.log("Saved. ");
-        } else
+        }
+        else
         {
             logger.log("Save command cancelled by user.");
         }
@@ -859,46 +903,6 @@ public final class MainForm
             this.settings.readProperties();
         }
     }
-
-    // Controls
-    private JFileChooser fileChooser;
-    private JFrame frame;
-    private JPanel pnlMain;
-    private JLabel lblStatusBar;
-    private JTabbedPane tabbedPane;
-    private JTextArea txtConsole;
-    private JComboBox interactURLComboBox;
-    private JTextField sessionTextField;
-    private JButton generateIdButton;
-    private JButton connManagerButton;
-
-    // Menu
-    private JMenuBar jMenuBar;
-    private JMenu jMenuFile;
-    private JMenuItem jMenuFileNew;
-    private JMenuItem jMenuFileOpen;
-    private JMenuItem jMenuFileSave;
-    private JMenuItem jMenuFileSaveAs;
-    private JMenuItem jMenuFileExportData;
-    private JSeparator jSeparator1;
-    private JSeparator jSeparator2;
-    private JSeparator jSeparator3;
-    private JSeparator jSeparator4;
-    private JSeparator jSeparator5;
-    private JSeparator jSeparator6;
-    private JMenuItem jMenuFileExit;
-    private JMenuItem jMenuSettings;
-    private JMenu jMenuTools;
-    private JMenuItem jMenuToolsSaveLog;
-    private JMenuItem jMenuToolsTestConnection;
-    private JMenuItem jMenuToolsConnManager;
-    private JMenu jMenuHelp;
-    private JMenuItem jMenuHelpIBMHome;
-    private JMenuItem jMenuHelpUnicaHome;
-    private JMenuItem jMenuHelpUnicaManual;
-    private JMenuItem jMenuHelpUnicaInteractHome;
-    private JMenuItem jMenuHelpAbout;
-    private JMenuItem jMenuToolsEndSession;
 
 
 }

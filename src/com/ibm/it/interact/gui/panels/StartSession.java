@@ -3,6 +3,7 @@ package com.ibm.it.interact.gui.panels;
 import com.ibm.it.interact.client.Client;
 import com.ibm.it.interact.client.Settings;
 import com.ibm.it.interact.client.Utils;
+import com.ibm.it.interact.client.data.NameValuePairDecor;
 import com.ibm.it.interact.client.data.RunData;
 import com.ibm.it.interact.client.data.StartSessionData;
 import com.ibm.it.interact.gui.MainForm;
@@ -148,19 +149,22 @@ public final class StartSession implements ITabbedPanel
             JOptionPane.showMessageDialog(this.getPanel(),
                     "Interactive Channel cannot be null",
                     "Invalid Interactive Channel", JOptionPane.OK_OPTION);
-        } else if (!Utils.isNotNullNotEmptyNotWhiteSpace(sessionId))
+        }
+        else if (!Utils.isNotNullNotEmptyNotWhiteSpace(sessionId))
         {
             readyToRun = false;
             JOptionPane.showMessageDialog(this.getPanel(),
                     "SessionID cannot be null",
                     "Invalid SessionID", JOptionPane.OK_OPTION);
-        } else if (!Utils.isNotNullNotEmptyNotWhiteSpace(audienceLevel))
+        }
+        else if (!Utils.isNotNullNotEmptyNotWhiteSpace(audienceLevel))
         {
             readyToRun = false;
             JOptionPane.showMessageDialog(this.getPanel(),
                     "Audience Level cannot be null",
                     "Invalid Audience Level", JOptionPane.OK_OPTION);
-        } else if (audienceIds.length == 0)
+        }
+        else if (audienceIds.length == 0)
         {
             readyToRun = false;
             JOptionPane.showMessageDialog(this.getPanel(),
@@ -195,7 +199,8 @@ public final class StartSession implements ITabbedPanel
                 rd.setStartSessionData(this.getDataFromUI());
                 this.client.runStartSession(rd, true);
             }
-        } else
+        }
+        else
         {
             System.err.println("Critical: Error is NULL.");
         }
@@ -209,7 +214,7 @@ public final class StartSession implements ITabbedPanel
         this.audienceIdList.setName("Audience");
         this.parametersList.setName("Parameters");
 
-        this.audienceIdList.setModel(new DefaultListModel());
-        this.parametersList.setModel(new DefaultListModel());
+        this.audienceIdList.setModel(new DefaultListModel<NameValuePairDecor>());
+        this.parametersList.setModel(new DefaultListModel<NameValuePairDecor>());
     }
 }

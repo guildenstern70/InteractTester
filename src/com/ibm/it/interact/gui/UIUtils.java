@@ -60,7 +60,7 @@ public class UIUtils
 
     public static void addParamToList(JList paramControl, NameValuePairDecor nvp, boolean sort)
     {
-        DefaultListModel dlm = (DefaultListModel) paramControl.getModel();
+        DefaultListModel<NameValuePairDecor> dlm = (DefaultListModel<NameValuePairDecor>) paramControl.getModel();
         if (nvp != null)
         {
             List<NameValuePairDecor> nvpList = new ArrayList<NameValuePairDecor>();
@@ -84,7 +84,7 @@ public class UIUtils
 
     public static void fillParamsList(JList paramControl, NameValuePair[] nvp, boolean sort)
     {
-        DefaultListModel dlm = (DefaultListModel) paramControl.getModel();
+        DefaultListModel<NameValuePairDecor> dlm = (DefaultListModel<NameValuePairDecor>) paramControl.getModel();
 
         if (nvp.length > 0)
         {
@@ -161,7 +161,8 @@ public class UIUtils
                 {
                     menuItemDelete.setEnabled(true);
                     menuItemEdit.setEnabled(true);
-                } else
+                }
+                else
                 {
                     menuItemDelete.setEnabled(false);
                     menuItemEdit.setEnabled(false);

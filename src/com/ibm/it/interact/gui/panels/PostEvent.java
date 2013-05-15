@@ -179,7 +179,8 @@ public final class PostEvent implements ITabbedPanel
                     this.client.runPostEvent(rd);
                 }
             }
-        } else
+        }
+        else
         {
             System.err.println("Critical: client is NULL.");
         }
@@ -240,7 +241,8 @@ public final class PostEvent implements ITabbedPanel
                 UIUtils.fillParamsList(this.parametersList, op.getOfferDetails(), false);
 
 
-            } else
+            }
+            else
             {
                 JOptionPane.showMessageDialog(this.getPanel(),
                         "Invalid Interaction Point",

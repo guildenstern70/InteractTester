@@ -18,6 +18,7 @@ import com.ibm.it.interact.client.data.RunData;
 import com.ibm.it.interact.client.data.RunDataFile;
 import com.ibm.it.interact.client.data.RunDataSerializer;
 import com.ibm.it.interact.client.data.TextFile;
+import com.ibm.it.interact.gui.panels.BatchExecute;
 import com.ibm.it.interact.gui.panels.GetOffers;
 import com.ibm.it.interact.gui.panels.PostEvent;
 import com.ibm.it.interact.gui.panels.StartSession;
@@ -77,6 +78,7 @@ public final class MainForm
     private StartSession startSessionPanel;
     private GetOffers getOffersPanel;
     private PostEvent postEventPanel;
+    private BatchExecute batchExecutePanel;
 
     // Controls
     private JFileChooser fileChooser;
@@ -244,10 +246,13 @@ public final class MainForm
         this.startSessionPanel = new StartSession(this);
         this.getOffersPanel = new GetOffers(this);
         this.postEventPanel = new PostEvent(this);
+        this.batchExecutePanel = new BatchExecute(this);
 
-        this.tabbedPane.addTab(startSessionPanel.getTitle(), startSessionPanel.getPanel());
-        this.tabbedPane.addTab(getOffersPanel.getTitle(), getOffersPanel.getPanel());
-        this.tabbedPane.addTab(postEventPanel.getTitle(), postEventPanel.getPanel());
+
+        this.tabbedPane.addTab(this.startSessionPanel.getTitle(), this.startSessionPanel.getPanel());
+        this.tabbedPane.addTab(this.getOffersPanel.getTitle(), this.getOffersPanel.getPanel());
+        this.tabbedPane.addTab(this.postEventPanel.getTitle(), this.postEventPanel.getPanel());
+        this.tabbedPane.addTab(this.batchExecutePanel.getTitle(), this.batchExecutePanel.getPanel());
     }
 
     private void initializeLogic(XLog xlog)

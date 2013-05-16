@@ -9,7 +9,7 @@
     <property name="compiler.debug" value="on"/>
     <property name="compiler.generate.no.warnings" value="off"/>
     <property name="compiler.args" value="-Xlint:unchecked"/>
-    <property name="compiler.max.memory" value="128m"/>
+    <property name="compiler.max.memory" value="256m"/>
     <patternset id="ignored.files">
         <exclude name="**/CVS/**"/>
         <exclude name="**/SCCS/**"/>
@@ -129,6 +129,7 @@
     <!-- Interact Client -->
 
     <dirname property="interactclient.basedir" file="${ant.file}"/>
+    <dirname property="interactclient.samples" file="${interactclient.basedir}/samples"/>
 
     <property name="jdk.home.interactclient" value="${project.jdk.home}"/>
     <property name="jdk.bin.interactclient" value="${project.jdk.bin}"/>
@@ -138,6 +139,7 @@
 
     <property name="interactclient.output.dir" value="${interactclient.basedir}/out/production/interactclient"/>
     <property name="interactclient.output.resources.dir" value="${interactclient.output.dir}/res/"/>
+    <property name="interactclient.output.samples.dir" value="${interactclient.output.dir}/samples/"/>
     <property name="interactclient.output.libraries.dir" value="${interactclient.output.dir}/lib/"/>
     <property name="interactclient.main.class" value="com.ibm.it.interact.gui.Launcher"/>
 
@@ -167,6 +169,10 @@
         <include name="res/*.ico"/>
     </patternset>
 
+    <patternset id="samples.files">
+        <include name="*.itf"/>
+    </patternset>
+
     <patternset id="excluded.from.compilation.interactclient">
         <patternset refid="excluded.from.interactclient"/>
     </patternset>
@@ -179,7 +185,6 @@
 
     <fileset id="interactclient.application.files" dir="${basedir}">
         <include name="application.properties"/>
-        <include name="CEP_Interact_Test.itf"/>
         <include name="start.bat"/>
     </fileset>
 
@@ -188,6 +193,12 @@
 
     <target name="prepare.resources">
         <mkdir dir="${interactclient.output.dir}"/>
+        <mkdir dir="${interactclient.output.samples.dir}"/>
+        <copy todir="${interactclient.output.samples.dir}">
+            <fileset dir="${interactclient.samples}">
+                <patternset refid="samples.files"/>
+            </fileset>
+        </copy>
         <mkdir dir="${interactclient.output.resources.dir}"/>
         <copy todir="${interactclient.output.dir}">
             <fileset dir=".">

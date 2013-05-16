@@ -1,3 +1,3 @@
 @echo off
-start /B javaw -jar interactclient.jar
+start /B javaw.exe -jar interactclient.jar
 

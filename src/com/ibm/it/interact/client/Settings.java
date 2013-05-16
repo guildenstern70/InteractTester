@@ -29,7 +29,7 @@ public final class Settings
     private static final String AUTOGENERATE_ID = "interact.tester.AutoGenerateId";
     private static final String LAST_USED_URL = "interact.tester.LastUrl";
 
-    public static final String VERSION = "0.1.3988";
+    public static final String VERSION = "0.1.4207";
 
     private static Settings settings;
     private final Properties props;
@@ -193,7 +193,8 @@ public final class Settings
             if (this.generateSessionIdAtStartup)
             {
                 this.props.setProperty(AUTOGENERATE_ID, "true");
-            } else
+            }
+            else
             {
                 this.props.setProperty(AUTOGENERATE_ID, "false");
             }
@@ -227,7 +228,8 @@ public final class Settings
             if (autoId.equals("true"))
             {
                 this.generateSessionIdAtStartup = true;
-            } else
+            }
+            else
             {
                 this.generateSessionIdAtStartup = false;
             }

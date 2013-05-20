@@ -8,6 +8,8 @@
 
 package com.ibm.it.interact.client.data;
 
+import com.ibm.it.interact.client.Utils;
+import com.unicacorp.interact.api.CommandImpl;
 import com.unicacorp.interact.api.NameValuePair;
 
 import java.io.Serializable;
@@ -40,6 +42,15 @@ public class PostEventData implements Serializable
     public void setPostEventParams(NameValuePair[] postEventParams)
     {
         this.postEventParams = postEventParams;
+    }
+
+    public CommandImpl getCommand()
+    {
+        CommandImpl cmd = new CommandImpl();
+        cmd.setMethodIdentifier("postEvent");
+        cmd.setEvent(this.eventName);
+        cmd.setEventParameters(Utils.toNVPImpl(this.postEventParams));
+        return cmd;
     }
 
     @Override

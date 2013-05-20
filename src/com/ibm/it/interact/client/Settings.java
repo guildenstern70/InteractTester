@@ -10,6 +10,7 @@ package com.ibm.it.interact.client;
 
 import com.ibm.it.interact.client.data.InteractConnection;
 
+import java.awt.Dimension;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,8 +29,10 @@ public final class Settings
     private static final String INTERACT_SERVER = "interact.server.";
     private static final String AUTOGENERATE_ID = "interact.tester.AutoGenerateId";
     private static final String LAST_USED_URL = "interact.tester.LastUrl";
+    private static final String CLIENT_WIDTH = "interact.tester.Width";
+    private static final String CLIENT_HEIGHT = "interact.tester.Height";
 
-    public static final String VERSION = "0.1.4207";
+    public static final String VERSION = "0.2.1217";
 
     private static Settings settings;
     private final Properties props;
@@ -40,6 +43,7 @@ public final class Settings
     private boolean generateSessionIdAtStartup;
     private List<InteractConnection> unicaServers;
     private int lastUserServer;
+    private Dimension clientSize;
 
     /**
      * Settings Factory Method
@@ -125,6 +129,16 @@ public final class Settings
     }
 
     /**
+     * Set client dimensions
+     *
+     * @param d
+     */
+    public void setClientSize(Dimension d)
+    {
+        this.clientSize = d;
+    }
+
+    /**
      * Get list of Unica Servers
      *
      * @return
@@ -155,6 +169,17 @@ public final class Settings
     }
 
     /**
+     * Get client window size
+     *
+     * @return
+     */
+    public Dimension clientDimensions()
+    {
+        System.out.println("Client size = " + String.valueOf(this.clientSize.getWidth()));
+        return this.clientSize;
+    }
+
+    /**
      * Set last used server (as combo box index)
      *
      * @param lastUserServer
@@ -169,7 +194,7 @@ public final class Settings
         this.props = new Properties();
         this.log = logger;
         this.lastUserServer = 0;
-
+        this.clientSize = null;
     }
 
     private void buildProperties()
@@ -201,6 +226,11 @@ public final class Settings
 
             // Last used Unica Server
             this.props.setProperty(LAST_USED_URL, String.valueOf(this.lastUserServer));
+
+            // Client size
+            this.props.setProperty(CLIENT_WIDTH, String.valueOf(this.clientSize.getWidth()));
+            this.props.setProperty(CLIENT_HEIGHT, String.valueOf(this.clientSize.getHeight()));
+
         }
 
     }
@@ -244,6 +274,19 @@ public final class Settings
             {
                 this.lastUserServer = 0;
             }
+
+            // Client size
+            try
+            {
+                double clientWidth = Double.parseDouble(this.props.getProperty(CLIENT_WIDTH));
+                double clientHeight = Double.parseDouble(this.props.getProperty(CLIENT_HEIGHT));
+                this.clientSize = new Dimension((int) clientWidth, (int) clientHeight);
+            }
+            catch (NumberFormatException | NullPointerException nex)
+            {
+                this.clientSize = new Dimension(770, 660);
+            }
+
         }
     }
 }

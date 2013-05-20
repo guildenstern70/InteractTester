@@ -82,17 +82,36 @@ public class UIUtils
         }
     }
 
-    public static void fillParamsList(JList paramControl, NameValuePair[] nvp, boolean sort)
+    /**
+     * Fill control with list of NameValuePair
+     *
+     * @param paramControl The control showing the list of NameValuePair
+     * @param nvp          The list of NameValuePair
+     * @param sort         True, if the control must show the list in order
+     * @param exclude      The key to be excluded from the list
+     */
+    public static void fillParamsList(JList paramControl, NameValuePair[] nvp, boolean sort, String exclude)
     {
         DefaultListModel<NameValuePairDecor> dlm = (DefaultListModel<NameValuePairDecor>) paramControl.getModel();
 
         if (nvp.length > 0)
         {
             dlm.removeAllElements();
+
             List<NameValuePairDecor> nvpList = new ArrayList<NameValuePairDecor>(nvp.length);
             for (NameValuePair item : nvp)
             {
-                nvpList.add(new NameValuePairDecor(item));
+                if (exclude != null)
+                {
+                    if (!item.getName().equals(exclude))
+                    {
+                        nvpList.add(new NameValuePairDecor(item));
+                    }
+                }
+                else
+                {
+                    nvpList.add(new NameValuePairDecor(item));
+                }
             }
 
             if (sort)
@@ -105,6 +124,12 @@ public class UIUtils
                 dlm.addElement(item);
             }
         }
+
+    }
+
+    public static void fillParamsList(JList paramControl, NameValuePair[] nvp, boolean sort)
+    {
+        UIUtils.fillParamsList(paramControl, nvp, sort, null);
     }
 
     public static void openUrl(String url)

@@ -8,11 +8,15 @@
 
 package com.ibm.it.interact.client.data;
 
+import com.ibm.it.interact.client.Utils;
+import com.unicacorp.interact.api.CommandImpl;
 import com.unicacorp.interact.api.NameValuePair;
 import com.unicacorp.interact.api.NameValuePairImpl;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Data needed to run Start Session Interact API
@@ -27,7 +31,7 @@ public class StartSessionData implements Serializable
     private String interactiveChannel; // aka Interactive Channel
     private NameValuePair[] audienceIds;
     private String audienceLevel;
-    private NameValuePair[] parameters;
+    private List<NameValuePair> parameters;
 
     @Override
     public String toString()
@@ -63,6 +67,7 @@ public class StartSessionData implements Serializable
 
     public void initializeWithDefaults()
     {
+        /*
         this.relyOnExistingSession = false;
         this.debug = true;
         this.interactiveChannel = "CEP";
@@ -90,6 +95,72 @@ public class StartSessionData implements Serializable
         this.parameters[2].setName("START_TS");
         this.parameters[2].setValueDataType(NameValuePair.DATA_TYPE_DATETIME);
         this.parameters[2].setValueAsDate(today.getTime());
+        */
+    }
+
+    public CommandImpl getCommand()
+    {
+        CommandImpl cmd = new CommandImpl();
+        cmd.setMethodIdentifier("startSession");
+        cmd.setRelyOnExistingSession(this.relyOnExistingSession);
+        cmd.setDebug(true);
+        cmd.setInteractiveChannel(this.interactiveChannel);
+        cmd.setAudienceID(Utils.toNVPImpl(this.audienceIds));
+        cmd.setAudienceLevel(this.audienceLevel);
+        cmd.setEventParameters(Utils.toNVPImpl(this.getParameters()));
+        return cmd;
+    }
+
+    public String getFlowchartName()
+    {
+        String flowchartName = "";
+
+        for (NameValuePair nvp : this.parameters)
+        {
+            if (nvp.getName().equals("UACIExecuteFlowchartByName"))
+            {
+                flowchartName = nvp.getValueAsString();
+                break;
+            }
+        }
+
+        return flowchartName;
+    }
+
+    public void setFlowchartName(String flowchart)
+    {
+        boolean found = false;
+
+        if (this.parameters != null)
+        {
+
+            for (NameValuePair nvp : this.parameters)
+            {
+                if (nvp.getName().equals("UACIExecuteFlowchartByName"))
+                {
+                    System.out.println("Trovato UAC! Lo cambio!");
+                    nvp.setValueAsString(flowchart);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                System.out.println("NON Trovato UAC! Lo aggiungo!");
+
+                NameValuePairImpl nvpFlowchart = new NameValuePairImpl();
+                nvpFlowchart.setName("UACIExecuteFlowchartByName");
+                nvpFlowchart.setValueDataType(NameValuePair.DATA_TYPE_STRING);
+                nvpFlowchart.setValueAsString(flowchart);
+                this.parameters.add(nvpFlowchart);
+            }
+
+        }
+        else
+        {
+            System.err.println("Parameters null?!");
+        }
     }
 
     public final String getSessionId()
@@ -154,12 +225,13 @@ public class StartSessionData implements Serializable
 
     public final NameValuePair[] getParameters()
     {
-        return parameters;
+        return this.parameters.toArray(new NameValuePair[this.parameters.size()]);
     }
 
     public final void setParameters(NameValuePair[] parameters)
     {
-        this.parameters = parameters;
+        this.parameters = new ArrayList<NameValuePair>(parameters.length);
+        this.parameters.addAll(Arrays.asList(parameters));
     }
 
 

@@ -153,10 +153,11 @@ public class ConnectionManager extends JDialog
             InteractConnection tempConn = (InteractConnection) model.getElementAt(j);
             if (!tempConn.equals(oldServer))
             {
-                System.out.println("Found existing connection " + oldServer.toString());
+                System.out.println("Adding " + tempConn.toString());
                 connectionArrayList.add(tempConn);
             }
         }
+        System.out.println("Adding NEW SERVER " + newServer.toString());
         connectionArrayList.add(newServer);
 
         // Clear the list and replace with the new one
@@ -319,7 +320,7 @@ public class ConnectionManager extends JDialog
     private void createNewConnection()
     {
         int connectionsSize = this.connectionsList.getModel().getSize();
-        InteractConnection ic = new InteractConnection(connectionsSize + 1, "http://localhost:8080/interact");
+        InteractConnection ic = new InteractConnection(connectionsSize + 1, "http://localhost:8080");
         DefaultListModel model = (DefaultListModel) this.connectionsList.getModel();
         model.addElement(ic);
         this.connectionsList.setSelectedIndex(connectionsSize);
@@ -345,6 +346,8 @@ public class ConnectionManager extends JDialog
         {
             DefaultListModel model = (DefaultListModel) this.connectionsList.getModel();
             model.remove(this.connectionsList.getSelectedIndex());
+            this.connectionNameTextField.setText("");
+            this.interactServerURLTextField.setText("");
         }
     }
 
@@ -354,13 +357,14 @@ public class ConnectionManager extends JDialog
         if (ic != null)
         {
             this.connectionNameTextField.setText(ic.getConnectionName());
-            this.interactServerURLTextField.setText(ic.getConnectionUrl().toString());
+            this.interactServerURLTextField.setText(ic.getConnectionSimplifiedUrl());
         }
+        /*
         else
         {
             this.connectionNameTextField.setText("");
             this.interactServerURLTextField.setText("");
-        }
+        } */
     }
 
     private void testConnection()

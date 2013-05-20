@@ -11,7 +11,6 @@ package com.ibm.it.interact.gui.panels;
 import com.ibm.it.interact.client.Utils;
 import com.ibm.it.interact.client.XLog;
 import com.ibm.it.interact.client.data.NameValuePairDecor;
-import com.toedter.calendar.JDateChooser;
 import com.unicacorp.interact.api.NameValuePair;
 import com.unicacorp.interact.api.NameValuePairImpl;
 
@@ -23,8 +22,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SpinnerDateModel;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,9 +42,9 @@ public class ParameterDialog extends JDialog
     private JTextField keyTextField;
     private JTextField valueTextField;
     private JComboBox typeComboBox;
-    private JDateChooser datePicker;
     private JLabel labelLabel;
     private JLabel labelDate;
+    private JSpinner spinner1;
     private NameValuePair nvp;
     private JFrame parent;
     private XLog log;
@@ -71,12 +72,12 @@ public class ParameterDialog extends JDialog
         {
             this.valueTextField.setVisible(false);
             this.labelLabel.setVisible(false);
-            this.datePicker.setVisible(true);
+            this.spinner1.setVisible(true);
             this.labelDate.setVisible(true);
         }
         else
         {
-            this.datePicker.setVisible(false);
+            this.spinner1.setVisible(false);
             this.labelDate.setVisible(false);
             this.labelLabel.setVisible(true);
             this.valueTextField.setVisible(true);
@@ -124,7 +125,7 @@ public class ParameterDialog extends JDialog
         getRootPane().setDefaultButton(buttonOK);
         setLocationRelativeTo(this.parent);
 
-        this.datePicker.setVisible(false);
+        this.spinner1.setVisible(false);
         this.labelDate.setVisible(false);
 
         buttonOK.addActionListener(new ActionListener()
@@ -218,10 +219,9 @@ public class ParameterDialog extends JDialog
             case 2: // date
                 this.nvp.setValueDataType("datetime");
                 Date d1 = null;
-                d1 = this.datePicker.getDate();
+                SpinnerDateModel model = (SpinnerDateModel) this.spinner1.getModel();
+                d1 = model.getDate();
                 this.nvp.setValueAsDate(d1);
-
-
                 break;
         }
 
@@ -246,4 +246,11 @@ public class ParameterDialog extends JDialog
         return dialog;
     }
 
+    private void createUIComponents()
+    {
+        this.spinner1 = new JSpinner(new SpinnerDateModel());
+        JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(this.spinner1, "dd-MMM-yyyy HH:mm:ss");
+        this.spinner1.setEditor(timeEditor);
+        this.spinner1.setValue(new Date()); // will only show the current time
+    }
 }

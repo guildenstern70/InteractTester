@@ -67,7 +67,7 @@ public final class MainForm
 {
     private final static Charset ENCODING = StandardCharsets.UTF_8;
     private static final String TITLE = "IBM Campaign Interact Tester";
-    private static final Dimension WINDOW_SIZE = new Dimension(770, 620);
+    private static final Dimension WINDOW_SIZE = new Dimension(770, 660);
 
     // Business logic
     private Client client;
@@ -157,7 +157,7 @@ public final class MainForm
         // Initialize business logic
         XLog xlog = new XLog(itf);
         xlog.initialize();
-        itf.initializeLogic(xlog);
+        itf.initializeLogicAndReadSettings(xlog);
 
         // Initialize UI
         itf.initializeTabs();
@@ -167,19 +167,31 @@ public final class MainForm
         frame.setContentPane(itf.pnlMain);
         frame.setJMenuBar(itf.jMenuBar);
         frame.pack();
-        MainForm.showInterface(frame);
+        itf.showInterface(frame);
         return itf;
     }
 
-    private static void showInterface(JFrame frame)
+    private void showInterface(JFrame frame)
     {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension size = WINDOW_SIZE;
+
+        if (this.settings != null)
+        {
+            Dimension savedSize = this.settings.clientDimensions();
+            if (savedSize != null)
+            {
+                size = savedSize;
+            }
+        }
+
         frame.setMinimumSize(size);
         frame.setTitle(TITLE);
         frame.setLocation((screenSize.width - size.width) / 2,
                 (screenSize.height - size.height) / 2);
         frame.setSize(size);
+        frame.setResizable(true);
+        frame.setMinimumSize(WINDOW_SIZE);
         frame.setVisible(true);
     }
 
@@ -255,11 +267,11 @@ public final class MainForm
         this.tabbedPane.addTab(this.batchExecutePanel.getTitle(), this.batchExecutePanel.getPanel());
     }
 
-    private void initializeLogic(XLog xlog)
+    private void initializeLogicAndReadSettings(XLog xlog)
     {
         this.client = new Client(xlog);
         this.settings = Settings.getInstance(this.client.getLogger());
-        settings.readProperties();
+        this.settings.readProperties();
     }
 
     private void initializeMenus()
@@ -653,7 +665,16 @@ public final class MainForm
         {
             this.interactURLComboBox.addItem(url);
         }
-        this.interactURLComboBox.setSelectedIndex(this.settings.getLastUserServer());
+
+        try
+        {
+            this.interactURLComboBox.setSelectedIndex(this.settings.getLastUserServer());
+        }
+        catch (IllegalArgumentException iae)
+        {
+            this.interactURLComboBox.setSelectedIndex(0);
+        }
+
         this.interactURLComboBox.setFocusable(false);
 
         // Generate Session ID
@@ -690,6 +711,7 @@ public final class MainForm
         this.startSessionPanel.clear();
         this.getOffersPanel.clear();
         this.postEventPanel.clear();
+        this.batchExecutePanel.clear();
     }
 
     private void shutdown()
@@ -697,6 +719,7 @@ public final class MainForm
         // Save options
         this.client.getLogger().log("Saving settings.");
         this.settings.setLastUserServer(this.interactURLComboBox.getSelectedIndex());
+        this.settings.setClientSize(this.getFrame().getSize());
         this.settings.writeProperties();
         this.client.getLogger().log("Bye.");
 

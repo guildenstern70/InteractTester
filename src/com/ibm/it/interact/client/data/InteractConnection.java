@@ -20,6 +20,7 @@ import java.net.URL;
 public class InteractConnection implements Serializable
 {
     private static final long serialVersionUID = 7526472345622776121L;
+    private static final String interactServicePath = "/interact/servlet/InteractJSService";
 
     private URL connectionUrl;
     private String connectionName;
@@ -38,6 +39,11 @@ public class InteractConnection implements Serializable
         this.setConnectionUrl(url);
     }
 
+    public String getConnectionSimplifiedUrl()
+    {
+        return this.connectionUrl.getProtocol() + "://" + this.connectionUrl.getHost() + ":" + this.connectionUrl.getPort();
+    }
+
     public URL getConnectionUrl()
     {
         return connectionUrl;
@@ -50,6 +56,11 @@ public class InteractConnection implements Serializable
 
     public void setConnectionUrl(String connectionUrl1)
     {
+        if (!connectionUrl1.endsWith(InteractConnection.interactServicePath))
+        {
+            connectionUrl1 += InteractConnection.interactServicePath;
+        }
+
         try
         {
             this.connectionUrl = new URL(connectionUrl1);
@@ -73,7 +84,7 @@ public class InteractConnection implements Serializable
     @Override
     public String toString()
     {
-        return this.connectionName;
+        return this.connectionName; //+ " (" + this.connectionUrl.toString() + ")";
     }
 
     @Override

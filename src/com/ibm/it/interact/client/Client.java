@@ -8,12 +8,16 @@
 
 package com.ibm.it.interact.client;
 
+import com.ibm.it.interact.client.data.BatchExecuteData;
 import com.ibm.it.interact.client.data.GetOffersData;
 import com.ibm.it.interact.client.data.NameValuePairDecor;
 import com.ibm.it.interact.client.data.PostEventData;
 import com.ibm.it.interact.client.data.RunData;
 import com.ibm.it.interact.client.data.StartSessionData;
 import com.unicacorp.interact.api.AdvisoryMessage;
+import com.unicacorp.interact.api.BatchResponse;
+import com.unicacorp.interact.api.Command;
+import com.unicacorp.interact.api.CommandImpl;
 import com.unicacorp.interact.api.NameValuePair;
 import com.unicacorp.interact.api.Offer;
 import com.unicacorp.interact.api.OfferList;
@@ -22,6 +26,7 @@ import com.unicacorp.interact.api.jsoverhttp.InteractAPI;
 
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
 public final class Client
@@ -37,6 +42,73 @@ public final class Client
     public XLog getLogger()
     {
         return this.logger;
+    }
+
+    public BatchResponse runBatch(RunData rd, boolean sendEndSession)
+    {
+        BatchResponse response = null;
+        InteractAPI api = this.initializeAPI(rd);
+
+
+        BatchExecuteData bed = rd.getBatchExecuteData();
+
+        if (bed.numberOfCommands() > 0)
+        {
+
+            this.logger.log("-----------------------");
+            this.logger.log("  RUNNING BATCH EXECUTE  ");
+            this.logger.log("-----------------------");
+
+            ArrayList<Command> commands = new ArrayList<>();
+
+            if (bed.isExeStartSession())
+            {
+                this.logger.log("  Adding 'StartSession' to command queue.");
+                CommandImpl cmdStartSession = rd.getStartSessionData().getCommand();
+                commands.add(cmdStartSession);
+            }
+
+            if (bed.isExeGetOffers())
+            {
+                this.logger.log("  Adding 'GetOffers' to command queue.");
+                CommandImpl cmdGetOffers = rd.getGetOffersData().getCommand();
+                commands.add(cmdGetOffers);
+            }
+
+            if (bed.isExePostEvent())
+            {
+                this.logger.log("  Adding 'PostEvent' to command queue.");
+                CommandImpl cmdPostEvent = rd.getPostEventData().getCommand();
+                commands.add(cmdPostEvent);
+            }
+
+            if (sendEndSession)
+            {
+                CommandImpl cmd = new CommandImpl();
+                cmd.setMethodIdentifier("endSession");
+                commands.add(cmd);
+            }
+
+            try
+            {
+                this.logger.log("  Beginning batch execute...");
+                response = api.executeBatch(rd.getSessionId(), commands.toArray(new Command[commands.size()]));
+                this.logger.log("  ... done.");
+                this.processBatchResponse(response);
+            }
+            catch (RemoteException rex)
+            {
+                this.logger.log(Level.SEVERE, "ERROR> Batch execute critical error.");
+                this.logger.log(Level.SEVERE, rex.getMessage());
+            }
+        }
+        else
+        {
+            this.logger.log("No command selected. Abort.");
+        }
+
+        return response;
+
     }
 
     public Response runPostEvent(RunData rd)
@@ -155,7 +227,8 @@ public final class Client
                         }
 
                     }
-                } else
+                }
+                else
                 {
                     this.logger.log("No offers found.");
                 }
@@ -244,10 +317,12 @@ public final class Client
         {
             this.logger.log(apiname + " call OK: no warnings or errors");
             this.logger.log(apiname + " SESSION ID = " + response.getSessionID());
-        } else if (response.getStatusCode() == Response.STATUS_WARNING)
+        }
+        else if (response.getStatusCode() == Response.STATUS_WARNING)
         {
             this.logger.log(Level.WARNING, apiname + " call processed with a warning");
-        } else
+        }
+        else
         {
             this.logger.log(Level.SEVERE, apiname + " call processed with an error");
         }
@@ -282,7 +357,8 @@ public final class Client
                 String apiVersion = response.getApiVersion();
                 this.logger.log("API Version " + apiVersion);
                 connectOk = true;
-            } else
+            }
+            else
             {
                 this.processResponse("getVersion", response);
             }
@@ -307,6 +383,37 @@ public final class Client
 
     }
 
+    private void processBatchResponse(BatchResponse batchResponse)
+    {
+        /** Process the response appropriately */
+        // Top level status code is a short cut to determine if there
+        // are any non-successes in the array of Response objects
+        if (batchResponse.getBatchStatusCode() == Response.STATUS_SUCCESS)
+        {
+            this.logger.log(Level.INFO, "ExecuteBatch ran OK with 0 errors and 0 warnings.");
+        }
+        else if (batchResponse.getBatchStatusCode() == Response.STATUS_WARNING)
+        {
+            this.logger.log(Level.WARNING, "ExecuteBatch call processed with at least one warning");
+        }
+        else
+        {
+            this.logger.log(Level.SEVERE, "ExecuteBatch call processed with at least one error");
+        }
+        // Iterate through the array, and print out the message for any non-successes
+        for (Response response : batchResponse.getResponses())
+        {
+            if (response.getStatusCode() != Response.STATUS_SUCCESS)
+            {
+                for (AdvisoryMessage am : response.getAdvisoryMessages())
+                {
+                    this.logger.log(Level.SEVERE, am.getMessage());
+                    this.logger.log(Level.SEVERE, am.getDetailMessage());
+                }
+            }
+        }
+    }
+
     private InteractAPI initializeAPI(RunData runData)
     {
         InteractAPI api = null;
@@ -323,11 +430,13 @@ public final class Client
                 if (response.getStatusCode() == Response.STATUS_SUCCESS)
                 {
                     this.logger.log("API object initialized");
-                } else
+                }
+                else
                 {
                     this.processResponse("getVersion", response);
                 }
-            } else
+            }
+            else
             {
                 this.logger.log(Level.SEVERE, "URL is null or empty.");
             }

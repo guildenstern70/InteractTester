@@ -32,6 +32,7 @@ public class RunData implements Serializable
     private StartSessionData startSessionData;
     private GetOffersData getOffersData;
     private PostEventData postEventData;
+    private BatchExecuteData batchExecuteData;
 
     /**
      * Constructor
@@ -46,6 +47,7 @@ public class RunData implements Serializable
         this.startSessionData = new StartSessionData();
         this.getOffersData = new GetOffersData();
         this.postEventData = new PostEventData();
+        this.batchExecuteData = new BatchExecuteData();
     }
 
     /**
@@ -74,6 +76,11 @@ public class RunData implements Serializable
         return this.startSessionData;
     }
 
+    public BatchExecuteData getBatchExecuteData()
+    {
+        return this.batchExecuteData;
+    }
+
     public void setStartSessionData(StartSessionData startSessionData)
     {
         this.startSessionData = startSessionData;
@@ -97,6 +104,11 @@ public class RunData implements Serializable
     public void setPostEventData(PostEventData postEventData)
     {
         this.postEventData = postEventData;
+    }
+
+    public void setBatchExecuteData(BatchExecuteData bed)
+    {
+        this.batchExecuteData = bed;
     }
 
     public String getInteractURL()

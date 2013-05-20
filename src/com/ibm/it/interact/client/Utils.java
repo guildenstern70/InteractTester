@@ -8,6 +8,9 @@
 
 package com.ibm.it.interact.client;
 
+import com.unicacorp.interact.api.NameValuePair;
+import com.unicacorp.interact.api.NameValuePairImpl;
+
 import java.text.DecimalFormat;
 import java.util.Properties;
 
@@ -22,6 +25,24 @@ public class Utils
     public static boolean isNotNullNotEmptyNotWhiteSpace(final String string)
     {
         return string != null && !string.isEmpty() && !string.trim().isEmpty();
+    }
+
+    /**
+     * Transform NameValuePair array into NameValuePairImpl array
+     *
+     * @param nvps
+     * @return
+     */
+    public static NameValuePairImpl[] toNVPImpl(NameValuePair[] nvps)
+    {
+        NameValuePairImpl[] nvpis = new NameValuePairImpl[nvps.length];
+
+        for (int j = 0; j < nvps.length; j++)
+        {
+            nvpis[j] = (NameValuePairImpl) nvps[j];
+        }
+
+        return nvpis;
     }
 
     public static String formatFromDouble(Double arg)

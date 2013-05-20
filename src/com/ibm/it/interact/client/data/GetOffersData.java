@@ -8,6 +8,8 @@
 
 package com.ibm.it.interact.client.data;
 
+import com.unicacorp.interact.api.CommandImpl;
+
 import java.io.Serializable;
 
 /**
@@ -49,6 +51,15 @@ public class GetOffersData implements Serializable
     public void setNumberOfOffers(int numberOfOffers)
     {
         this.numberOfOffers = numberOfOffers;
+    }
+
+    public CommandImpl getCommand()
+    {
+        CommandImpl cmd = new CommandImpl();
+        cmd.setMethodIdentifier("getOffers");
+        cmd.setInteractionPoint(this.interactionPoint);
+        cmd.setNumberRequested(this.numberOfOffers);
+        return cmd;
     }
 
     @Override

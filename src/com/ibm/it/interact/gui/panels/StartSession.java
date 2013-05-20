@@ -41,6 +41,7 @@ public final class StartSession implements ITabbedPanel
     private JPanel startSessionPanel;
     private JList audienceIdList;
     private JButton runButton;
+    private JTextField flowchartNameTextField;
     private JFrame mainFrame;
 
     // Business logic variables
@@ -85,6 +86,7 @@ public final class StartSession implements ITabbedPanel
         this.relyOnExistingSessionCheckBox.setSelected(false);
         this.interactiveChannelText.setText("");
         this.audienceLevelText.setText("");
+        this.flowchartNameTextField.setText("");
         UIUtils.clearList(this.audienceIdList);
         UIUtils.clearList(this.parametersList);
     }
@@ -108,6 +110,7 @@ public final class StartSession implements ITabbedPanel
         ssd.setAudienceLevel(this.audienceLevelText.getText());
         ssd.setAudienceIds(UIUtils.getNameValuePairs(this.audienceIdList));
         ssd.setParameters(UIUtils.getNameValuePairs(this.parametersList));
+        ssd.setFlowchartName(this.flowchartNameTextField.getText());
         ssd.setRelyOnExistingSession(this.relyOnExistingSessionCheckBox.isSelected());
         return ssd;
     }
@@ -117,8 +120,10 @@ public final class StartSession implements ITabbedPanel
         this.relyOnExistingSessionCheckBox.setSelected(ssd.isRelyOnExistingSession());
         this.interactiveChannelText.setText(ssd.getInteractiveChannel());
         this.audienceLevelText.setText(ssd.getAudienceLevel());
+        this.flowchartNameTextField.setText(ssd.getFlowchartName());
+
         UIUtils.fillParamsList(this.audienceIdList, ssd.getAudienceIds(), true);
-        UIUtils.fillParamsList(this.parametersList, ssd.getParameters(), true);
+        UIUtils.fillParamsList(this.parametersList, ssd.getParameters(), true, "UACIExecuteFlowchartByName");
     }
 
     private void initializePopupParamsMenu()

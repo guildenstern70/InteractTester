@@ -41,6 +41,7 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -50,6 +51,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -81,8 +83,8 @@ public final class MainForm
     private BatchExecute batchExecutePanel;
 
     // Controls
+    final private JFrame frame;
     private JFileChooser fileChooser;
-    private JFrame frame;
     private JPanel pnlMain;
     private JLabel lblStatusBar;
     private JTabbedPane tabbedPane;
@@ -111,6 +113,7 @@ public final class MainForm
     private JMenuItem jMenuFileExit;
     private JMenuItem jMenuSettings;
     private JMenu jMenuTools;
+    private JMenuItem jMenuToolsClearLog;
     private JMenuItem jMenuToolsSaveLog;
     private JMenuItem jMenuToolsTestConnection;
     private JMenuItem jMenuToolsConnManager;
@@ -166,9 +169,30 @@ public final class MainForm
 
         frame.setContentPane(itf.pnlMain);
         frame.setJMenuBar(itf.jMenuBar);
+
+        Image icon = itf.getWindowIcon();
+        if (icon != null)
+        {
+            frame.setIconImage(itf.getWindowIcon());
+        }
+
         frame.pack();
         itf.showInterface(frame);
         return itf;
+    }
+
+    private Image getWindowIcon()
+    {
+        Image icon = null;
+
+        String imgLocation = "/res/UnicaIcon.gif";
+        URL imageURL = getClass().getResource(imgLocation);
+        if (imageURL != null)
+        {
+            icon = Toolkit.getDefaultToolkit().getImage(imageURL);
+        }
+
+        return icon;
     }
 
     private void showInterface(JFrame frame)
@@ -289,6 +313,7 @@ public final class MainForm
         jSeparator2 = new javax.swing.JSeparator();
         jMenuFileExit = new javax.swing.JMenuItem();
         jMenuTools = new javax.swing.JMenu();
+        jMenuToolsClearLog = new javax.swing.JMenuItem();
         jMenuToolsSaveLog = new javax.swing.JMenuItem();
         jSeparator5 = new javax.swing.JSeparator();
         jSeparator6 = new javax.swing.JSeparator();
@@ -337,7 +362,7 @@ public final class MainForm
         });
         jMenuFile.add(jMenuFileNew);
 
-        jMenuFileOpen.setText("Open");
+        jMenuFileOpen.setText("Open...");
         jMenuFileOpen.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
@@ -433,6 +458,21 @@ public final class MainForm
         jMenuBar.add(jMenuFile);
 
         jMenuTools.setText("Tools");
+
+        jMenuToolsClearLog.setText("Clear log");
+        jMenuToolsClearLog.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuToolsClearLogActionPerformed(evt);
+            }
+
+            private void jMenuToolsClearLogActionPerformed(ActionEvent evt)
+            {
+                clearLog();
+            }
+        });
+        jMenuTools.add(jMenuToolsClearLog);
 
         jMenuToolsSaveLog.setText("Save log...");
         jMenuToolsSaveLog.addActionListener(new java.awt.event.ActionListener()
@@ -597,7 +637,6 @@ public final class MainForm
             final JFileChooser fc = new JFileChooser(fsv.getRoots()[0]);
             fc.setDialogTitle("Export test data");
             fc.setFileFilter(new TextFile());
-            fc.addChoosableFileFilter(new TextFile());
             fc.setAcceptAllFileFilterUsed(true);
 
             int returnVal = fc.showSaveDialog(this.getFrame());
@@ -761,6 +800,7 @@ public final class MainForm
         RunData runData = this.getCurrentRunData();
         runData.setRunDataFilePath(filePath);
         RunDataSerializer.Serialize(runData, filePath, this.client.getLogger());
+        this.currentRunData = runData;
         this.updateTitle(runData);
     }
 
@@ -878,6 +918,11 @@ public final class MainForm
         {
             logger.log("Load command cancelled by user.");
         }
+    }
+
+    private void clearLog()
+    {
+        this.txtConsole.setText("");
     }
 
     private void saveLog()

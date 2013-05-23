@@ -11,8 +11,12 @@ package com.ibm.it.interact.client.data;
 import com.ibm.it.interact.client.Utils;
 import com.unicacorp.interact.api.CommandImpl;
 import com.unicacorp.interact.api.NameValuePair;
+import com.unicacorp.interact.api.NameValuePairImpl;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Data needed to run Post Event Interact API
@@ -22,7 +26,12 @@ public class PostEventData implements Serializable
     private static final long serialVersionUID = 7526472295622776133L;
 
     private String eventName;
-    private NameValuePair[] postEventParams;
+    private List<NameValuePair> postEventParams;
+
+    public PostEventData()
+    {
+        this.eventName = "";
+    }
 
     public String getEventName()
     {
@@ -36,12 +45,62 @@ public class PostEventData implements Serializable
 
     public NameValuePair[] getPostEventParams()
     {
-        return postEventParams;
+        return this.postEventParams.toArray(new NameValuePair[this.postEventParams.size()]);
     }
 
-    public void setPostEventParams(NameValuePair[] postEventParams)
+    public void setPostEventParams(NameValuePair[] parameters)
     {
-        this.postEventParams = postEventParams;
+        this.postEventParams = new ArrayList<NameValuePair>(parameters.length);
+        this.postEventParams.addAll(Arrays.asList(parameters));
+    }
+
+    public String getFlowchartName()
+    {
+        String flowchartName = "";
+
+        for (NameValuePair nvp : this.postEventParams)
+        {
+            if (nvp.getName().equals("UACIExecuteFlowchartByName"))
+            {
+                flowchartName = nvp.getValueAsString();
+                break;
+            }
+        }
+
+        return flowchartName;
+    }
+
+    public void setFlowchartName(String flowchart)
+    {
+        boolean found = false;
+
+        if (this.postEventParams != null)
+        {
+
+            for (NameValuePair nvp : this.postEventParams)
+            {
+                if (nvp.getName().equals("UACIExecuteFlowchartByName"))
+                {
+                    nvp.setValueAsString(flowchart);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                NameValuePairImpl nvpFlowchart = new NameValuePairImpl();
+                nvpFlowchart.setName("UACIExecuteFlowchartByName");
+                nvpFlowchart.setValueDataType(NameValuePair.DATA_TYPE_STRING);
+                nvpFlowchart.setValueAsString(flowchart);
+                this.postEventParams.add(nvpFlowchart);
+            }
+
+        }
+        else
+        {
+            System.err.println("Parameters null? Always call setPostEventParameters() before setFlowchartName.");
+        }
     }
 
     public CommandImpl getCommand()
@@ -49,7 +108,7 @@ public class PostEventData implements Serializable
         CommandImpl cmd = new CommandImpl();
         cmd.setMethodIdentifier("postEvent");
         cmd.setEvent(this.eventName);
-        cmd.setEventParameters(Utils.toNVPImpl(this.postEventParams));
+        cmd.setEventParameters(Utils.toNVPImpl(this.getPostEventParams()));
         return cmd;
     }
 

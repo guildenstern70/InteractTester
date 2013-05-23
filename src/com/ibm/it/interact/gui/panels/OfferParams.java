@@ -16,12 +16,12 @@ import java.util.List;
  */
 public class OfferParams
 {
-    private int offerId;
-    private Offer unicaOffer;
+    final private int offerId;
+    final private Offer unicaOffer;
     private String treatmentCode;
     private String name;
     private String[] offerCodes;
-    private List<NameValuePairDecor> params;
+    final private List<NameValuePairDecor> params;
 
     public OfferParams(Offer offer, int id)
     {

@@ -3,6 +3,7 @@
 
 
     <property file="build.properties"/>
+    <buildnumber file="build.properties"/>
 
     <!-- Compiler options -->
 
@@ -142,6 +143,8 @@
     <property name="interactclient.output.samples.dir" value="${interactclient.output.dir}/samples/"/>
     <property name="interactclient.output.libraries.dir" value="${interactclient.output.dir}/lib/"/>
     <property name="interactclient.main.class" value="com.ibm.it.interact.gui.Launcher"/>
+    <property name="interactclient.deploy.dir" value="${interactclient.basedir}/out/deployment/interactclient/"/>
+    <property name="interactclient.deploy.zipdir" value="${interactclient.basedir}/out/deployment/"/>
 
     <path id="interactclient.libraries">
         <path refid="library.jgoodies-1.2.1.classpath"/>
@@ -166,11 +169,12 @@
 
     <patternset id="resource.files">
         <include name="res/*.png"/>
-        <include name="res/*.ico"/>
+        <include name="res/*.gif"/>
     </patternset>
 
     <patternset id="samples.files">
-        <include name="*.itf"/>
+        <include name="samples/*.itf"/>
+        <include name="samples/*.txt"/>
     </patternset>
 
     <patternset id="excluded.from.compilation.interactclient">
@@ -186,6 +190,7 @@
     <fileset id="interactclient.application.files" dir="${basedir}">
         <include name="application.properties"/>
         <include name="start.bat"/>
+        <include name="start.sh"/>
     </fileset>
 
 
@@ -194,8 +199,8 @@
     <target name="prepare.resources">
         <mkdir dir="${interactclient.output.dir}"/>
         <mkdir dir="${interactclient.output.samples.dir}"/>
-        <copy todir="${interactclient.output.samples.dir}">
-            <fileset dir="${interactclient.samples}">
+        <copy todir="${interactclient.output.dir}">
+            <fileset dir=".">
                 <patternset refid="samples.files"/>
             </fileset>
         </copy>
@@ -257,6 +262,22 @@
     <target name="build" depends="clean, jar.all" description="build all">
         <delete dir="${interactclient.output.resources.dir}"/>
         <delete dir="${interactclient.output.dir}/com"/>
+    </target>
+
+    <target name="run" depends="build" description="Run Interact Tester">
+        <java jar="${interactclient.output.dir}/interactclient.jar" fork="true"/>
+    </target>
+
+    <target name="deploy" depends="build" description="Prepare a package ready for deployment">
+        <move file="${interactclient.output.dir}/start.bat"
+              tofile="${interactclient.output.dir}/start.rename_me_to_bat"/>
+        <copy todir="${interactclient.deploy.dir}">
+            <fileset dir="${interactclient.output.dir}" includes="**"/>
+        </copy>
+        <zip destfile="${interactclient.deploy.zipdir}/interact_client_${build.number}.zip"
+             basedir="${interactclient.deploy.dir}"
+                />
+        <delete dir="${interactclient.deploy.dir}"/>
     </target>
 
     <target name="all" depends="build" description="build all"/>

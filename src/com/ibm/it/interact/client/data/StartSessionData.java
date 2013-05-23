@@ -65,39 +65,6 @@ public class StartSessionData implements Serializable
         return sb.toString();
     }
 
-    public void initializeWithDefaults()
-    {
-        /*
-        this.relyOnExistingSession = false;
-        this.debug = true;
-        this.interactiveChannel = "CEP";
-        this.audienceLevel = "NDG";
-
-        this.audienceIds = new NameValuePairImpl[]{new NameValuePairImpl()};
-
-        this.audienceIds[0].setName("NDG_KEY");
-        this.audienceIds[0].setValueDataType(NameValuePair.DATA_TYPE_NUMERIC);
-        this.audienceIds[0].setValueAsNumeric(1932707801.0d);
-
-        this.parameters = new NameValuePairImpl[]{new NameValuePairImpl(),
-                new NameValuePairImpl(),
-                new NameValuePairImpl()};
-
-        this.parameters[0].setName("UACIExecuteFlowchartByName");
-        this.parameters[0].setValueDataType(NameValuePair.DATA_TYPE_STRING);
-        this.parameters[0].setValueAsString("CEP_Segmentation_Flowchart");
-
-        this.parameters[1].setName("BASIC_EVENT_TYPE_ID");
-        this.parameters[1].setValueDataType(NameValuePair.DATA_TYPE_NUMERIC);
-        this.parameters[1].setValueAsNumeric(55.0d);
-
-        Calendar today = Calendar.getInstance();
-        this.parameters[2].setName("START_TS");
-        this.parameters[2].setValueDataType(NameValuePair.DATA_TYPE_DATETIME);
-        this.parameters[2].setValueAsDate(today.getTime());
-        */
-    }
-
     public CommandImpl getCommand()
     {
         CommandImpl cmd = new CommandImpl();
@@ -138,7 +105,6 @@ public class StartSessionData implements Serializable
             {
                 if (nvp.getName().equals("UACIExecuteFlowchartByName"))
                 {
-                    System.out.println("Trovato UAC! Lo cambio!");
                     nvp.setValueAsString(flowchart);
                     found = true;
                     break;
@@ -147,8 +113,6 @@ public class StartSessionData implements Serializable
 
             if (!found)
             {
-                System.out.println("NON Trovato UAC! Lo aggiungo!");
-
                 NameValuePairImpl nvpFlowchart = new NameValuePairImpl();
                 nvpFlowchart.setName("UACIExecuteFlowchartByName");
                 nvpFlowchart.setValueDataType(NameValuePair.DATA_TYPE_STRING);

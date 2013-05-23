@@ -23,7 +23,7 @@ public final class NameValuePairDecor implements Serializable
 {
     private static final long serialVersionUID = 7526472295622776121L;
 
-    private NameValuePair nvp;
+    final private NameValuePair nvp;
     private String kind;
 
     public NameValuePairDecor(NameValuePair xNvp)
@@ -69,10 +69,12 @@ public final class NameValuePairDecor implements Serializable
         {
             Double valDbl = this.nvp.getValueAsNumeric();
             val = Utils.formatFromDouble(valDbl);
-        } else if (this.kind.equals("string"))
+        }
+        else if (this.kind.equals("string"))
         {
             val = this.nvp.getValueAsString();
-        } else
+        }
+        else
         {
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss");
             val = format.format(this.nvp.getValueAsDate());

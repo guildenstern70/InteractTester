@@ -10,7 +10,7 @@
     <rowspec value="center:d:grow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:d:noGrow"/>
-    <colspec value="fill:125px:noGrow"/>
+    <colspec value="fill:101px:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:131px:grow"/>
     <colspec value="left:4dlu:noGrow"/>
@@ -34,7 +34,7 @@
         </constraints>
         <properties>
           <labelFor value="e7a1a"/>
-          <text value="Interaction Point"/>
+          <text value="Interaction Point:"/>
         </properties>
       </component>
       <component id="e7a1a" class="javax.swing.JTextField" binding="interactionPointTextField" default-binding="true">
@@ -62,7 +62,7 @@
         </constraints>
         <properties>
           <labelFor value="c6ff7"/>
-          <text value="Number Of Offers"/>
+          <text value="Number Of Offers:"/>
         </properties>
       </component>
       <component id="ed0c" class="javax.swing.JButton" binding="runButton" default-binding="true">
@@ -89,7 +89,7 @@
       </hspacer>
       <component id="7ec18" class="javax.swing.JLabel">
         <constraints>
-          <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="6" fill="0" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
@@ -116,7 +116,7 @@
       </scrollpane>
       <component id="4110b" class="javax.swing.JLabel">
         <constraints>
-          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
           <forms defaultalign-vert="false"/>
         </constraints>
         <properties>

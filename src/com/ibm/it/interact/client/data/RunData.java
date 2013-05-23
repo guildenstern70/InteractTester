@@ -176,6 +176,12 @@ public class RunData implements Serializable
     public String toString()
     {
         StringBuilder sb = new StringBuilder("INTERACT TEST DATA");
+        String dataName = this.getRunDataName();
+        if (Utils.isNotNullNotEmptyNotWhiteSpace(dataName))
+        {
+            sb.append(": ");
+            sb.append(dataName);
+        }
         sb.append(System.lineSeparator());
         sb.append(System.lineSeparator());
         sb.append(this.startSessionData.toString());

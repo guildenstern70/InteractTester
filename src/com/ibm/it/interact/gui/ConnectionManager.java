@@ -44,7 +44,7 @@ public class ConnectionManager extends JDialog
     private JButton deleteButton;
     private JTextField connectionNameTextField;
 
-    private Client client;
+    final private Client client;
 
     public ConnectionManager(Client theClient)
     {
@@ -132,16 +132,12 @@ public class ConnectionManager extends JDialog
             InteractConnection newServer = new InteractConnection(connectionName, connectionUrl);
             this.replaceOrAddServer(oldServer, newServer);
         }
-        else
-        {
-            System.out.println("A server is not selected from the list.");
-        }
 
     }
 
     private void replaceOrAddServer(InteractConnection oldServer, InteractConnection newServer)
     {
-        DefaultListModel model = (DefaultListModel) this.connectionsList.getModel();
+        DefaultListModel<InteractConnection> model = (DefaultListModel<InteractConnection>) this.connectionsList.getModel();
         int connections = model.getSize();
 
         // Build a list of servers. If the oldServer is found, it is not added
@@ -150,14 +146,12 @@ public class ConnectionManager extends JDialog
         ArrayList<InteractConnection> connectionArrayList = new ArrayList<InteractConnection>(connections);
         for (int j = 0; j < model.getSize(); j++)
         {
-            InteractConnection tempConn = (InteractConnection) model.getElementAt(j);
+            InteractConnection tempConn = model.getElementAt(j);
             if (!tempConn.equals(oldServer))
             {
-                System.out.println("Adding " + tempConn.toString());
                 connectionArrayList.add(tempConn);
             }
         }
-        System.out.println("Adding NEW SERVER " + newServer.toString());
         connectionArrayList.add(newServer);
 
         // Clear the list and replace with the new one
@@ -181,7 +175,6 @@ public class ConnectionManager extends JDialog
             InteractConnection tempConn = (InteractConnection) model.getElementAt(j);
             if (!tempConn.equals(oldConn))
             {
-                System.out.println("Adding " + tempConn.toString());
                 connectionArrayList.add(tempConn);
             }
         }
@@ -276,7 +269,6 @@ public class ConnectionManager extends JDialog
             for (int j = 0; j < model.getSize(); j++)
             {
                 InteractConnection ic = (InteractConnection) model.getElementAt(j);
-                System.out.println("Adding " + ic.toString());
                 connectionArrayList.add(ic);
             }
 

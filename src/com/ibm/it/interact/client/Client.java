@@ -31,12 +31,12 @@ import java.util.logging.Level;
 
 public final class Client
 {
-    private XLog logger;
+    final private XLog logger;
 
     public Client(XLog log)
     {
         this.logger = log;
-        this.logger.log("Welcome to Unica Interact Tester v.0.1");
+        this.logger.log("Welcome to Unica Interact Tester v." + Settings.VERSION);
     }
 
     public XLog getLogger()

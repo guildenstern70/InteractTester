@@ -58,7 +58,7 @@ public class UIUtils
         UIUtils.addParamToList(paramControl, nvp, true);
     }
 
-    public static void addParamToList(JList paramControl, NameValuePairDecor nvp, boolean sort)
+    private static void addParamToList(JList paramControl, NameValuePairDecor nvp, boolean sort)
     {
         DefaultListModel<NameValuePairDecor> dlm = (DefaultListModel<NameValuePairDecor>) paramControl.getModel();
         if (nvp != null)

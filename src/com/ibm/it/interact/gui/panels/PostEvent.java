@@ -40,11 +40,12 @@ public final class PostEvent implements ITabbedPanel
     private JButton getFromGetOffersButton;
     private JButton runButton;
     private JComboBox getFromOfferComboBox;
-    private JFrame mainFrame;
+    private JTextField flowchartTextField;
+    final private JFrame mainFrame;
 
     // Business logic variables
-    private MainForm parent;
-    private Client client;
+    final private MainForm parent;
+    final private Client client;
 
     public PostEvent(MainForm mainForm)
     {
@@ -125,15 +126,34 @@ public final class PostEvent implements ITabbedPanel
 
     public void updateUIFromData(PostEventData ped)
     {
-        this.eventNameTextField.setText(ped.getEventName());
-        UIUtils.fillParamsList(this.parametersList, ped.getPostEventParams(), true);
+
+        String eventName = ped.getEventName();
+        String flowChart = ped.getFlowchartName();
+
+        this.eventNameTextField.setText(eventName);
+        this.flowchartTextField.setText(flowChart);
+
+        UIUtils.fillParamsList(this.parametersList, ped.getPostEventParams(), true, "UACIExecuteFlowchartByName");
     }
 
     public PostEventData getDataFromUI()
     {
         PostEventData ped = new PostEventData();
-        ped.setEventName(this.eventNameTextField.getText());
+        String eventName = this.eventNameTextField.getText();
+        String flowChart = this.flowchartTextField.getText();
+
+        if (Utils.isNotNullNotEmptyNotWhiteSpace(eventName))
+        {
+            ped.setEventName(eventName);
+        }
+
         ped.setPostEventParams(UIUtils.getNameValuePairs(this.parametersList));
+
+        if (Utils.isNotNullNotEmptyNotWhiteSpace(flowChart))
+        {
+            ped.setFlowchartName(flowChart);
+        }
+
         return ped;
     }
 

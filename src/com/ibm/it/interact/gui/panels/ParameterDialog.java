@@ -47,7 +47,7 @@ public class ParameterDialog extends JDialog
     private JSpinner spinner1;
     private NameValuePair nvp;
     private JFrame parent;
-    private XLog log;
+    final private XLog log;
 
     private ParameterDialog(JFrame parent, XLog logger)
     {

@@ -25,11 +25,11 @@ public class BatchExecute implements ITabbedPanel
     private JButton runButton;
     private JPanel apiCheckPanel;
     private JCheckBox endSessionCheckBox;
-    private JFrame mainFrame;
+    final private JFrame mainFrame;
 
     // Business logic variables
-    private MainForm parent;
-    private Client client;
+    final private MainForm parent;
+    final private Client client;
 
     public BatchExecute(MainForm mainForm)
     {

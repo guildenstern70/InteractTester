@@ -122,7 +122,9 @@
           </grid>
           <forms defaultalign-horz="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <enabled value="true"/>
+        </properties>
       </component>
       <component id="fe0fe" class="javax.swing.JLabel">
         <constraints>

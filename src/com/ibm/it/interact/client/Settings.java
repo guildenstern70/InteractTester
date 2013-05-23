@@ -32,12 +32,12 @@ public final class Settings
     private static final String CLIENT_WIDTH = "interact.tester.Width";
     private static final String CLIENT_HEIGHT = "interact.tester.Height";
 
-    public static final String VERSION = "0.2.1217";
+    public static final String VERSION = "0.2.1247";
 
     private static Settings settings;
     private final Properties props;
 
-    private XLog log;
+    final private XLog log;
 
     // Properties
     private boolean generateSessionIdAtStartup;
@@ -175,7 +175,6 @@ public final class Settings
      */
     public Dimension clientDimensions()
     {
-        System.out.println("Client size = " + String.valueOf(this.clientSize.getWidth()));
         return this.clientSize;
     }
 
@@ -255,14 +254,7 @@ public final class Settings
 
             // Generate random session id
             String autoId = this.props.getProperty(AUTOGENERATE_ID);
-            if (autoId.equals("true"))
-            {
-                this.generateSessionIdAtStartup = true;
-            }
-            else
-            {
-                this.generateSessionIdAtStartup = false;
-            }
+            this.generateSessionIdAtStartup = autoId.equals("true");
 
             // Last used Unica Server
             String lastUsed = this.props.getProperty(LAST_USED_URL);

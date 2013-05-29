@@ -54,7 +54,7 @@ public class InteractConnection implements Serializable
         this.connectionUrl = connectionUrl;
     }
 
-    public void setConnectionUrl(String connectionUrl1)
+    void setConnectionUrl(String connectionUrl1)
     {
         if (!connectionUrl1.endsWith(InteractConnection.interactServicePath))
         {

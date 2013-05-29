@@ -1,10 +1,15 @@
-/************************************************
- * UNICA INTERACT TESTER
- * (C) IBM Corp. 2013 - All rights reserved.
+/**
+ *   UNICA INTERACT TESTER
  *
- * Author: alessiosaltarin@it.ibm.com
+ *   IBM Confidential
+ *   (C) IBM Corp. 2013 - All rights reserved.
  *
- ***********************************************/
+ *   The source code for this program is not published or otherwise
+ *   divested of its trade secrets, irrespective of what has been
+ *   deposited with the U.S. Copyright Office.
+ *
+ *   Author: alessiosaltarin@it.ibm.com
+ */
 
 package com.ibm.it.interact.gui.panels;
 
@@ -218,7 +223,7 @@ public class ParameterDialog extends JDialog
 
             case 2: // date
                 this.nvp.setValueDataType("datetime");
-                Date d1 = null;
+                Date d1;
                 SpinnerDateModel model = (SpinnerDateModel) this.spinner1.getModel();
                 d1 = model.getDate();
                 this.nvp.setValueAsDate(d1);

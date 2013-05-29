@@ -63,7 +63,7 @@ public final class NameValuePairDecor implements Serializable
 
     public final String getValue()
     {
-        String val = "Unknown";
+        String val;
 
         if (this.kind.equals("numeric"))
         {

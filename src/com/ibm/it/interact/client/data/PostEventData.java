@@ -50,7 +50,7 @@ public class PostEventData implements Serializable
 
     public void setPostEventParams(NameValuePair[] parameters)
     {
-        this.postEventParams = new ArrayList<NameValuePair>(parameters.length);
+        this.postEventParams = new ArrayList<>(parameters.length);
         this.postEventParams.addAll(Arrays.asList(parameters));
     }
 
@@ -125,7 +125,8 @@ public class PostEventData implements Serializable
         {
             sb.append(System.lineSeparator());
             NameValuePairDecor nvd = new NameValuePairDecor(s);
-            sb.append("  > " + nvd.toExtendedString());
+            sb.append("  > ");
+            sb.append(nvd.toExtendedString());
         }
         sb.append(System.lineSeparator());
         return sb.toString();

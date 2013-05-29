@@ -1,6 +1,11 @@
 /************************************************
  * UNICA INTERACT TESTER
+ * IBM Confidential
  * (C) IBM Corp. 2013 - All rights reserved.
+ *
+ * The source code for this program is not published or otherwise
+ * divested of its trade secrets, irrespective of what has been
+ * deposited with the U.S. Copyright Office.
  *
  * Author: alessiosaltarin@it.ibm.com
  *
@@ -111,6 +116,31 @@ public final class Client
 
     }
 
+    public Response getProfile(RunData rd)
+    {
+        Response resp = null;
+        String sessionId = rd.getSessionId();
+        InteractAPI api = this.initializeAPI(rd);
+
+        this.logger.log("-----------------------");
+        this.logger.log("  RUNNING GET PROFILE    ");
+        this.logger.log("-----------------------");
+        this.logger.log("> Parameters given: ");
+        this.logger.log("> SessionID = " + sessionId);
+
+        try
+        {
+            resp = api.getProfile(sessionId);
+            this.processResponse("getProfile", resp);
+        }
+        catch (RemoteException e)
+        {
+            this.logger.log(Level.SEVERE, e.getMessage());
+        }
+
+        return resp;
+    }
+
     public Response runPostEvent(RunData rd)
     {
         Response resp = null;
@@ -150,7 +180,6 @@ public final class Client
         try
         {
             InteractAPI api = this.initializeAPI(rd);
-            GetOffersData gofd = rd.getGetOffersData();
 
             this.logger.log("-----------------------");
             this.logger.log("     END SESSION       ");
@@ -310,7 +339,7 @@ public final class Client
         }
     }
 
-    public void processResponse(String apiname, Response response)
+    void processResponse(String apiname, Response response)
     {
         // check if response is successful or not
         if (response.getStatusCode() == Response.STATUS_SUCCESS)
@@ -424,7 +453,7 @@ public final class Client
             if (Utils.isNotNullNotEmptyNotWhiteSpace(url))
             {
                 api = InteractAPI.getInstance(url);
-                Response response = null;
+                Response response;
                 response = api.getVersion();
 
                 if (response.getStatusCode() == Response.STATUS_SUCCESS)
@@ -443,14 +472,11 @@ public final class Client
 
 
         }
-        catch (MalformedURLException e)
+        catch (MalformedURLException | RemoteException e)
         {
             this.logger.log(Level.SEVERE, e.getMessage());
         }
-        catch (Exception e)
-        {
-            this.logger.log(Level.SEVERE, e.getMessage());
-        }
+
 
         return api;
 

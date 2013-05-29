@@ -27,7 +27,7 @@ public class OfferParams
     {
         this.unicaOffer = offer;
         this.offerId = id;
-        this.params = new ArrayList<NameValuePairDecor>();
+        this.params = new ArrayList<>();
         this.initialize();
     }
 

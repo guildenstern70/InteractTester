@@ -12,7 +12,6 @@ import com.unicacorp.interact.api.NameValuePair;
 import com.unicacorp.interact.api.NameValuePairImpl;
 
 import java.text.DecimalFormat;
-import java.util.Properties;
 
 public class Utils
 {
@@ -64,16 +63,5 @@ public class Utils
         return retStr;
     }
 
-    /**
-     * Read properties file
-     *
-     * @return Handle to read properties
-     */
-    public static Properties getClientProperties(XLog logger)
-    {
-        Settings settings = Settings.getInstance(logger);
-        settings.readProperties();
-        return settings.getProperties();
-    }
 }
 

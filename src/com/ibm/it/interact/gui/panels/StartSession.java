@@ -1,3 +1,16 @@
+/**
+ *   UNICA INTERACT TESTER
+ *
+ *   IBM Confidential
+ *   (C) IBM Corp. 2013 - All rights reserved.
+ *
+ *   The source code for this program is not published or otherwise
+ *   divested of its trade secrets, irrespective of what has been
+ *   deposited with the U.S. Copyright Office.
+ *
+ *   Author: alessiosaltarin@it.ibm.com
+ */
+
 package com.ibm.it.interact.gui.panels;
 
 import com.ibm.it.interact.client.Client;
@@ -146,35 +159,34 @@ public final class StartSession implements ITabbedPanel
         String interactiveChannel = this.interactiveChannelText.getText();
         String audienceLevel = this.audienceLevelText.getText();
         NameValuePair[] audienceIds = UIUtils.getNameValuePairs(this.audienceIdList);
-        NameValuePair[] params = UIUtils.getNameValuePairs(this.audienceIdList);
 
         if (!Utils.isNotNullNotEmptyNotWhiteSpace(interactiveChannel))
         {
             readyToRun = false;
             JOptionPane.showMessageDialog(this.getPanel(),
                     "Interactive Channel cannot be null",
-                    "Invalid Interactive Channel", JOptionPane.OK_OPTION);
+                    "Invalid Interactive Channel", JOptionPane.WARNING_MESSAGE);
         }
         else if (!Utils.isNotNullNotEmptyNotWhiteSpace(sessionId))
         {
             readyToRun = false;
             JOptionPane.showMessageDialog(this.getPanel(),
                     "SessionID cannot be null",
-                    "Invalid SessionID", JOptionPane.OK_OPTION);
+                    "Invalid SessionID", JOptionPane.WARNING_MESSAGE);
         }
         else if (!Utils.isNotNullNotEmptyNotWhiteSpace(audienceLevel))
         {
             readyToRun = false;
             JOptionPane.showMessageDialog(this.getPanel(),
                     "Audience Level cannot be null",
-                    "Invalid Audience Level", JOptionPane.OK_OPTION);
+                    "Invalid Audience Level", JOptionPane.WARNING_MESSAGE);
         }
         else if (audienceIds.length == 0)
         {
             readyToRun = false;
             JOptionPane.showMessageDialog(this.getPanel(),
                     "Audience IDs cannot be null",
-                    "Invalid Audience IDs", JOptionPane.OK_OPTION);
+                    "Invalid Audience IDs", JOptionPane.WARNING_MESSAGE);
         }
 
         return readyToRun;
@@ -199,9 +211,11 @@ public final class StartSession implements ITabbedPanel
 
             if (this.isReadyToRun()) // validation
             {
+                this.parent.showStatusMessage("Running StartSession...");
                 RunData rd = new RunData(this.parent.getInteractServer(), this.parent.getSessionId());
                 rd.setStartSessionData(this.getDataFromUI());
                 this.client.runStartSession(rd, true);
+                this.parent.showStatusMessage("Ready.");
             }
         }
         else

@@ -45,7 +45,7 @@ public class Launcher
                 @Override
                 public void run()
                 {
-                    MainForm mf = MainForm.show();
+                    MainForm.show();
                 }
             });
 

@@ -1,3 +1,16 @@
+/**
+ *   UNICA INTERACT TESTER
+ *
+ *   IBM Confidential
+ *   (C) IBM Corp. 2013 - All rights reserved.
+ *
+ *   The source code for this program is not published or otherwise
+ *   divested of its trade secrets, irrespective of what has been
+ *   deposited with the U.S. Copyright Office.
+ *
+ *   Author: alessiosaltarin@it.ibm.com
+ */
+
 package com.ibm.it.interact.gui.panels;
 
 import com.ibm.it.interact.client.Client;
@@ -97,7 +110,7 @@ public final class PostEvent implements ITabbedPanel
 
             for (int j = 0; j < howManyOffers; j++)
             {
-                this.getFromOfferComboBox.addItem(new Integer(j + 1));
+                this.getFromOfferComboBox.addItem(j + 1);
             }
 
             this.getFromGetOffersButton.setEnabled(true);
@@ -194,8 +207,10 @@ public final class PostEvent implements ITabbedPanel
                 PostEventData pod = this.getDataFromUI();
                 if (pod != null)
                 {
+                    this.parent.showStatusMessage("Running PostEvent...");
                     rd.setPostEventData(pod);
                     this.client.runPostEvent(rd);
+                    this.parent.showStatusMessage("Ready.");
                 }
             }
         }
@@ -231,8 +246,7 @@ public final class PostEvent implements ITabbedPanel
                 rd.setGetOffersData(god);
                 resp = this.client.runGetOffers(rd);
 
-                Map<Integer, OfferParams> offers;
-                offers = new HashMap<Integer, OfferParams>();
+                Map<Integer, OfferParams> offers = new HashMap<>();
                 int offerNum = 0;
 
                 OfferList[] offerLists = resp.getAllOfferLists();
@@ -251,7 +265,7 @@ public final class PostEvent implements ITabbedPanel
                     for (Offer offer : of.getRecommendedOffers())
                     {
                         OfferParams op = new OfferParams(offer, ++offerNum);
-                        offers.put(new Integer(offerNum), op);
+                        offers.put(offerNum, op);
                     }
                 }
 

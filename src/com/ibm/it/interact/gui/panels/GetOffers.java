@@ -1,3 +1,16 @@
+/**
+ *   UNICA INTERACT TESTER
+ *
+ *   IBM Confidential
+ *   (C) IBM Corp. 2013 - All rights reserved.
+ *
+ *   The source code for this program is not published or otherwise
+ *   divested of its trade secrets, irrespective of what has been
+ *   deposited with the U.S. Copyright Office.
+ *
+ *   Author: alessiosaltarin@it.ibm.com
+ */
+
 package com.ibm.it.interact.gui.panels;
 
 import com.ibm.it.interact.client.Client;
@@ -13,7 +26,6 @@ import com.unicacorp.interact.api.Response;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JList;
@@ -36,7 +48,6 @@ public final class GetOffers implements ITabbedPanel
     private JPanel getOffersPanel;
     private JTextField interactionPointTextField;
     private JTextField numberOfOffersTextField;
-    private JCheckBox sendParametersFromStartCheckBox;
     private JButton runButton;
     private JComboBox selectOfferComboBox;
     private JList offerParametersList;
@@ -74,9 +85,12 @@ public final class GetOffers implements ITabbedPanel
 
     public void onComboChange()
     {
-        int selectedItem = this.selectOfferComboBox.getSelectedIndex();
-        OfferParams op = this.offers.get(selectedItem + 1);
-        UIUtils.fillParamsList(this.offerParametersList, op.getOfferDetails(), false);
+        Integer selectedItem = (Integer) this.selectOfferComboBox.getSelectedItem();
+        if (selectedItem != null)
+        {
+            OfferParams op = this.offers.get(selectedItem);
+            UIUtils.fillParamsList(this.offerParametersList, op.getOfferDetails(), false);
+        }
     }
 
     public String getInteractionPoint()
@@ -92,7 +106,7 @@ public final class GetOffers implements ITabbedPanel
 
     public GetOffersData getDataFromUI()
     {
-        GetOffersData god = null;
+        GetOffersData god;
         int nroff;
 
         god = new GetOffersData();
@@ -133,7 +147,7 @@ public final class GetOffers implements ITabbedPanel
 
     private void fillOffersData(Response resp)
     {
-        this.offers = new HashMap<Integer, OfferParams>();
+        this.offers = new HashMap<>();
         int offerNum = 0;
 
         OfferList[] offerLists = resp.getAllOfferLists();
@@ -147,7 +161,7 @@ public final class GetOffers implements ITabbedPanel
                     for (Offer offer : offers)
                     {
                         OfferParams op = new OfferParams(offer, ++offerNum);
-                        this.offers.put(new Integer(offerNum), op);
+                        this.offers.put(offerNum, op);
                     }
                 }
             }
@@ -159,7 +173,7 @@ public final class GetOffers implements ITabbedPanel
         this.selectOfferComboBox.removeAllItems();
         for (int j = 0; j < offerNum; j++)
         {
-            this.selectOfferComboBox.addItem(new Integer(j + 1));
+            this.selectOfferComboBox.addItem(j + 1);
         }
 
         // Fill List with first offer
@@ -183,10 +197,13 @@ public final class GetOffers implements ITabbedPanel
         {
             if (this.isReadyToRun()) // validation
             {
+                this.parent.showStatusMessage("Running GetOffers...");
+
                 RunData rd = new RunData(this.parent.getInteractServer(), this.parent.getSessionId());
                 GetOffersData god = this.getDataFromUI();
                 if (god != null)
                 {
+
                     rd.setGetOffersData(god);
                     Response resp = this.client.runGetOffers(rd);
                     this.fillOffersData(resp);
@@ -197,6 +214,8 @@ public final class GetOffers implements ITabbedPanel
         {
             System.err.println("Critical: client is NULL.");
         }
+
+        this.parent.showStatusMessage("Ready.");
     }
 
     private boolean isReadyToRun()
@@ -211,14 +230,14 @@ public final class GetOffers implements ITabbedPanel
             readyToRun = false;
             JOptionPane.showMessageDialog(this.getPanel(),
                     "Interaction Point cannot be null",
-                    "Invalid InteractionPoint", JOptionPane.OK_OPTION);
+                    "Invalid InteractionPoint", JOptionPane.WARNING_MESSAGE);
         }
         else if (!Utils.isNotNullNotEmptyNotWhiteSpace(numOffers))
         {
             readyToRun = false;
             JOptionPane.showMessageDialog(this.getPanel(),
                     "Number of Offers cannot be null",
-                    "Invalid Nr. Of Offers", JOptionPane.OK_OPTION);
+                    "Invalid Nr. Of Offers", JOptionPane.WARNING_MESSAGE);
         }
 
         try
@@ -230,7 +249,7 @@ public final class GetOffers implements ITabbedPanel
             readyToRun = false;
             JOptionPane.showMessageDialog(this.getPanel(),
                     "Invalid number of offers",
-                    "Invalid Nr. Of Offers", JOptionPane.OK_OPTION);
+                    "Invalid Nr. Of Offers", JOptionPane.WARNING_MESSAGE);
         }
 
         return readyToRun;

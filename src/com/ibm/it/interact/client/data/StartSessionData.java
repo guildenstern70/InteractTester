@@ -49,7 +49,8 @@ public class StartSessionData implements Serializable
         {
             sb.append(System.lineSeparator());
             NameValuePairDecor nvd = new NameValuePairDecor(s);
-            sb.append("  > " + nvd.toExtendedString());
+            sb.append("  > ");
+            sb.append(nvd.toExtendedString());
 
         }
         sb.append(System.lineSeparator());
@@ -58,7 +59,8 @@ public class StartSessionData implements Serializable
         {
             sb.append(System.lineSeparator());
             NameValuePairDecor nvd = new NameValuePairDecor(s);
-            sb.append("  > " + nvd.toExtendedString());
+            sb.append("  > ");
+            sb.append(nvd.toExtendedString());
         }
         sb.append(System.lineSeparator());
 
@@ -194,7 +196,7 @@ public class StartSessionData implements Serializable
 
     public final void setParameters(NameValuePair[] parameters)
     {
-        this.parameters = new ArrayList<NameValuePair>(parameters.length);
+        this.parameters = new ArrayList<>(parameters.length);
         this.parameters.addAll(Arrays.asList(parameters));
     }
 

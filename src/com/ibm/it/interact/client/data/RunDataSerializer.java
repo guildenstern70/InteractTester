@@ -25,7 +25,7 @@ public class RunDataSerializer
 {
     public static void Serialize(RunData rd, String fullPath, XLog log)
     {
-        ObjectOutputStream oos = null;
+        ObjectOutputStream oos;
         try
         {
             FileOutputStream fos = new FileOutputStream(fullPath);
@@ -41,7 +41,7 @@ public class RunDataSerializer
 
     public static RunData Deserialize(String fileFullPath, XLog log)
     {
-        FileInputStream fis = null;
+        FileInputStream fis;
         RunData rd = null;
 
         try
@@ -50,16 +50,12 @@ public class RunDataSerializer
             ObjectInputStream ois = new ObjectInputStream(fis);
             rd = (RunData) ois.readObject();
         }
-        catch (IOException e)
+        catch (IOException | ClassNotFoundException e)
         {
             log.log(Level.SEVERE, e.getMessage());
             e.printStackTrace();
         }
-        catch (ClassNotFoundException e)
-        {
-            log.log(Level.SEVERE, e.getMessage());
-            e.printStackTrace();
-        }
+
 
         return rd;
 

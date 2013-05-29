@@ -32,7 +32,7 @@ public final class Settings
     private static final String CLIENT_WIDTH = "interact.tester.Width";
     private static final String CLIENT_HEIGHT = "interact.tester.Height";
 
-    public static final String VERSION = "0.2.1247";
+    public static final String VERSION = "0.2.7878";
 
     private static Settings settings;
     private final Properties props;
@@ -240,7 +240,7 @@ public final class Settings
         {
             // Unica Servers
             Set<String> propertyNames = this.props.stringPropertyNames();
-            this.unicaServers = new ArrayList<InteractConnection>();
+            this.unicaServers = new ArrayList<>();
             for (String prop : propertyNames)
             {
                 if (prop.startsWith(INTERACT_SERVER))

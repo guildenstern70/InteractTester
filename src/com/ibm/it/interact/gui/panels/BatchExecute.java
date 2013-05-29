@@ -1,3 +1,16 @@
+/**
+ *   UNICA INTERACT TESTER
+ *
+ *   IBM Confidential
+ *   (C) IBM Corp. 2013 - All rights reserved.
+ *
+ *   The source code for this program is not published or otherwise
+ *   divested of its trade secrets, irrespective of what has been
+ *   deposited with the U.S. Copyright Office.
+ *
+ *   Author: alessiosaltarin@it.ibm.com
+ */
+
 package com.ibm.it.interact.gui.panels;
 
 import com.ibm.it.interact.client.Client;
@@ -75,7 +88,7 @@ public class BatchExecute implements ITabbedPanel
         this.endSessionCheckBox.setSelected(bed.isExeEndSession());
     }
 
-    public BatchExecuteData getDataFromUI()
+    BatchExecuteData getDataFromUI()
     {
         BatchExecuteData bed = new BatchExecuteData();
 
@@ -111,8 +124,10 @@ public class BatchExecute implements ITabbedPanel
                     rd.setPostEventData(parent.getPostEventPanel().getDataFromUI());
                 }
 
+                this.parent.showStatusMessage("Running BatchExecute...");
                 rd.setBatchExecuteData(bed);
                 this.client.runBatch(rd, this.endSessionCheckBox.isSelected());
+                this.parent.showStatusMessage("Ready.");
 
             }
         }

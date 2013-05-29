@@ -143,7 +143,7 @@ public class ConnectionManager extends JDialog
         // Build a list of servers. If the oldServer is found, it is not added
         // to the list: it will be added the new one. If it is not found, then
         // the new one will be added.
-        ArrayList<InteractConnection> connectionArrayList = new ArrayList<InteractConnection>(connections);
+        ArrayList<InteractConnection> connectionArrayList = new ArrayList<>(connections);
         for (int j = 0; j < model.getSize(); j++)
         {
             InteractConnection tempConn = model.getElementAt(j);
@@ -163,6 +163,7 @@ public class ConnectionManager extends JDialog
 
     }
 
+    /*
     private void modifyConnection(String newConnectionName, InteractConnection oldConn)
     {
         InteractConnection newConn = new InteractConnection(newConnectionName,
@@ -184,7 +185,7 @@ public class ConnectionManager extends JDialog
             model.addElement(conn);
         }
         model.addElement(newConn);
-    }
+    } */
 
     private void initializeEventHandlers()
     {
@@ -265,7 +266,7 @@ public class ConnectionManager extends JDialog
         {
             Settings settings = Settings.getInstance(this.client.getLogger());
 
-            ArrayList<InteractConnection> connectionArrayList = new ArrayList<InteractConnection>(connections);
+            ArrayList<InteractConnection> connectionArrayList = new ArrayList<>(connections);
             for (int j = 0; j < model.getSize(); j++)
             {
                 InteractConnection ic = (InteractConnection) model.getElementAt(j);
@@ -323,7 +324,6 @@ public class ConnectionManager extends JDialog
         InteractConnection ic = (InteractConnection) this.connectionsList.getSelectedValue();
         if (ic != null)
         {
-            int connectionsSize = this.connectionsList.getModel().getSize();
             String copyName = "Copy of " + ic.getConnectionName();
             String copyUrl = ic.getConnectionUrl().toString();
             InteractConnection newIc = new InteractConnection(copyName, copyUrl);

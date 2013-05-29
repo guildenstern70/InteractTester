@@ -53,20 +53,15 @@ public class UIUtils
         return nvps;
     }
 
-    public static void addParamToList(JList paramControl, NameValuePairDecor nvp)
-    {
-        UIUtils.addParamToList(paramControl, nvp, true);
-    }
-
     private static void addParamToList(JList paramControl, NameValuePairDecor nvp, boolean sort)
     {
         DefaultListModel<NameValuePairDecor> dlm = (DefaultListModel<NameValuePairDecor>) paramControl.getModel();
         if (nvp != null)
         {
-            List<NameValuePairDecor> nvpList = new ArrayList<NameValuePairDecor>();
+            List<NameValuePairDecor> nvpList = new ArrayList<>();
             for (int j = 0; j < dlm.getSize(); j++)
             {
-                nvpList.add((NameValuePairDecor) dlm.get(j));
+                nvpList.add(dlm.get(j));
             }
             nvpList.add(nvp);
 
@@ -159,7 +154,7 @@ public class UIUtils
 
     }
 
-    public static final JPopupMenu buildParametersPopupMenu(final JFrame parent, final Client client)
+    public static JPopupMenu buildParametersPopupMenu(final JFrame parent, final Client client)
     {
         final JPopupMenu popup;
 

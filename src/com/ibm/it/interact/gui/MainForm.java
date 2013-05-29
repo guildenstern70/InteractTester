@@ -1,10 +1,15 @@
-/************************************************
- * UNICA INTERACT TESTER
- * (C) IBM Corp. 2013 - All rights reserved.
+/**
+ *   UNICA INTERACT TESTER
  *
- * Author: alessiosaltarin@it.ibm.com
+ *   IBM Confidential
+ *   (C) IBM Corp. 2013 - All rights reserved.
  *
- ***********************************************/
+ *   The source code for this program is not published or otherwise
+ *   divested of its trade secrets, irrespective of what has been
+ *   deposited with the U.S. Copyright Office.
+ *
+ *   Author: alessiosaltarin@it.ibm.com
+ */
 
 package com.ibm.it.interact.gui;
 
@@ -22,21 +27,10 @@ import com.ibm.it.interact.gui.panels.BatchExecute;
 import com.ibm.it.interact.gui.panels.GetOffers;
 import com.ibm.it.interact.gui.panels.PostEvent;
 import com.ibm.it.interact.gui.panels.StartSession;
+import com.unicacorp.interact.api.NameValuePair;
+import com.unicacorp.interact.api.Response;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileSystemView;
@@ -117,6 +111,7 @@ public final class MainForm
     private JMenuItem jMenuToolsSaveLog;
     private JMenuItem jMenuToolsTestConnection;
     private JMenuItem jMenuToolsConnManager;
+    private JMenuItem jMenuToolsGetProfile;
     private JMenu jMenuHelp;
     private JMenuItem jMenuHelpIBMHome;
     private JMenuItem jMenuHelpUnicaHome;
@@ -137,7 +132,7 @@ public final class MainForm
                 showConnectionManager();
             }
         });
-        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.frame.addWindowListener(new WindowAdapter()
         {
             public void windowClosing(WindowEvent e)
@@ -219,11 +214,6 @@ public final class MainForm
         frame.setVisible(true);
     }
 
-    public JPanel getMainPanel()
-    {
-        return this.pnlMain;
-    }
-
     public PostEvent getPostEventPanel()
     {
         return this.postEventPanel;
@@ -262,6 +252,11 @@ public final class MainForm
     public InteractConnection getInteractServer()
     {
         return (InteractConnection) this.interactURLComboBox.getSelectedItem();
+    }
+
+    public void showStatusMessage(String status)
+    {
+        this.lblStatusBar.setText(status);
     }
 
     public String getInteractionPoint()
@@ -320,6 +315,7 @@ public final class MainForm
         jMenuToolsTestConnection = new javax.swing.JMenuItem();
         jMenuToolsConnManager = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JSeparator();
+        jMenuToolsGetProfile = new javax.swing.JMenuItem();
         jMenuToolsEndSession = new javax.swing.JMenuItem();
         jMenuHelp = new javax.swing.JMenu();
         jMenuHelpIBMHome = new javax.swing.JMenuItem();
@@ -521,6 +517,21 @@ public final class MainForm
         jMenuTools.add(jMenuToolsTestConnection);
         jMenuTools.add(jSeparator5);
 
+        jMenuToolsGetProfile.setText("Get Profile");
+        jMenuToolsGetProfile.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jMenuToolsGetProfileActionPerformed(evt);
+            }
+
+            private void jMenuToolsGetProfileActionPerformed(ActionEvent evt)
+            {
+                runGetProfile();
+            }
+        });
+        jMenuTools.add(jMenuToolsGetProfile);
+
         jMenuToolsEndSession.setText("End Session");
         jMenuToolsEndSession.addActionListener(new java.awt.event.ActionListener()
         {
@@ -682,6 +693,58 @@ public final class MainForm
         }
     }
 
+    private void runGetProfile()
+    {
+
+        String sessionId = this.getSessionId();
+        if (!Utils.isNotNullNotEmptyNotWhiteSpace(sessionId))
+        {
+            Settings settings = this.getSettings();
+            if (settings != null)
+            {
+                if (settings.isGenerateSessionIdAtStartup())
+                {
+                    this.generateRandomSessionId();
+                }
+            }
+        }
+
+        RunData rd = this.getCurrentRunData();
+        Response resp = client.getProfile(rd);
+        if (resp != null)
+        {
+            if (resp.getStatusCode() == Response.STATUS_SUCCESS)
+            {
+                XLog log = this.client.getLogger();
+                log.log("GetProfile Results:");
+
+                for (NameValuePair nvp : resp.getProfileRecord())
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("   [");
+                    sb.append(nvp.getName());
+                    sb.append(" = ");
+
+                    if (nvp.getValueDataType().equals(NameValuePair.DATA_TYPE_DATETIME))
+                    {
+                        sb.append(nvp.getValueAsDate());
+                    }
+                    else if (nvp.getValueDataType().equals(NameValuePair.DATA_TYPE_NUMERIC))
+                    {
+                        sb.append(nvp.getValueAsNumeric());
+                    }
+                    else
+                    {
+                        sb.append(nvp.getValueAsString());
+                    }
+                    sb.append("]");
+
+                    log.log(sb.toString());
+                }
+            }
+        }
+    }
+
     private void testConnection()
     {
         RunData rd = this.getCurrentRunData();
@@ -789,6 +852,7 @@ public final class MainForm
                 }
                 catch (IOException e)
                 {
+                    e.printStackTrace();
                 }
             }
         }
@@ -854,25 +918,6 @@ public final class MainForm
 
         // PostEvent Data
         this.postEventPanel.updateUIFromData(runData.getPostEventData());
-    }
-
-    private void setComboURL(InteractConnection url)
-    {
-        boolean found = false;
-        for (int k = 0; k < this.interactURLComboBox.getItemCount(); k++)
-        {
-            InteractConnection tempUrl = (InteractConnection) this.interactURLComboBox.getItemAt(k);
-            if (url.equals(tempUrl))
-            {
-                this.interactURLComboBox.setSelectedIndex(k);
-                found = true;
-                break;
-            }
-        }
-        if (!found)
-        {
-            this.interactURLComboBox.addItem(url);
-        }
     }
 
     private RunData getCurrentRunData()

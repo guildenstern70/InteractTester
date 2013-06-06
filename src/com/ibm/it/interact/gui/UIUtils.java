@@ -21,25 +21,42 @@ import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- *
- *
+ * User Interface Utilities
  */
 public class UIUtils
 {
+
+    /**
+     * Clear a JList list
+     *
+     * @param list
+     */
     public static void clearList(JList list)
     {
         DefaultListModel model = (DefaultListModel) list.getModel();
         model.removeAllElements();
     }
 
+    /**
+     * Extract a list of NameValuePair from a List with NameValuePairs items
+     *
+     * @param control
+     * @return
+     */
     public static NameValuePair[] getNameValuePairs(JList control)
     {
         DefaultListModel model = (DefaultListModel) control.getModel();
@@ -53,28 +70,16 @@ public class UIUtils
         return nvps;
     }
 
-    private static void addParamToList(JList paramControl, NameValuePairDecor nvp, boolean sort)
+    /**
+     * Fill control with list of NameValuePair
+     *
+     * @param paramControl The control showing the list of NameValuePair
+     * @param nvp          The list of NameValuePair
+     * @param sort         True, if the control must show the list in order
+     */
+    public static void fillParamsList(JList paramControl, NameValuePair[] nvp, boolean sort)
     {
-        DefaultListModel<NameValuePairDecor> dlm = (DefaultListModel<NameValuePairDecor>) paramControl.getModel();
-        if (nvp != null)
-        {
-            List<NameValuePairDecor> nvpList = new ArrayList<>();
-            for (int j = 0; j < dlm.getSize(); j++)
-            {
-                nvpList.add(dlm.get(j));
-            }
-            nvpList.add(nvp);
-
-            if (sort)
-            {
-                Collections.sort(nvpList, new NameValuePairSorter());
-            }
-            dlm.clear();
-            for (NameValuePairDecor item : nvpList)
-            {
-                dlm.addElement(item);
-            }
-        }
+        UIUtils.fillParamsList(paramControl, nvp, sort, null);
     }
 
     /**
@@ -93,7 +98,7 @@ public class UIUtils
         {
             dlm.removeAllElements();
 
-            List<NameValuePairDecor> nvpList = new ArrayList<NameValuePairDecor>(nvp.length);
+            List<NameValuePairDecor> nvpList = new ArrayList<>(nvp.length);
             for (NameValuePair item : nvp)
             {
                 if (exclude != null)
@@ -122,16 +127,17 @@ public class UIUtils
 
     }
 
-    public static void fillParamsList(JList paramControl, NameValuePair[] nvp, boolean sort)
-    {
-        UIUtils.fillParamsList(paramControl, nvp, sort, null);
-    }
-
+    /**
+     * Open a web site on desktop
+     *
+     * @param url
+     */
     public static void openUrl(String url)
     {
         if (!java.awt.Desktop.isDesktopSupported())
         {
             System.err.println("Desktop is not supported (fatal)");
+            return;
         }
 
         java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
@@ -140,6 +146,7 @@ public class UIUtils
         {
 
             System.err.println("Desktop doesn't support the browse action (fatal)");
+            return;
         }
 
         try
@@ -154,39 +161,76 @@ public class UIUtils
 
     }
 
+    /**
+     * Build a popup menu on a frame
+     *
+     * @param parent Frame on which the popup menu is to be displayed
+     * @param client Business logic handle
+     * @return the popup menu
+     */
     public static JPopupMenu buildParametersPopupMenu(final JFrame parent, final Client client)
+    {
+        return UIUtils.buildParametersPopupMenu("Parameters", parent, client);
+    }
+
+    /**
+     * Build a popup menu on a frame
+     *
+     * @param title  popup menu title
+     * @param parent Frame on which the popup menu is to be displayed
+     * @param client Business logic handle
+     * @return the popup menu
+     */
+    public static JPopupMenu buildParametersPopupMenu(String title, final JFrame parent, final Client client)
     {
         final JPopupMenu popup;
 
         // Context menu items
-        final JMenuItem menuItemAdd;
-        final JMenuItem menuItemClear;
-        final JMenuItem menuItemEdit;
-        final JMenuItem menuItemDelete;
-
-        menuItemDelete = new JMenuItem("Delete");
-        menuItemAdd = new JMenuItem("Add...");
-        menuItemEdit = new JMenuItem("Edit...");
-        menuItemClear = new JMenuItem("Clear");
+        final JMenuItem menuItemAdd = new JMenuItem("Add...");
+        final JMenuItem menuItemClear = new JMenuItem("Clear");
+        final JMenuItem menuItemEdit = new JMenuItem("Edit...");
+        final JMenuItem menuItemDelete = new JMenuItem("Delete");
+        final JMenuItem menuItemCut = new JMenuItem("Cut");
+        final JMenuItem menuItemCopy = new JMenuItem("Copy");
+        final JMenuItem menuItemPaste = new JMenuItem("Paste");
 
         //Create the popup menu.
-        popup = new LabeledPopupMenu("Parameters");
+        popup = new LabeledPopupMenu(title);
         popup.addPopupMenuListener(new PopupMenuListener()
         {
+            private boolean isThereAnyItemToPaste()
+            {
+                boolean isThereAny = false;
+
+                try
+                {
+                    Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    Transferable nvpdTrs = clpbrd.getContents(null);
+                    if (nvpdTrs != null)
+                    {
+                        if (nvpdTrs.getTransferData(NameValuePairDecor.clipboardDataFlavor) != null)
+                        {
+                            isThereAny = true;
+                        }
+                    }
+                }
+                catch (Exception exc)
+                {
+                }
+
+                return isThereAny;
+            }
+
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e)
             {
                 JList invoker = (JList) popup.getInvoker();
-                if (invoker.getSelectedIndex() >= 0)
-                {
-                    menuItemDelete.setEnabled(true);
-                    menuItemEdit.setEnabled(true);
-                }
-                else
-                {
-                    menuItemDelete.setEnabled(false);
-                    menuItemEdit.setEnabled(false);
-                }
+                boolean isSelected = (invoker.getSelectedIndex() >= 0);
+                menuItemDelete.setEnabled(isSelected);
+                menuItemEdit.setEnabled(isSelected);
+                menuItemCut.setEnabled(isSelected);
+                menuItemCopy.setEnabled(isSelected);
+                menuItemPaste.setEnabled(this.isThereAnyItemToPaste());
             }
 
             @Override
@@ -217,6 +261,7 @@ public class UIUtils
             }
         });
         popup.add(menuItemClear);
+        popup.add(new JSeparator());
 
         // Add
         menuItemAdd.addActionListener(new java.awt.event.ActionListener()
@@ -250,22 +295,7 @@ public class UIUtils
             private void menuItemEditActionPerformed(ActionEvent evt)
             {
                 JList invoker = (JList) popup.getInvoker();
-                NameValuePairDecor nvpd = (NameValuePairDecor) invoker.getSelectedValue();
-
-                ParameterDialog pdial = ParameterDialog.showDialog(parent,
-                        client.getLogger(),
-                        nvpd);
-                NameValuePair nvp = pdial.getNameValuePair();
-                if (nvp != null)
-                {
-                    // Remove selected
-                    DefaultListModel model = (DefaultListModel) invoker.getModel();
-                    int selIndex = invoker.getSelectedIndex();
-                    model.remove(selIndex);
-
-                    // Add new
-                    UIUtils.addParamToList(invoker, new NameValuePairDecor(nvp), true);
-                }
+                editNVPItem(invoker, parent, client);
             }
         });
         popup.add(menuItemEdit);
@@ -293,9 +323,142 @@ public class UIUtils
             }
         });
         popup.add(menuItemDelete);
+        popup.add(new JSeparator());
+
+        // Cut
+        menuItemCut.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuItemCutActionPerformed(evt);
+            }
+
+            private void menuItemCutActionPerformed(ActionEvent evt)
+            {
+                JList invoker = (JList) popup.getInvoker();
+                NameValuePairDecor nvpd = (NameValuePairDecor) invoker.getSelectedValue();
+                NameValuePair nvp = nvpd.getNameValuePair();
+                if (nvp != null)
+                {
+                    // Remove selected
+                    DefaultListModel model = (DefaultListModel) invoker.getModel();
+                    int selIndex = invoker.getSelectedIndex();
+                    model.remove(selIndex);
+
+                    // Copy value to clipboard
+                    Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    clpbrd.setContents(nvpd, null);
+                }
+            }
+        });
+        popup.add(menuItemCut);
+
+        // Copy
+        menuItemCopy.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuItemCopyActionPerformed(evt);
+            }
+
+            private void menuItemCopyActionPerformed(ActionEvent evt)
+            {
+                JList invoker = (JList) popup.getInvoker();
+                NameValuePairDecor nvpd = (NameValuePairDecor) invoker.getSelectedValue();
+                NameValuePair nvp = nvpd.getNameValuePair();
+                if (nvp != null)
+                {
+                    // Copy value to clipboard
+                    Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    clpbrd.setContents(nvpd, null);
+                }
+            }
+        });
+        popup.add(menuItemCopy);
+
+        // Paste
+        menuItemPaste.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                menuItemPasteActionPerformed(evt);
+            }
+
+            private void menuItemPasteActionPerformed(ActionEvent evt)
+            {
+                // Copy value to clipboard
+                Clipboard clpbrd = Toolkit.getDefaultToolkit().getSystemClipboard();
+                Transferable nvpdTrs = clpbrd.getContents(null);
+
+                try
+                {
+                    if (nvpdTrs != null)
+                    {
+                        JList invoker = (JList) popup.getInvoker();
+                        NameValuePairDecor nvpd;
+                        nvpd = (NameValuePairDecor) nvpdTrs.getTransferData(NameValuePairDecor.clipboardDataFlavor);
+                        UIUtils.addParamToList(invoker, nvpd, true);
+                    }
+                }
+                catch (UnsupportedFlavorException | IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        });
+        popup.add(menuItemPaste);
 
         return popup;
 
     }
+
+    public static void editNVPItem(JList invoker, JFrame parent, Client client)
+    {
+
+        NameValuePairDecor nvpd = (NameValuePairDecor) invoker.getSelectedValue();
+        if (nvpd != null)
+        {
+            ParameterDialog pdial = ParameterDialog.showDialog(parent,
+                    client.getLogger(),
+                    nvpd);
+            NameValuePair nvp = pdial.getNameValuePair();
+            if (nvp != null)
+            {
+                // Remove selected
+                DefaultListModel model = (DefaultListModel) invoker.getModel();
+                int selIndex = invoker.getSelectedIndex();
+                model.remove(selIndex);
+
+                // Add new
+                UIUtils.addParamToList(invoker, new NameValuePairDecor(nvp), true);
+            }
+        }
+    }
+
+
+    private static void addParamToList(JList paramControl, NameValuePairDecor nvp, boolean sort)
+    {
+        DefaultListModel<NameValuePairDecor> dlm = (DefaultListModel<NameValuePairDecor>) paramControl.getModel();
+        if (nvp != null)
+        {
+            List<NameValuePairDecor> nvpList = new ArrayList<>();
+            for (int j = 0; j < dlm.getSize(); j++)
+            {
+                nvpList.add(dlm.get(j));
+            }
+            nvpList.add(nvp);
+
+            if (sort)
+            {
+                Collections.sort(nvpList, new NameValuePairSorter());
+            }
+            dlm.clear();
+            for (NameValuePairDecor item : nvpList)
+            {
+                dlm.addElement(item);
+            }
+        }
+    }
+
 
 }

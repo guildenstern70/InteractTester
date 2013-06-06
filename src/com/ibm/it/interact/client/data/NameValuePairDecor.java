@@ -11,6 +11,12 @@ package com.ibm.it.interact.client.data;
 import com.ibm.it.interact.client.Utils;
 import com.unicacorp.interact.api.NameValuePair;
 
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 
@@ -19,9 +25,11 @@ import java.text.SimpleDateFormat;
  * com.unicacorp.interact.api.NameValuePair.
  * Adds toString() and String representation for value.
  */
-public final class NameValuePairDecor implements Serializable
+public final class NameValuePairDecor implements Serializable, Transferable, ClipboardOwner
 {
     private static final long serialVersionUID = 7526472295622776121L;
+    public static final DataFlavor clipboardDataFlavor =
+            new DataFlavor(NameValuePairDecor.class, "NameValuePairDecor Object");
 
     final private NameValuePair nvp;
     private String kind;
@@ -65,19 +73,19 @@ public final class NameValuePairDecor implements Serializable
     {
         String val;
 
-        if (this.kind.equals("numeric"))
+        switch (this.kind)
         {
-            Double valDbl = this.nvp.getValueAsNumeric();
-            val = Utils.formatFromDouble(valDbl);
-        }
-        else if (this.kind.equals("string"))
-        {
-            val = this.nvp.getValueAsString();
-        }
-        else
-        {
-            SimpleDateFormat format = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss");
-            val = format.format(this.nvp.getValueAsDate());
+            case "numeric":
+                Double valDbl = this.nvp.getValueAsNumeric();
+                val = Utils.formatFromDouble(valDbl);
+                break;
+            case "string":
+                val = this.nvp.getValueAsString();
+                break;
+            default:
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss");
+                val = format.format(this.nvp.getValueAsDate());
+                break;
         }
         return val;
     }
@@ -99,5 +107,36 @@ public final class NameValuePairDecor implements Serializable
         sb.append(" = ");
         sb.append(this.getValue());
         return sb.toString();
+    }
+
+    @Override
+    public DataFlavor[] getTransferDataFlavors()
+    {
+        DataFlavor[] ret = {NameValuePairDecor.clipboardDataFlavor};
+        return ret;
+    }
+
+    @Override
+    public boolean isDataFlavorSupported(DataFlavor flavor)
+    {
+        return NameValuePairDecor.clipboardDataFlavor.equals(flavor);
+    }
+
+    @Override
+    public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException
+    {
+
+        if (this.isDataFlavorSupported(flavor))
+        {
+            return this;
+        }
+
+        return null;
+    }
+
+    @Override
+    public void lostOwnership(Clipboard clipboard, Transferable contents)
+    {
+        System.out.println("MyObjectSelection: Lost ownership");
     }
 }

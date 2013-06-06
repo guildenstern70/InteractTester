@@ -51,7 +51,6 @@ public final class GetOffers implements ITabbedPanel
     private JButton runButton;
     private JComboBox selectOfferComboBox;
     private JList offerParametersList;
-    final private JFrame mainFrame;
 
     // Business logic variables
     final private MainForm parent;
@@ -61,7 +60,7 @@ public final class GetOffers implements ITabbedPanel
     public GetOffers(MainForm mainForm)
     {
         this.parent = mainForm;
-        this.mainFrame = mainForm.getFrame();
+        JFrame mainFrame = mainForm.getFrame();
         this.client = this.parent.getClient();
 
         runButton.addActionListener(new ActionListener()
@@ -242,7 +241,7 @@ public final class GetOffers implements ITabbedPanel
 
         try
         {
-            int p = Integer.parseInt(numOffers);
+            @SuppressWarnings("UnusedAssignment") int p = Integer.parseInt(numOffers);
         }
         catch (NumberFormatException nfe)
         {

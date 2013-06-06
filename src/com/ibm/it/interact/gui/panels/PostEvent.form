@@ -10,7 +10,7 @@
     <rowspec value="top:28dlu:noGrow"/>
     <colspec value="fill:d:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
-    <colspec value="fill:168px:noGrow"/>
+    <colspec value="fill:190px:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:50px:noGrow"/>
     <colspec value="left:4dlu:noGrow"/>
@@ -20,7 +20,7 @@
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:93px:noGrow"/>
     <constraints>
-      <xy x="20" y="20" width="559" height="292"/>
+      <xy x="20" y="20" width="616" height="292"/>
     </constraints>
     <properties/>
     <border type="empty">
@@ -78,16 +78,6 @@
           </component>
         </children>
       </scrollpane>
-      <component id="99f8d" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
-          <forms top="5" left="0" bottom="0" right="0" defaultalign-horz="false" defaultalign-vert="false"/>
-        </constraints>
-        <properties>
-          <labelFor value="313bc"/>
-          <text value="Get parameters from offer #"/>
-        </properties>
-      </component>
       <component id="313bc" class="javax.swing.JComboBox" binding="getFromOfferComboBox" default-binding="true">
         <constraints>
           <grid row="6" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false"/>
@@ -120,15 +110,6 @@
           </grid>
         </children>
       </grid>
-      <component id="80d33" class="javax.swing.JButton" binding="getFromGetOffersButton">
-        <constraints>
-          <grid row="6" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
-          <forms defaultalign-vert="false"/>
-        </constraints>
-        <properties>
-          <text value="..."/>
-        </properties>
-      </component>
       <component id="ea9d3" class="javax.swing.JTextField" binding="flowchartTextField" default-binding="true">
         <constraints>
           <grid row="2" column="2" row-span="1" col-span="7" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
@@ -146,6 +127,15 @@
         <properties>
           <labelFor value="ea9d3"/>
           <text value="Flowchart:"/>
+        </properties>
+      </component>
+      <component id="80d33" class="javax.swing.JButton" binding="getFromGetOffersButton">
+        <constraints>
+          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-vert="false"/>
+        </constraints>
+        <properties>
+          <text value="Get parameters from offer #"/>
         </properties>
       </component>
     </children>

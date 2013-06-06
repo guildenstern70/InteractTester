@@ -7,10 +7,11 @@
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:62px:grow"/>
     <rowspec value="top:5dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
-    <rowspec value="center:32px:noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:30px:noGrow"/>
     <colspec value="fill:117px:noGrow"/>
@@ -49,16 +50,16 @@
       </component>
       <component id="94720" class="javax.swing.JLabel">
         <constraints>
-          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
           <forms defaultalign-vert="false"/>
         </constraints>
         <properties>
-          <text value="Audience ID: "/>
+          <text value="Audience IDs: "/>
         </properties>
       </component>
       <scrollpane id="7770d">
         <constraints>
-          <grid row="2" column="4" row-span="8" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="2" column="4" row-span="9" col-span="3" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms defaultalign-vert="false"/>
         </constraints>
         <properties/>
@@ -83,7 +84,7 @@
       </component>
       <scrollpane id="f80a0">
         <constraints>
-          <grid row="6" column="2" row-span="3" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <grid row="8" column="2" row-span="3" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <forms defaultalign-vert="false"/>
         </constraints>
         <properties/>
@@ -99,7 +100,7 @@
       </scrollpane>
       <component id="66295" class="javax.swing.JCheckBox" binding="relyOnExistingSessionCheckBox" default-binding="true">
         <constraints>
-          <grid row="11" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="12" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="10" fill="0" indent="0" use-parent-layout="false"/>
           <forms defaultalign-vert="false"/>
         </constraints>
         <properties>
@@ -108,32 +109,11 @@
       </component>
       <component id="cc20b" class="javax.swing.JButton" binding="runButton" default-binding="true">
         <constraints>
-          <grid row="11" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
+          <grid row="12" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
           <forms defaultalign-horz="false" defaultalign-vert="false"/>
         </constraints>
         <properties>
           <text value="&amp;Run"/>
-        </properties>
-      </component>
-      <component id="fc0f" class="javax.swing.JTextField" binding="audienceLevelText">
-        <constraints>
-          <grid row="9" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-            <preferred-size width="150" height="-1"/>
-          </grid>
-          <forms defaultalign-horz="false"/>
-        </constraints>
-        <properties>
-          <enabled value="true"/>
-        </properties>
-      </component>
-      <component id="fe0fe" class="javax.swing.JLabel">
-        <constraints>
-          <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-          <forms/>
-        </constraints>
-        <properties>
-          <labelFor value="fc0f"/>
-          <text value="Audience Level: "/>
         </properties>
       </component>
       <component id="1fc96" class="javax.swing.JTextField" binding="flowchartNameTextField" default-binding="true">
@@ -153,6 +133,27 @@
         <properties>
           <labelFor value="1fc96"/>
           <text value="Flowchart Name:"/>
+        </properties>
+      </component>
+      <component id="fe0fe" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <labelFor value="fc0f"/>
+          <text value="Audience Level: "/>
+        </properties>
+      </component>
+      <component id="fc0f" class="javax.swing.JTextField" binding="audienceLevelText">
+        <constraints>
+          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <enabled value="true"/>
         </properties>
       </component>
     </children>

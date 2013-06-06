@@ -255,6 +255,8 @@
 
     <target name="clean.interactclient" description="cleanup">
         <delete dir="${interactclient.output.dir}"/>
+        <delete dir="${interactclient.deploy.dir}"/>
+        <delete file="${interactclient.deploy.zipdir}"/>
     </target>
 
     <target name="clean" depends="clean.interactclient" description="cleanup all"/>
@@ -268,7 +270,7 @@
         <java jar="${interactclient.output.dir}/interactclient.jar" fork="true"/>
     </target>
 
-    <target name="deploy" depends="build" description="Prepare a package ready for deployment">
+    <target name="deploy" depends="clean, build" description="Prepare a package ready for deployment">
         <move file="${interactclient.output.dir}/start.bat"
               tofile="${interactclient.output.dir}/start.rename_me_to_bat"/>
         <copy todir="${interactclient.deploy.dir}">

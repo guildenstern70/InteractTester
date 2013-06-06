@@ -18,6 +18,7 @@ import com.ibm.it.interact.client.Utils;
 import com.ibm.it.interact.client.data.GetOffersData;
 import com.ibm.it.interact.client.data.PostEventData;
 import com.ibm.it.interact.client.data.RunData;
+import com.ibm.it.interact.gui.EditItemAdapter;
 import com.ibm.it.interact.gui.MainForm;
 import com.ibm.it.interact.gui.UIUtils;
 import com.unicacorp.interact.api.Offer;
@@ -97,6 +98,8 @@ public final class PostEvent implements ITabbedPanel
                 parametersList.clearSelection();
             }
         });
+        EditItemAdapter mouseAdapter1 = new EditItemAdapter(this.parametersList, this.mainFrame, this.client);
+        this.parametersList.addMouseListener(mouseAdapter1);
 
         this.getFromOfferComboBox.setEnabled(false);
         this.getFromGetOffersButton.setEnabled(false);
@@ -139,7 +142,6 @@ public final class PostEvent implements ITabbedPanel
 
     public void updateUIFromData(PostEventData ped)
     {
-
         String eventName = ped.getEventName();
         String flowChart = ped.getFlowchartName();
 

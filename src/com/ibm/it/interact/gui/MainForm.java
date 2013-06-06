@@ -37,6 +37,10 @@ import javax.swing.filechooser.FileSystemView;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDropEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -62,8 +66,11 @@ import java.util.Random;
 public final class MainForm
 {
     private final static Charset ENCODING = StandardCharsets.UTF_8;
-    private static final String TITLE = "IBM Campaign Interact Tester";
+    private static final String TITLE = "IBM Interact Tester";
     private static final Dimension WINDOW_SIZE = new Dimension(770, 660);
+
+    // Controls
+    final private JFrame frame;
 
     // Business logic
     private Client client;
@@ -75,9 +82,6 @@ public final class MainForm
     private GetOffers getOffersPanel;
     private PostEvent postEventPanel;
     private BatchExecute batchExecutePanel;
-
-    // Controls
-    final private JFrame frame;
     private JFileChooser fileChooser;
     private JPanel pnlMain;
     private JLabel lblStatusBar;
@@ -87,42 +91,14 @@ public final class MainForm
     private JTextField sessionTextField;
     private JButton generateIdButton;
     private JButton connManagerButton;
-
     // Menu
     private JMenuBar jMenuBar;
-    private JMenu jMenuFile;
-    private JMenuItem jMenuFileNew;
-    private JMenuItem jMenuFileOpen;
-
     // Private methods
     private JMenuItem jMenuFileSave;
-    private JMenuItem jMenuFileSaveAs;
-    private JMenuItem jMenuFileExportData;
-    private JSeparator jSeparator1;
-    private JSeparator jSeparator2;
-    private JSeparator jSeparator3;
-    private JSeparator jSeparator4;
-    private JSeparator jSeparator5;
-    private JSeparator jSeparator6;
-    private JMenuItem jMenuFileExit;
-    private JMenuItem jMenuSettings;
-    private JMenu jMenuTools;
-    private JMenuItem jMenuToolsClearLog;
-    private JMenuItem jMenuToolsSaveLog;
-    private JMenuItem jMenuToolsTestConnection;
-    private JMenuItem jMenuToolsConnManager;
-    private JMenuItem jMenuToolsGetProfile;
-    private JMenu jMenuHelp;
-    private JMenuItem jMenuHelpIBMHome;
-    private JMenuItem jMenuHelpUnicaHome;
-    private JMenuItem jMenuHelpUnicaManual;
-    private JMenuItem jMenuHelpUnicaInteractHome;
-    private JMenuItem jMenuHelpAbout;
-    private JMenuItem jMenuToolsEndSession;
 
     private MainForm(JFrame frm)
     {
-        System.out.println("Welcome to Interact Tester v." + Settings.VERSION);
+        System.out.println("Welcome to " + TITLE + " v." + Settings.VERSION);
         this.frame = frm;
         connManagerButton.addActionListener(new ActionListener()
         {
@@ -140,6 +116,7 @@ public final class MainForm
                 shutdown();
             }
         });
+        this.setFileDropTarget();
     }
 
     /**
@@ -174,6 +151,42 @@ public final class MainForm
         frame.pack();
         itf.showInterface(frame);
         return itf;
+    }
+
+    private void setFileDropTarget()
+    {
+        this.tabbedPane.setDropTarget(new DropTarget()
+        {
+            public synchronized void drop(DropTargetDropEvent dtde)
+            {
+                String dataFilePath = null;
+
+                try
+                {
+                    dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+                    List<File> droppedFiles = (List<File>) dtde
+                            .getTransferable().getTransferData(
+                                    DataFlavor.javaFileListFlavor);
+                    for (File file : droppedFiles)
+                    {
+                        if (file.isFile() && file.getAbsolutePath().endsWith(".itf"))
+                        {
+                            dataFilePath = file.getAbsolutePath();
+                            System.out.println("Found file " + dataFilePath);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ex.printStackTrace();
+                }
+
+                if (dataFilePath != null)
+                {
+                    loadRunData(dataFilePath);
+                }
+            }
+        });
     }
 
     private Image getWindowIcon()
@@ -296,34 +309,33 @@ public final class MainForm
     private void initializeMenus()
     {
         jMenuBar = new javax.swing.JMenuBar();
-        jMenuFile = new javax.swing.JMenu();
-        jMenuFileNew = new javax.swing.JMenuItem();
-        jMenuFileOpen = new javax.swing.JMenuItem();
+        JMenu jMenuFile = new JMenu();
+        JMenuItem jMenuFileNew = new JMenuItem();
+        JMenuItem jMenuFileOpen = new JMenuItem();
         jMenuFileSave = new javax.swing.JMenuItem();
-        jMenuFileSaveAs = new javax.swing.JMenuItem();
-        jSeparator1 = new javax.swing.JSeparator();
-        jMenuFileExportData = new javax.swing.JMenuItem();
-        jSeparator5 = new javax.swing.JSeparator();
-        jMenuSettings = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JSeparator();
-        jMenuFileExit = new javax.swing.JMenuItem();
-        jMenuTools = new javax.swing.JMenu();
-        jMenuToolsClearLog = new javax.swing.JMenuItem();
-        jMenuToolsSaveLog = new javax.swing.JMenuItem();
-        jSeparator5 = new javax.swing.JSeparator();
-        jSeparator6 = new javax.swing.JSeparator();
-        jMenuToolsTestConnection = new javax.swing.JMenuItem();
-        jMenuToolsConnManager = new javax.swing.JMenuItem();
-        jSeparator4 = new javax.swing.JSeparator();
-        jMenuToolsGetProfile = new javax.swing.JMenuItem();
-        jMenuToolsEndSession = new javax.swing.JMenuItem();
-        jMenuHelp = new javax.swing.JMenu();
-        jMenuHelpIBMHome = new javax.swing.JMenuItem();
-        jMenuHelpUnicaHome = new javax.swing.JMenuItem();
-        jMenuHelpUnicaManual = new javax.swing.JMenuItem();
-        jMenuHelpUnicaInteractHome = new javax.swing.JMenuItem();
-        jSeparator3 = new javax.swing.JSeparator();
-        jMenuHelpAbout = new javax.swing.JMenuItem();
+        JMenuItem jMenuFileSaveAs = new JMenuItem();
+        JSeparator jSeparator1 = new JSeparator();
+        JMenuItem jMenuFileExportData = new JMenuItem();
+        JSeparator jSeparator5 = new JSeparator();
+        JMenuItem jMenuSettings = new JMenuItem();
+        JSeparator jSeparator2 = new JSeparator();
+        JMenuItem jMenuFileExit = new JMenuItem();
+        JMenu jMenuTools = new JMenu();
+        JMenuItem jMenuToolsClearLog = new JMenuItem();
+        JMenuItem jMenuToolsSaveLog = new JMenuItem();
+        JSeparator jSeparator6 = new JSeparator();
+        JMenuItem jMenuToolsTestConnection = new JMenuItem();
+        JMenuItem jMenuToolsConnManager = new JMenuItem();
+        JSeparator jSeparator4 = new JSeparator();
+        JMenuItem jMenuToolsGetProfile = new JMenuItem();
+        JMenuItem jMenuToolsEndSession = new JMenuItem();
+        JMenu jMenuHelp = new JMenu();
+        JMenuItem jMenuHelpIBMHome = new JMenuItem();
+        JMenuItem jMenuHelpUnicaHome = new JMenuItem();
+        JMenuItem jMenuHelpUnicaManual = new JMenuItem();
+        JMenuItem jMenuHelpUnicaInteractHome = new JMenuItem();
+        JSeparator jSeparator3 = new JSeparator();
+        JMenuItem jMenuHelpAbout = new JMenuItem();
 
         jMenuFile.setText("File");
         jMenuFile.addMenuListener(new MenuListener()
@@ -655,6 +667,11 @@ public final class MainForm
             {
                 File file = fc.getSelectedFile();
                 String filePath = file.getAbsolutePath();
+
+                if (!file.getName().toLowerCase().endsWith(".txt"))
+                {
+                    filePath = filePath + ".txt";
+                }
 
                 if (file.exists())
                 {
@@ -1050,7 +1067,7 @@ public final class MainForm
         {
             File file = this.fileChooser.getSelectedFile();
             String filePath = file.getAbsolutePath();
-            if (!filePath.endsWith("itf"))
+            if (!filePath.endsWith(".itf"))
             {
                 filePath = filePath + ".itf";
                 file = new File(filePath);
@@ -1094,6 +1111,5 @@ public final class MainForm
             this.settings.readProperties();
         }
     }
-
 
 }

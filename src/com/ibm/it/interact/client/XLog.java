@@ -55,11 +55,7 @@ public class XLog
         {
             LogManager.getLogManager().readConfiguration();
         }
-        catch (SecurityException e)
-        {
-            LOGGER.severe(e.getMessage());
-        }
-        catch (IOException e)
+        catch (SecurityException | IOException e)
         {
             LOGGER.severe(e.getMessage());
         }

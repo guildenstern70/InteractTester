@@ -83,7 +83,7 @@ public class ConnectionManager extends JDialog
 
         try
         {
-            URL tryUrl = new URL(newUrl);
+            @SuppressWarnings("UnusedAssignment") URL tryUrl = new URL(newUrl);
             if (Utils.isNotNullNotEmptyNotWhiteSpace(newUrl))
             {
                 this.modifyConnection();

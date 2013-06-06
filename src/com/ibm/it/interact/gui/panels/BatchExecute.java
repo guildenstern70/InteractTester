@@ -38,7 +38,6 @@ public class BatchExecute implements ITabbedPanel
     private JButton runButton;
     private JPanel apiCheckPanel;
     private JCheckBox endSessionCheckBox;
-    final private JFrame mainFrame;
 
     // Business logic variables
     final private MainForm parent;
@@ -47,7 +46,7 @@ public class BatchExecute implements ITabbedPanel
     public BatchExecute(MainForm mainForm)
     {
         this.parent = mainForm;
-        this.mainFrame = mainForm.getFrame();
+        JFrame mainFrame = mainForm.getFrame();
         this.client = this.parent.getClient();
         runButton.addActionListener(new ActionListener()
         {

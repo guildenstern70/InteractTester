@@ -19,6 +19,7 @@ import com.ibm.it.interact.client.Utils;
 import com.ibm.it.interact.client.data.NameValuePairDecor;
 import com.ibm.it.interact.client.data.RunData;
 import com.ibm.it.interact.client.data.StartSessionData;
+import com.ibm.it.interact.gui.EditItemAdapter;
 import com.ibm.it.interact.gui.MainForm;
 import com.ibm.it.interact.gui.UIUtils;
 import com.unicacorp.interact.api.NameValuePair;
@@ -66,6 +67,8 @@ public final class StartSession implements ITabbedPanel
         this.parent = main;
         this.mainFrame = main.getFrame();
         this.client = this.parent.getClient();
+        EditItemAdapter mouseAdapter1 = new EditItemAdapter(this.parametersList, this.mainFrame, this.client);
+        EditItemAdapter mouseAdapter2 = new EditItemAdapter(this.audienceIdList, this.mainFrame, this.client);
 
         this.initializePopupParamsMenu();
         startSessionPanel.addMouseListener(new MouseAdapter()
@@ -86,6 +89,8 @@ public final class StartSession implements ITabbedPanel
                 run();
             }
         });
+        parametersList.addMouseListener(mouseAdapter1);
+        audienceIdList.addMouseListener(mouseAdapter2);
     }
 
     @Override
@@ -141,11 +146,13 @@ public final class StartSession implements ITabbedPanel
 
     private void initializePopupParamsMenu()
     {
-        JPopupMenu popup = UIUtils.buildParametersPopupMenu(mainFrame, client);
+        JPopupMenu popupParams = UIUtils.buildParametersPopupMenu(mainFrame, client);
+        JPopupMenu audienceParams = UIUtils.buildParametersPopupMenu("Audience IDs", mainFrame, client);
 
-        MouseListener popupListener = new PopupListener(popup);
-        this.audienceIdList.addMouseListener(popupListener);
-        this.parametersList.addMouseListener(popupListener);
+        MouseListener popupListener1 = new PopupListener(popupParams);
+        MouseListener popupListener2 = new PopupListener(audienceParams);
+        this.audienceIdList.addMouseListener(popupListener2);
+        this.parametersList.addMouseListener(popupListener1);
 
         this.getPanel().updateUI();
         this.getPanel().validate();

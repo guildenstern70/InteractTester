@@ -32,7 +32,7 @@ public final class Settings
     private static final String CLIENT_WIDTH = "interact.tester.Width";
     private static final String CLIENT_HEIGHT = "interact.tester.Height";
 
-    public static final String VERSION = "0.2.7878";
+    public static final String VERSION = "0.3.1024";
 
     private static Settings settings;
     private final Properties props;

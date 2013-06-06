@@ -5,9 +5,7 @@
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:max(d;4px):noGrow"/>
     <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:d:grow"/>
-    <rowspec value="top:4dlu:noGrow"/>
-    <rowspec value="center:175px:noGrow"/>
+    <rowspec value="center:max(d;470px):grow"/>
     <rowspec value="top:4dlu:noGrow"/>
     <rowspec value="center:22px:noGrow"/>
     <colspec value="fill:max(d;4px):noGrow"/>
@@ -20,7 +18,7 @@
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:27px:noGrow"/>
     <constraints>
-      <xy x="20" y="20" width="716" height="587"/>
+      <xy x="20" y="20" width="716" height="597"/>
     </constraints>
     <properties/>
     <border type="empty">
@@ -29,7 +27,7 @@
     <children>
       <component id="51120" class="javax.swing.JLabel" binding="lblStatusBar">
         <constraints>
-          <grid row="8" column="0" row-span="1" col-span="7" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="6" column="0" row-span="1" col-span="7" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
           <forms/>
         </constraints>
         <properties>
@@ -37,38 +35,6 @@
           <text value="Ready."/>
         </properties>
       </component>
-      <tabbedpane id="1e94f" binding="tabbedPane">
-        <constraints>
-          <grid row="4" column="0" row-span="1" col-span="9" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="200" height="200"/>
-          </grid>
-          <forms defaultalign-vert="false"/>
-        </constraints>
-        <properties>
-          <background system-color="control"/>
-          <toolTipText value=""/>
-        </properties>
-        <border type="none"/>
-        <children/>
-      </tabbedpane>
-      <scrollpane id="a6cff">
-        <constraints>
-          <grid row="6" column="0" row-span="1" col-span="9" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-          <forms defaultalign-horz="false" defaultalign-vert="false"/>
-        </constraints>
-        <properties/>
-        <border type="bevel-lowered"/>
-        <children>
-          <component id="d17ad" class="javax.swing.JTextArea" binding="txtConsole">
-            <constraints/>
-            <properties>
-              <background color="-3355393"/>
-              <editable value="false"/>
-              <font name="Monospaced" size="11"/>
-            </properties>
-          </component>
-        </children>
-      </scrollpane>
       <component id="a89ae" class="javax.swing.JComboBox" binding="interactURLComboBox" default-binding="true">
         <constraints>
           <grid row="0" column="2" row-span="1" col-span="5" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
@@ -130,6 +96,48 @@
           <text value="Button"/>
         </properties>
       </component>
+      <splitpane id="e96b1">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="9" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="200" height="200"/>
+          </grid>
+          <forms defaultalign-vert="false"/>
+        </constraints>
+        <properties>
+          <orientation value="0"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <tabbedpane id="1e94f" binding="tabbedPane">
+            <constraints>
+              <splitpane position="left"/>
+            </constraints>
+            <properties>
+              <background system-color="control"/>
+              <toolTipText value=""/>
+            </properties>
+            <border type="none"/>
+            <children/>
+          </tabbedpane>
+          <scrollpane id="a6cff">
+            <constraints>
+              <splitpane position="right"/>
+            </constraints>
+            <properties/>
+            <border type="bevel-lowered"/>
+            <children>
+              <component id="d17ad" class="javax.swing.JTextArea" binding="txtConsole">
+                <constraints/>
+                <properties>
+                  <background color="-3355393"/>
+                  <editable value="false"/>
+                  <font name="Monospaced" size="11"/>
+                </properties>
+              </component>
+            </children>
+          </scrollpane>
+        </children>
+      </splitpane>
     </children>
   </grid>
 </form>

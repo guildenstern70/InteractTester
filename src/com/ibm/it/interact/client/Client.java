@@ -1,15 +1,10 @@
-/************************************************
- * UNICA INTERACT TESTER
- * IBM Confidential
- * (C) IBM Corp. 2013 - All rights reserved.
+/**
+ *   UNICA INTERACT TESTER
+ *   (C) IBM Corp. 2013 - All rights reserved.
  *
- * The source code for this program is not published or otherwise
- * divested of its trade secrets, irrespective of what has been
- * deposited with the U.S. Copyright Office.
- *
- * Author: alessiosaltarin@it.ibm.com
- *
- ***********************************************/
+ *   Author: alessiosaltarin@it.ibm.com
+ */
+
 
 package com.ibm.it.interact.client;
 

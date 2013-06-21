@@ -1,3 +1,11 @@
+/**
+ *   UNICA INTERACT TESTER
+ *   (C) IBM Corp. 2013 - All rights reserved.
+ *
+ *   Author: alessiosaltarin@it.ibm.com
+ */
+
+
 package com.ibm.it.interact.client.data;
 
 import javax.swing.filechooser.FileFilter;

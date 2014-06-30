@@ -42,6 +42,11 @@ public class ConnectionManager extends JDialog
 
     private final Client client;
 
+    /**
+     * Connection manager main class
+     *
+     * @param theClient Handler to Client object
+     */
     public ConnectionManager(Client theClient)
     {
         this.client = theClient;

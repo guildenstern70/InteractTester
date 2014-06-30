@@ -1,6 +1,6 @@
 /************************************************
  * UNICA INTERACT TESTER
- * (C) IBM Corp. 2013 - All rights reserved.
+ * (C) IBM Corp. 2013-14 - All rights reserved.
  *
  * Author: alessiosaltarin@it.ibm.com
  *
@@ -10,11 +10,7 @@ package com.ibm.it.interact.client.data;
 
 import com.ibm.it.interact.client.XLog;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.logging.Level;
 
 /**
@@ -55,7 +51,6 @@ public class RunDataSerializer
             log.log(Level.SEVERE, e.getMessage());
             e.printStackTrace();
         }
-
 
         return rd;
 

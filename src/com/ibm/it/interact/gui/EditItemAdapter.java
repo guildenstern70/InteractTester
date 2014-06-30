@@ -2,7 +2,7 @@
  * UNICA INTERACT TESTER
  *   IBM Confidential
  *   OCO Source Materials
- *   (C) IBM Corp. 2013 - All rights reserved.
+ *   (C) IBM Corp. 2013-14 - All rights reserved.
  *
  *   The source code for this program is not published or otherwise
  *   divested of its trade secrets, irrespective of what has been
@@ -15,8 +15,7 @@ package com.ibm.it.interact.gui;
 
 import com.ibm.it.interact.client.Client;
 
-import javax.swing.JFrame;
-import javax.swing.JList;
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 

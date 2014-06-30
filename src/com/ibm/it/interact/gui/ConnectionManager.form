@@ -101,7 +101,9 @@
                   </grid>
                   <forms defaultalign-horz="false"/>
                 </constraints>
-                <properties/>
+                <properties>
+                  <editable value="false"/>
+                </properties>
               </component>
               <component id="2a1e2" class="javax.swing.JButton" binding="testConnectionButton" default-binding="true">
                 <constraints>
@@ -119,7 +121,9 @@
                   </grid>
                   <forms defaultalign-horz="false"/>
                 </constraints>
-                <properties/>
+                <properties>
+                  <editable value="false"/>
+                </properties>
               </component>
             </children>
           </grid>
@@ -144,11 +148,11 @@
             <children>
               <component id="99be7" class="javax.swing.JButton" binding="newConnectionButton" default-binding="true">
                 <constraints>
-                  <grid row="6" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                   <forms/>
                 </constraints>
                 <properties>
-                  <text value="New Connection"/>
+                  <text value="New"/>
                 </properties>
               </component>
               <component id="5baff" class="javax.swing.JLabel">
@@ -192,6 +196,15 @@
                 </constraints>
                 <properties>
                   <text value="Delete"/>
+                </properties>
+              </component>
+              <component id="29e42" class="javax.swing.JButton" binding="editButton" default-binding="true">
+                <constraints>
+                  <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <forms/>
+                </constraints>
+                <properties>
+                  <text value="Edit"/>
                 </properties>
               </component>
             </children>

@@ -1,28 +1,17 @@
 /**
  *   UNICA INTERACT TESTER
- *   (C) IBM Corp. 2013 - All rights reserved.
+ *   (C) IBM Corp. 2013-14 - All rights reserved.
  *
  *   Author: alessiosaltarin@it.ibm.com
  */
-
 
 package com.ibm.it.interact.gui;
 
 import com.ibm.it.interact.client.Settings;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class SettingsForm extends JDialog
 {

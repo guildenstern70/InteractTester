@@ -1,6 +1,6 @@
 /************************************************
  * UNICA INTERACT TESTER
- * (C) IBM Corp. 2013 - All rights reserved.
+ * (C) IBM Corp. 2013-14 - All rights reserved.
  *
  * Author: alessiosaltarin@it.ibm.com
  *
@@ -10,21 +10,11 @@ package com.ibm.it.interact.gui;
 
 import com.ibm.it.interact.client.Settings;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-import javax.swing.SwingConstants;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.net.URL;
+import java.util.Calendar;
 
 public class AboutForm extends JDialog
 {
@@ -62,7 +52,8 @@ public class AboutForm extends JDialog
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
-        this.versionLabel.setText("Version " + Settings.VERSION + ". Copyright IBM Corp. 2013");
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        this.versionLabel.setText("Version " + Settings.VERSION + ". Copyright " + String.valueOf(currentYear) + " IBM Corp.");
     }
 
     private void onOK()

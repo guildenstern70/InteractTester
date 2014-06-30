@@ -1,27 +1,14 @@
 /**
  *   UNICA INTERACT TESTER
- *   (C) IBM Corp. 2013 - All rights reserved.
+ *   (C) IBM Corp. 2013-14 - All rights reserved.
  *
  *   Author: alessiosaltarin@it.ibm.com
  */
 
-
 package com.ibm.it.interact.client;
 
-import com.ibm.it.interact.client.data.BatchExecuteData;
-import com.ibm.it.interact.client.data.GetOffersData;
-import com.ibm.it.interact.client.data.NameValuePairDecor;
-import com.ibm.it.interact.client.data.PostEventData;
-import com.ibm.it.interact.client.data.RunData;
-import com.ibm.it.interact.client.data.StartSessionData;
-import com.unicacorp.interact.api.AdvisoryMessage;
-import com.unicacorp.interact.api.BatchResponse;
-import com.unicacorp.interact.api.Command;
-import com.unicacorp.interact.api.CommandImpl;
-import com.unicacorp.interact.api.NameValuePair;
-import com.unicacorp.interact.api.Offer;
-import com.unicacorp.interact.api.OfferList;
-import com.unicacorp.interact.api.Response;
+import com.ibm.it.interact.client.data.*;
+import com.unicacorp.interact.api.*;
 import com.unicacorp.interact.api.jsoverhttp.InteractAPI;
 
 import java.net.MalformedURLException;
@@ -48,7 +35,6 @@ public final class Client
     {
         BatchResponse response = null;
         InteractAPI api = this.initializeAPI(rd);
-
 
         BatchExecuteData bed = rd.getBatchExecuteData();
 
@@ -465,17 +451,14 @@ public final class Client
                 this.logger.log(Level.SEVERE, "URL is null or empty.");
             }
 
-
         }
         catch (MalformedURLException | RemoteException e)
         {
             this.logger.log(Level.SEVERE, e.getMessage());
         }
 
-
         return api;
 
     }
-
 
 }

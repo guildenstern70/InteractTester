@@ -2,7 +2,7 @@
  *   UNICA INTERACT TESTER
  *
  *   IBM Confidential
- *   (C) IBM Corp. 2013 - All rights reserved.
+ *   (C) IBM Corp. 2013-14 - All rights reserved.
  *
  *   The source code for this program is not published or otherwise
  *   divested of its trade secrets, irrespective of what has been
@@ -25,19 +25,8 @@ import com.unicacorp.interact.api.Offer;
 import com.unicacorp.interact.api.OfferList;
 import com.unicacorp.interact.api.Response;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import javax.swing.*;
+import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -181,7 +170,6 @@ public final class PostEvent implements ITabbedPanel
         this.getPanel().validate();
     }
 
-
     private boolean isReadyToRun()
     {
         boolean readyToRun = true;
@@ -274,7 +262,6 @@ public final class PostEvent implements ITabbedPanel
                 OfferParams op = offers.get(offerNumber);
                 UIUtils.fillParamsList(this.parametersList, op.getOfferDetails(), false);
 
-
             }
             else
             {
@@ -284,7 +271,6 @@ public final class PostEvent implements ITabbedPanel
                         JOptionPane.ERROR_MESSAGE);
             }
         }
-
 
     }
 

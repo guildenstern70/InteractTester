@@ -1,6 +1,6 @@
 /************************************************
  * UNICA INTERACT TESTER
- * (C) IBM Corp. 2013 - All rights reserved.
+ * (C) IBM Corp. 2013-14 - All rights reserved.
  *
  * Author: alessiosaltarin@it.ibm.com
  *
@@ -199,6 +199,5 @@ public class StartSessionData implements Serializable
         this.parameters = new ArrayList<>(parameters.length);
         this.parameters.addAll(Arrays.asList(parameters));
     }
-
 
 }

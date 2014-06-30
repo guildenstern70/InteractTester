@@ -1,6 +1,6 @@
 /************************************************
  * UNICA INTERACT TESTER
- * (C) IBM Corp. 2013 - All rights reserved.
+ * (C) IBM Corp. 2013-14 - All rights reserved.
  *
  * Author: alessiosaltarin@it.ibm.com
  *
@@ -18,7 +18,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
-
 
 /**
  * Logger utility class

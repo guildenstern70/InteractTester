@@ -1,6 +1,6 @@
 /************************************************
  * UNICA INTERACT TESTER
- * (C) IBM Corp. 2013 - All rights reserved.
+ * (C) IBM Corp. 2013-14 - All rights reserved.
  *
  * Author: alessiosaltarin@it.ibm.com
  *
@@ -13,10 +13,7 @@ import com.jgoodies.looks.plastic.theme.ExperienceBlue;
 import com.jgoodies.looks.plastic.theme.Silver;
 import com.jgoodies.looks.plastic.theme.SkyKrupp;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.*;
 import javax.swing.plaf.metal.DefaultMetalTheme;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.MetalTheme;

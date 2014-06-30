@@ -1,6 +1,6 @@
 /************************************************
  * UNICA INTERACT TESTER
- * (C) IBM Corp. 2013 - All rights reserved.
+ * (C) IBM Corp. 2013-14 - All rights reserved.
  *
  * Author: alessiosaltarin@it.ibm.com
  *
@@ -11,11 +11,7 @@ package com.ibm.it.interact.client.data;
 import com.ibm.it.interact.client.Utils;
 import com.unicacorp.interact.api.NameValuePair;
 
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.ClipboardOwner;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.datatransfer.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -112,7 +108,7 @@ public final class NameValuePairDecor implements Serializable, Transferable, Cli
     @Override
     public DataFlavor[] getTransferDataFlavors()
     {
-        DataFlavor[] ret = {NameValuePairDecor.clipboardDataFlavor};
+        DataFlavor[] ret = { NameValuePairDecor.clipboardDataFlavor };
         return ret;
     }
 

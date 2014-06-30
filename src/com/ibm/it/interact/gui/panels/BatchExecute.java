@@ -2,7 +2,7 @@
  *   UNICA INTERACT TESTER
  *
  *   IBM Confidential
- *   (C) IBM Corp. 2013 - All rights reserved.
+ *   (C) IBM Corp. 2013-14 - All rights reserved.
  *
  *   The source code for this program is not published or otherwise
  *   divested of its trade secrets, irrespective of what has been
@@ -18,10 +18,7 @@ import com.ibm.it.interact.client.data.BatchExecuteData;
 import com.ibm.it.interact.client.data.RunData;
 import com.ibm.it.interact.gui.MainForm;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

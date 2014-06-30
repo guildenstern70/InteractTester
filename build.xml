@@ -93,16 +93,16 @@
     </path>
 
     <path id="library.forms.runtime">
-        <pathelement location="${idea.home}/lib/forms_rt.jar"/>
+        <pathelement location="${libs.home}/lib/forms_rt.jar"/>
     </path>
 
     <path id="library.jgoodies-1.2.1.classpath">
-        <pathelement location="${idea.home}/lib/jgoodies-common-1.2.1.jar"/>
-        <pathelement location="${idea.home}/lib/jgoodies-forms.jar"/>
-        <pathelement location="${idea.home}/lib/jgoodies-looks-2.4.2.jar"/>
+        <pathelement location="${libs.home}/lib/jgoodies-common-1.2.1.jar"/>
+        <pathelement location="${libs.home}/lib/jgoodies-forms.jar"/>
+        <pathelement location="${libs.home}/lib/jgoodies-looks-2.4.2.jar"/>
     </path>
 
-    <fileset id="libraries.fromidea" dir="${idea.home}/lib">
+    <fileset id="libraries.fromidea" dir="${libs.home}/lib">
         <include name="forms_rt.jar"/>
         <include name="jgoodies-common-1.2.1.jar"/>
         <include name="jgoodies-forms.jar"/>
@@ -114,7 +114,7 @@
         <include name="jcalendar-1.4.jar"/>
     </fileset>
 
-    <property name="javac2.home" value="${idea.home}/lib"/>
+    <property name="javac2.home" value="${libs.home}/lib"/>
     <path id="javac2.classpath">
         <pathelement location="${javac2.home}/javac2.jar"/>
         <pathelement location="${javac2.home}/jdom.jar"/>
@@ -143,6 +143,7 @@
     <property name="interactclient.output.samples.dir" value="${interactclient.output.dir}/samples/"/>
     <property name="interactclient.output.libraries.dir" value="${interactclient.output.dir}/lib/"/>
     <property name="interactclient.main.class" value="com.ibm.it.interact.gui.Launcher"/>
+    <property name="interactclient.deploy.sources" value="${interactclient.basedir}/out/deployment/sources/"/>
     <property name="interactclient.deploy.dir" value="${interactclient.basedir}/out/deployment/interactclient/"/>
     <property name="interactclient.deploy.zipdir" value="${interactclient.basedir}/out/deployment/"/>
 
@@ -186,6 +187,14 @@
             <include name="src"/>
         </dirset>
     </path>
+
+    <fileset id="interactclient.sourcepath.files" dir="${basedir}">
+        <include name="src/**/*.java"/>
+        <include name="src/**/*.form"/>
+        <include name="build.*"/>
+        <include name="application.properties"/>
+    </fileset>
+
 
     <fileset id="interactclient.application.files" dir="${basedir}">
         <include name="application.properties"/>
@@ -270,7 +279,18 @@
         <java jar="${interactclient.output.dir}/interactclient.jar" fork="true"/>
     </target>
 
-    <target name="deploy" depends="clean, build" description="Prepare a package ready for deployment">
+    <target name="dist.sources" depends="" description="Prepare a package ready for build">
+        <delete dir="${interactclient.deploy.sources}"/>
+        <copy todir="${interactclient.deploy.sources}">
+            <fileset refid="interactclient.sourcepath.files"/>
+        </copy>
+        <copy todir="${interactclient.deploy.sources}/lib">
+            <fileset refid="libraries.fromidea"/>
+            <fileset refid="libraries.fromsrc"/>
+        </copy>
+    </target>
+
+    <target name="dist.bin" depends="clean, build" description="Prepare a package ready for deployment">
         <move file="${interactclient.output.dir}/start.bat"
               tofile="${interactclient.output.dir}/start.rename_me_to_bat"/>
         <copy todir="${interactclient.deploy.dir}">

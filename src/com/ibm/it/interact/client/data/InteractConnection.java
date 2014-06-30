@@ -1,6 +1,6 @@
 /************************************************
  * UNICA INTERACT TESTER
- * (C) IBM Corp. 2013 - All rights reserved.
+ * (C) IBM Corp. 2013-14 - All rights reserved.
  *
  * Author: alessiosaltarin@it.ibm.com
  *
@@ -41,7 +41,13 @@ public class InteractConnection implements Serializable
 
     public String getConnectionSimplifiedUrl()
     {
-        return this.connectionUrl.getProtocol() + "://" + this.connectionUrl.getHost() + ":" + this.connectionUrl.getPort();
+        String connectionURL = this.connectionUrl.getProtocol() + "://" + this.connectionUrl.getHost();
+        int port = this.connectionUrl.getPort();
+        if (port > 0 && port != 80)
+        {
+            connectionURL += ":" + String.valueOf(port);
+        }
+        return connectionURL;
     }
 
     public URL getConnectionUrl()

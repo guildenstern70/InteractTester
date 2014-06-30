@@ -1,6 +1,6 @@
 /**
  *   UNICA INTERACT TESTER
- *   (C) IBM Corp. 2013 - All rights reserved.
+ *   (C) IBM Corp. 2013-14 - All rights reserved.
  *
  *   Author: alessiosaltarin@it.ibm.com
  */
@@ -11,12 +11,7 @@ import com.ibm.it.interact.client.Client;
 import com.ibm.it.interact.client.Settings;
 import com.ibm.it.interact.client.Utils;
 import com.ibm.it.interact.client.XLog;
-import com.ibm.it.interact.client.data.InteractConnection;
-import com.ibm.it.interact.client.data.LogDataFile;
-import com.ibm.it.interact.client.data.RunData;
-import com.ibm.it.interact.client.data.RunDataFile;
-import com.ibm.it.interact.client.data.RunDataSerializer;
-import com.ibm.it.interact.client.data.TextFile;
+import com.ibm.it.interact.client.data.*;
 import com.ibm.it.interact.gui.panels.BatchExecute;
 import com.ibm.it.interact.gui.panels.GetOffers;
 import com.ibm.it.interact.gui.panels.PostEvent;
@@ -28,9 +23,7 @@ import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileSystemView;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -55,16 +48,15 @@ import java.util.Random;
 
 /**
  * Main Interact Test form.
- * Designed with IntelliJ Idea Form Designer
  */
 public final class MainForm
 {
-    private final static Charset ENCODING = StandardCharsets.UTF_8;
+    private static final Charset ENCODING = StandardCharsets.UTF_8;
     private static final String TITLE = "IBM Interact Tester";
     private static final Dimension WINDOW_SIZE = new Dimension(770, 660);
 
     // Controls
-    final private JFrame frame;
+    private final JFrame frame;
 
     // Business logic
     private Client client;

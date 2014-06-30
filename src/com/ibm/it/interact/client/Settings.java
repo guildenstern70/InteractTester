@@ -1,6 +1,6 @@
 /************************************************
  * UNICA INTERACT TESTER
- * (C) IBM Corp. 2013 - All rights reserved.
+ * (C) IBM Corp. 2013-14 - All rights reserved.
  *
  * Author: alessiosaltarin@it.ibm.com
  *
@@ -10,7 +10,7 @@ package com.ibm.it.interact.client;
 
 import com.ibm.it.interact.client.data.InteractConnection;
 
-import java.awt.Dimension;
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,7 +32,7 @@ public final class Settings
     private static final String CLIENT_WIDTH = "interact.tester.Width";
     private static final String CLIENT_HEIGHT = "interact.tester.Height";
 
-    public static final String VERSION = "0.3.1024";
+    public static final String VERSION = "0.4.1227";
 
     private static Settings settings;
     private final Properties props;

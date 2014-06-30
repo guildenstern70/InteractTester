@@ -1,10 +1,9 @@
 /**
  *   UNICA INTERACT TESTER
- *   (C) IBM Corp. 2013 - All rights reserved.
+ *   (C) IBM Corp. 2013-14 - All rights reserved.
  *
  *   Author: alessiosaltarin@it.ibm.com
  */
-
 
 package com.ibm.it.interact.gui;
 
@@ -14,25 +13,10 @@ import com.ibm.it.interact.client.Utils;
 import com.ibm.it.interact.client.data.InteractConnection;
 import com.ibm.it.interact.client.data.RunData;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -51,167 +35,131 @@ public class ConnectionManager extends JDialog
     private JButton copyButton;
     private JButton deleteButton;
     private JTextField connectionNameTextField;
+    private JButton editButton;
 
-    final private Client client;
+    private boolean modifiedName;
+    private boolean modifiedURL;
+
+    private final Client client;
 
     public ConnectionManager(Client theClient)
     {
         this.client = theClient;
 
-        setContentPane(contentPane);
-        setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
+        this.setContentPane(contentPane);
+        this.setModal(true);
+        this.setResizable(false);
+        this.getRootPane().setDefaultButton(buttonOK);
 
         this.setTitle("Interact Connection Manager");
         this.initializeServerList();
         this.initializeEventHandlers();
-        connectionNameTextField.addFocusListener(new FocusAdapter()
-        {
-            @Override
-            public void focusLost(FocusEvent e)
-            {
-                modifyName();
-                super.focusLost(e);
-            }
-        });
-        interactServerURLTextField.addFocusListener(new FocusAdapter()
-        {
-            @Override
-            public void focusLost(FocusEvent e)
-            {
-                modifyUrl();
-                super.focusLost(e);
-            }
-        });
+
     }
 
     private void modifyUrl()
     {
-        String newUrl = this.interactServerURLTextField.getText();
-
-        try
+        System.out.println("ASKED TO MODIFY URL: Modified name = " + String.valueOf(this.modifiedName));
+        if (this.modifiedURL)
         {
-            @SuppressWarnings("UnusedAssignment") URL tryUrl = new URL(newUrl);
-            if (Utils.isNotNullNotEmptyNotWhiteSpace(newUrl))
+            String newUrl = this.interactServerURLTextField.getText();
+            try
             {
-                this.modifyConnection();
+                @SuppressWarnings("UnusedAssignment") URL tryUrl = new URL(newUrl);
+                if (Utils.isNotNullNotEmptyNotWhiteSpace(newUrl))
+                {
+                    this.modifyConnection();
+                }
+            }
+            catch (MalformedURLException e)
+            {
+                JOptionPane.showMessageDialog(this,
+                        "The URL is not valid.",
+                        "Unrecognized URL format.", JOptionPane.ERROR_MESSAGE);
+                this.interactServerURLTextField.setText("");
             }
         }
-        catch (MalformedURLException e)
-        {
-            JOptionPane.showMessageDialog(this,
-                    "The URL is not valid.",
-                    "Unrecognized URL format.", JOptionPane.ERROR_MESSAGE);
-            this.interactServerURLTextField.setText("");
-        }
-
 
     }
 
     private void modifyName()
     {
-        String newConnectionName = this.connectionNameTextField.getText();
-
-        if (Utils.isNotNullNotEmptyNotWhiteSpace(newConnectionName))
+        System.out.println("ASKED TO MODIFY NAME: Modified name = " + String.valueOf(this.modifiedName));
+        if (this.modifiedName)
         {
-            if (newConnectionName.contains(" "))
+            String newConnectionName = this.connectionNameTextField.getText();
+            if (Utils.isNotNullNotEmptyNotWhiteSpace(newConnectionName))
             {
-                JOptionPane.showMessageDialog(this,
-                        "Connection name cannot contain spaces.",
-                        "Invalid name", JOptionPane.ERROR_MESSAGE);
-            }
-            else
-            {
-                this.modifyConnection();
-                DefaultListModel model = (DefaultListModel) this.connectionsList.getModel();
-                this.connectionsList.setSelectedIndex(model.getSize() - 1);
+                if (newConnectionName.contains(" "))
+                {
+                    JOptionPane.showMessageDialog(this,
+                            "Connection name cannot contain spaces.",
+                            "Invalid name", JOptionPane.ERROR_MESSAGE);
+                }
+                else
+                {
+                    this.modifyConnection();
+                }
             }
         }
     }
 
     private void modifyConnection()
     {
-        InteractConnection oldServer = (InteractConnection) this.connectionsList.getSelectedValue();
-
-        if (oldServer != null)
+        System.out.println("ASKED TO MODIFY CONNECTION: Modified name = " + String.valueOf(this.modifiedName));
+        System.out.println("ASKED TO MODIFY CONNECTION: Modified URL = " + String.valueOf(this.modifiedURL));
+        if (this.modifiedURL || this.modifiedName)
         {
-            String connectionName = this.connectionNameTextField.getText();
-            String connectionUrl = this.interactServerURLTextField.getText();
-            InteractConnection newServer = new InteractConnection(connectionName, connectionUrl);
-            this.replaceOrAddServer(oldServer, newServer);
+            InteractConnection oldServer = (InteractConnection) this.connectionsList.getSelectedValue();
+            if (oldServer != null)
+            {
+                String connectionName = this.connectionNameTextField.getText();
+                String connectionUrl = this.interactServerURLTextField.getText();
+                InteractConnection newServer = new InteractConnection(connectionName, connectionUrl);
+                this.replaceOrAddServer(oldServer, newServer);
+                this.resetTextBoxes();
+            }
         }
 
+    }
+
+    private void resetTextBoxes()
+    {
+        this.connectionNameTextField.setEditable(false);
+        this.interactServerURLTextField.setEditable(false);
+        this.modifiedName = false;
+        this.modifiedURL = false;
+        System.out.println("== RESET RESET RESET ==");
     }
 
     private void replaceOrAddServer(InteractConnection oldServer, InteractConnection newServer)
     {
-        DefaultListModel<InteractConnection> model = (DefaultListModel<InteractConnection>) this.connectionsList.getModel();
+        DefaultListModel<InteractConnection> model =
+                (DefaultListModel<InteractConnection>) this.connectionsList.getModel();
         int connections = model.getSize();
 
-        // Build a list of servers. If the oldServer is found, it is not added
-        // to the list: it will be added the new one. If it is not found, then
-        // the new one will be added.
-        ArrayList<InteractConnection> connectionArrayList = new ArrayList<>(connections);
+        boolean replaced = false;
+
         for (int j = 0; j < model.getSize(); j++)
         {
             InteractConnection tempConn = model.getElementAt(j);
-            if (!tempConn.equals(oldServer))
+            if (tempConn.equals(oldServer))
             {
-                connectionArrayList.add(tempConn);
+                // Replace
+                model.set(j, newServer);
+                replaced = true;
             }
         }
-        connectionArrayList.add(newServer);
 
-        // Clear the list and replace with the new one
-        model.clear();
-        for (InteractConnection conn : connectionArrayList)
+        if (!replaced)
         {
-            model.addElement(conn);
+            model.addElement(newServer);
         }
 
     }
 
-    /*
-    private void modifyConnection(String newConnectionName, InteractConnection oldConn)
-    {
-        InteractConnection newConn = new InteractConnection(newConnectionName,
-                this.interactServerURLTextField.getText());
-        DefaultListModel model = (DefaultListModel) this.connectionsList.getModel();
-        int connections = model.getSize();
-        ArrayList<InteractConnection> connectionArrayList = new ArrayList<InteractConnection>(connections);
-        for (int j = 0; j < model.getSize(); j++)
-        {
-            InteractConnection tempConn = (InteractConnection) model.getElementAt(j);
-            if (!tempConn.equals(oldConn))
-            {
-                connectionArrayList.add(tempConn);
-            }
-        }
-        model.clear();
-        for (InteractConnection conn : connectionArrayList)
-        {
-            model.addElement(conn);
-        }
-        model.addElement(newConn);
-    } */
-
     private void initializeEventHandlers()
     {
-        buttonOK.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                onOK();
-            }
-        });
-
-        buttonCancel.addActionListener(new ActionListener()
-        {
-            public void actionPerformed(ActionEvent e)
-            {
-                onCancel();
-            }
-        });
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter()
@@ -230,6 +178,26 @@ public class ConnectionManager extends JDialog
                 onCancel();
             }
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        connectionNameTextField.addFocusListener(new FocusAdapter()
+        {
+            @Override
+            public void focusLost(FocusEvent e)
+            {
+                modifyName();
+                super.focusLost(e);
+            }
+        });
+        interactServerURLTextField.addFocusListener(new FocusAdapter()
+        {
+            @Override
+            public void focusLost(FocusEvent e)
+            {
+                modifyUrl();
+                super.focusLost(e);
+            }
+        });
+
         newConnectionButton.addActionListener(new ActionListener()
         {
             @Override
@@ -262,7 +230,85 @@ public class ConnectionManager extends JDialog
                 testConnection();
             }
         });
+        buttonOK.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                onOK();
+            }
+        });
 
+        buttonCancel.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                onCancel();
+            }
+        });
+
+        editButton.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                editServer();
+            }
+        });
+
+        connectionNameTextField.addKeyListener(new KeyListener()
+        {
+            @Override
+            public void keyPressed(KeyEvent e)
+            {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e)
+            {
+                if (connectionNameTextField.isEditable())
+                {
+                    modifiedName = true;
+                    System.out.println("Modified name = " + String.valueOf(modifiedName));
+                }
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e)
+            {
+            }
+        });
+
+        interactServerURLTextField.addKeyListener(new KeyListener()
+        {
+            @Override
+            public void keyPressed(KeyEvent e)
+            {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e)
+            {
+                if (interactServerURLTextField.isEditable())
+                {
+                    modifiedURL = true;
+                    System.out.println("Modified URL = " + modifiedURL);
+                }
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e)
+            {
+            }
+        });
+
+    }
+
+    private void setConnectionTextBoxedEditable(boolean editable)
+    {
+        connectionNameTextField.setEditable(editable);
+        interactServerURLTextField.setEditable(editable);
     }
 
     private void saveConnections()
@@ -320,11 +366,13 @@ public class ConnectionManager extends JDialog
 
     private void createNewConnection()
     {
+        this.setConnectionTextBoxedEditable(true);
         int connectionsSize = this.connectionsList.getModel().getSize();
         InteractConnection ic = new InteractConnection(connectionsSize + 1, "http://localhost:8080");
         DefaultListModel model = (DefaultListModel) this.connectionsList.getModel();
         model.addElement(ic);
         this.connectionsList.setSelectedIndex(connectionsSize);
+        this.connectionNameTextField.requestFocus();
     }
 
     private void copyServer()
@@ -338,6 +386,12 @@ public class ConnectionManager extends JDialog
             DefaultListModel model = (DefaultListModel) this.connectionsList.getModel();
             model.addElement(newIc);
         }
+    }
+
+    private void editServer()
+    {
+        this.setConnectionTextBoxedEditable(true);
+        this.connectionNameTextField.requestFocus();
     }
 
     private void deleteServer()

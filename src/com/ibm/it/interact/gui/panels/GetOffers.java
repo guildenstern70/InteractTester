@@ -2,7 +2,7 @@
  *   UNICA INTERACT TESTER
  *
  *   IBM Confidential
- *   (C) IBM Corp. 2013 - All rights reserved.
+ *   (C) IBM Corp. 2013-14 - All rights reserved.
  *
  *   The source code for this program is not published or otherwise
  *   divested of its trade secrets, irrespective of what has been
@@ -24,14 +24,7 @@ import com.unicacorp.interact.api.Offer;
 import com.unicacorp.interact.api.OfferList;
 import com.unicacorp.interact.api.Response;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -186,7 +179,6 @@ public final class GetOffers implements ITabbedPanel
         {
             selectOfferComboBox.setEnabled(false);
         }
-
 
     }
 

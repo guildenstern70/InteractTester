@@ -1,6 +1,6 @@
 /************************************************
  * UNICA INTERACT TESTER
- * (C) IBM Corp. 2013 - All rights reserved.
+ * (C) IBM Corp. 2013-14 - All rights reserved.
  *
  * Author: alessiosaltarin@it.ibm.com
  *
@@ -15,16 +15,10 @@ import com.ibm.it.interact.gui.panels.LabeledPopupMenu;
 import com.ibm.it.interact.gui.panels.ParameterDialog;
 import com.unicacorp.interact.api.NameValuePair;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JSeparator;
+import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -435,7 +429,6 @@ public class UIUtils
         }
     }
 
-
     private static void addParamToList(JList paramControl, NameValuePairDecor nvp, boolean sort)
     {
         DefaultListModel<NameValuePairDecor> dlm = (DefaultListModel<NameValuePairDecor>) paramControl.getModel();
@@ -459,6 +452,5 @@ public class UIUtils
             }
         }
     }
-
 
 }

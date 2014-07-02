@@ -27,7 +27,7 @@ public final class NameValuePairDecor implements Serializable, Transferable, Cli
     public static final DataFlavor clipboardDataFlavor =
             new DataFlavor(NameValuePairDecor.class, "NameValuePairDecor Object");
 
-    final private NameValuePair nvp;
+    private final NameValuePair nvp;
     private String kind;
 
     public NameValuePairDecor(NameValuePair xNvp)
@@ -79,7 +79,8 @@ public final class NameValuePairDecor implements Serializable, Transferable, Cli
                 val = this.nvp.getValueAsString();
                 break;
             default:
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss");
+                // Target format: 2014-06-12 10:45:54.552
+                SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss.SSS");
                 val = format.format(this.nvp.getValueAsDate());
                 break;
         }

@@ -36,6 +36,7 @@ import java.util.Map;
 public final class PostEvent implements ITabbedPanel
 {
     private static final String TITLE = "Post Event";
+    private static final int MAX_NUMBER_OF_OFFERS = 50;
 
     private JPanel postEventPanel;
     private JTextField eventNameTextField;
@@ -44,11 +45,11 @@ public final class PostEvent implements ITabbedPanel
     private JButton runButton;
     private JComboBox getFromOfferComboBox;
     private JTextField flowchartTextField;
-    final private JFrame mainFrame;
+    private final JFrame mainFrame;
 
     // Business logic variables
-    final private MainForm parent;
-    final private Client client;
+    private final MainForm parent;
+    private final Client client;
 
     public PostEvent(MainForm mainForm)
     {
@@ -232,7 +233,7 @@ public final class PostEvent implements ITabbedPanel
                 RunData rd = new RunData(this.parent.getInteractServer(), this.parent.getSessionId());
                 GetOffersData god = new GetOffersData();
                 god.setInteractionPoint(interactionPoint);
-                god.setNumberOfOffers(20);  // We try and get all offers here
+                god.setNumberOfOffers(MAX_NUMBER_OF_OFFERS);  // We try and get all offers here
                 rd.setGetOffersData(god);
                 resp = this.client.runGetOffers(rd);
 

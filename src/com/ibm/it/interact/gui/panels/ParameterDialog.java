@@ -37,7 +37,7 @@ public class ParameterDialog extends JDialog
     private JSpinner spinner1;
     private NameValuePair nvp;
     private JFrame parent;
-    final private XLog log;
+    private final XLog log;
 
     private ParameterDialog(JFrame parent, XLog logger)
     {
@@ -239,7 +239,7 @@ public class ParameterDialog extends JDialog
     private void createUIComponents()
     {
         this.spinner1 = new JSpinner(new SpinnerDateModel());
-        JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(this.spinner1, "dd-MMM-yyyy HH:mm:ss");
+        JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(this.spinner1, "yyyy-MM-dd HH:mm:ss.SSS");
         this.spinner1.setEditor(timeEditor);
         this.spinner1.setValue(new Date()); // will only show the current time
     }

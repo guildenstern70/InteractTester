@@ -16,12 +16,12 @@ import java.util.List;
  */
 public class OfferParams
 {
-    final private int offerId;
-    final private Offer unicaOffer;
+    private final int offerId;
+    private final Offer unicaOffer;
     private String treatmentCode;
     private String name;
     private String[] offerCodes;
-    final private List<NameValuePairDecor> params;
+    private final List<NameValuePairDecor> params;
 
     public OfferParams(Offer offer, int id)
     {
@@ -51,7 +51,7 @@ public class OfferParams
         j++;
 
         nvps[j] = new NameValuePairImpl();
-        nvps[j].setName("Treatment Code");
+        nvps[j].setName("UACIOfferTrackingCode");
         nvps[j].setValueAsString(this.treatmentCode);
         nvps[j].setValueDataType("string");
 

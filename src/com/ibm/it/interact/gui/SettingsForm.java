@@ -20,7 +20,7 @@ public class SettingsForm extends JDialog
     private JButton buttonCancel;
     private JCheckBox generateRandomSessionIDCheckBox;
     private JCheckBox experimentalFlagCheckBox;
-    final private Settings settings;
+    private final Settings settings;
     private boolean returnOk;
 
     public SettingsForm(Settings mainSettings)

@@ -44,11 +44,11 @@ public final class StartSession implements ITabbedPanel
     private JList audienceIdList;
     private JButton runButton;
     private JTextField flowchartNameTextField;
-    final private JFrame mainFrame;
+    private final JFrame mainFrame;
 
     // Business logic variables
-    final private MainForm parent;
-    final private Client client;
+    private final MainForm parent;
+    private final Client client;
 
     public StartSession(MainForm main)
     {

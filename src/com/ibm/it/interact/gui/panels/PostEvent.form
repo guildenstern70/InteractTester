@@ -81,7 +81,7 @@
       <component id="313bc" class="javax.swing.JComboBox" binding="getFromOfferComboBox" default-binding="true">
         <constraints>
           <grid row="6" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="9" fill="1" indent="0" use-parent-layout="false"/>
-          <forms defaultalign-vert="false"/>
+          <forms top="4" left="0" bottom="0" right="0" defaultalign-vert="false"/>
         </constraints>
         <properties/>
       </component>

@@ -18,7 +18,7 @@ import java.util.logging.Level;
 
 public final class Client
 {
-    final private XLog logger;
+    private final XLog logger;
 
     public Client(XLog log)
     {

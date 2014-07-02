@@ -84,7 +84,7 @@ public final class MainForm
 
     private MainForm(JFrame frm)
     {
-        System.out.println("Welcome to " + TITLE + " v." + Settings.VERSION);
+        //System.out.println("Welcome to " + TITLE + " v." + Settings.VERSION);
         this.frame = frm;
         connManagerButton.addActionListener(new ActionListener()
         {
@@ -277,7 +277,6 @@ public final class MainForm
         this.getOffersPanel = new GetOffers(this);
         this.postEventPanel = new PostEvent(this);
         this.batchExecutePanel = new BatchExecute(this);
-
 
         this.tabbedPane.addTab(this.startSessionPanel.getTitle(), this.startSessionPanel.getPanel());
         this.tabbedPane.addTab(this.getOffersPanel.getTitle(), this.getOffersPanel.getPanel());
@@ -609,7 +608,6 @@ public final class MainForm
             }
         });
         jMenuHelp.add(jMenuHelpUnicaManual);
-
 
         jMenuHelp.add(jSeparator3);
 

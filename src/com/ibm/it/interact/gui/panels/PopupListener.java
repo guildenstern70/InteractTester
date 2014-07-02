@@ -1,12 +1,12 @@
 package com.ibm.it.interact.gui.panels;
 
-import javax.swing.JPopupMenu;
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 class PopupListener extends MouseAdapter
 {
-    final private JPopupMenu popup;
+    private final JPopupMenu popup;
 
     public PopupListener(JPopupMenu menu)
     {

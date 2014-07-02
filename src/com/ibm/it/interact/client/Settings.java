@@ -37,7 +37,7 @@ public final class Settings
     private static Settings settings;
     private final Properties props;
 
-    final private XLog log;
+    private final XLog log;
 
     // Properties
     private boolean generateSessionIdAtStartup;

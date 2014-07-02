@@ -37,8 +37,8 @@ public class BatchExecute implements ITabbedPanel
     private JCheckBox endSessionCheckBox;
 
     // Business logic variables
-    final private MainForm parent;
-    final private Client client;
+    private final MainForm parent;
+    private final Client client;
 
     public BatchExecute(MainForm mainForm)
     {

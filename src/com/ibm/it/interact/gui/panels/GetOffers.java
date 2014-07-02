@@ -29,6 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  *
@@ -46,8 +47,8 @@ public final class GetOffers implements ITabbedPanel
     private JList offerParametersList;
 
     // Business logic variables
-    final private MainForm parent;
-    final private Client client;
+    private final MainForm parent;
+    private final Client client;
     private Map<Integer, OfferParams> offers;
 
     public GetOffers(MainForm mainForm)
@@ -77,10 +78,13 @@ public final class GetOffers implements ITabbedPanel
 
     public void onComboChange()
     {
+        this.client.getLogger().log(Level.INFO, "Selected offer change...");
         Integer selectedItem = (Integer) this.selectOfferComboBox.getSelectedItem();
         if (selectedItem != null)
         {
+            this.client.getLogger().log(Level.INFO, "Trying to get offer " + String.valueOf(selectedItem));
             OfferParams op = this.offers.get(selectedItem);
+            this.client.getLogger().log(Level.INFO, "Offer #" + String.valueOf(selectedItem) + " has " + op.getOfferDetails().length + " items.");
             UIUtils.fillParamsList(this.offerParametersList, op.getOfferDetails(), false);
         }
     }

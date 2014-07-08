@@ -43,7 +43,7 @@ public final class GetOffers implements ITabbedPanel
     private JTextField interactionPointTextField;
     private JTextField numberOfOffersTextField;
     private JButton runButton;
-    private JComboBox selectOfferComboBox;
+    private JComboBox<Integer> selectOfferComboBox;
     private JList offerParametersList;
 
     // Business logic variables
@@ -78,11 +78,12 @@ public final class GetOffers implements ITabbedPanel
 
     public void onComboChange()
     {
-        this.client.getLogger().log(Level.INFO, "Selected offer change...");
+        this.client.getLogger().log(Level.INFO, "Selected 'offer change'...");
+        this.client.getLogger().log(Level.INFO, "Offers has now " + String.valueOf(this.offers.size()) + " items.");
         Integer selectedItem = (Integer) this.selectOfferComboBox.getSelectedItem();
         if (selectedItem != null)
         {
-            this.client.getLogger().log(Level.INFO, "Trying to get offer " + String.valueOf(selectedItem));
+            this.client.getLogger().log(Level.INFO, "Trying to get offer #" + String.valueOf(selectedItem));
             OfferParams op = this.offers.get(selectedItem);
             this.client.getLogger().log(Level.INFO, "Offer #" + String.valueOf(selectedItem) + " has " + op.getOfferDetails().length + " items.");
             UIUtils.fillParamsList(this.offerParametersList, op.getOfferDetails(), false);
@@ -100,12 +101,16 @@ public final class GetOffers implements ITabbedPanel
         this.numberOfOffersTextField.setText(String.valueOf(god.getNumberOfOffers()));
     }
 
+    /**
+     * Set a new GetOffersData populating its fields (Interaction Point + MAX nr of offers)
+     * by the User Interface
+     *
+     * @return A newly created GetOffersData object
+     */
     public GetOffersData getDataFromUI()
     {
-        GetOffersData god;
+        GetOffersData god = new GetOffersData();
         int nroff;
-
-        god = new GetOffersData();
 
         try
         {
@@ -169,7 +174,8 @@ public final class GetOffers implements ITabbedPanel
         this.selectOfferComboBox.removeAllItems();
         for (int j = 0; j < offerNum; j++)
         {
-            this.selectOfferComboBox.addItem(j + 1);
+            Integer offerNumber = new Integer(j + 1);
+            this.selectOfferComboBox.addItem(offerNumber);
         }
 
         // Fill List with first offer
@@ -198,11 +204,13 @@ public final class GetOffers implements ITabbedPanel
                 GetOffersData god = this.getDataFromUI();
                 if (god != null)
                 {
-
                     rd.setGetOffersData(god);
+                    this.client.getLogger().log(Level.INFO, "Running GetOffers...");
                     Response resp = this.client.runGetOffers(rd);
+                    this.client.getLogger().log(Level.INFO, "...done");
                     this.fillOffersData(resp);
                 }
+
             }
         }
         else
@@ -253,9 +261,7 @@ public final class GetOffers implements ITabbedPanel
     private void createUIComponents()
     {
         this.offerParametersList = new JList();
-
         this.offerParametersList.setName("Offers");
-
         this.offerParametersList.setModel(new DefaultListModel<NameValuePairDecor>());
     }
 }

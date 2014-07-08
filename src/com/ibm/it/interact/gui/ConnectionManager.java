@@ -122,19 +122,9 @@ public class ConnectionManager extends JDialog
                 String connectionUrl = this.interactServerURLTextField.getText();
                 InteractConnection newServer = new InteractConnection(connectionName, connectionUrl);
                 this.replaceOrAddServer(oldServer, newServer);
-                this.resetTextBoxes();
             }
         }
 
-    }
-
-    private void resetTextBoxes()
-    {
-        this.connectionNameTextField.setEditable(false);
-        this.interactServerURLTextField.setEditable(false);
-        this.modifiedName = false;
-        this.modifiedURL = false;
-        System.out.println("== RESET RESET RESET ==");
     }
 
     private void replaceOrAddServer(InteractConnection oldServer, InteractConnection newServer)
@@ -310,10 +300,14 @@ public class ConnectionManager extends JDialog
 
     }
 
-    private void setConnectionTextBoxedEditable(boolean editable)
+    private void setConnectionTextBoxedEditable(boolean nameEditable, boolean urlEditable)
     {
-        connectionNameTextField.setEditable(editable);
-        interactServerURLTextField.setEditable(editable);
+        connectionNameTextField.setEditable(nameEditable);
+        interactServerURLTextField.setEditable(urlEditable);
+        this.modifiedName = nameEditable;
+        this.modifiedURL = urlEditable;
+        System.out.println("Name Editable = " + nameEditable);
+        System.out.println("URL Editable = " + urlEditable);
     }
 
     private void saveConnections()
@@ -371,7 +365,7 @@ public class ConnectionManager extends JDialog
 
     private void createNewConnection()
     {
-        this.setConnectionTextBoxedEditable(true);
+        this.setConnectionTextBoxedEditable(true, true);
         int connectionsSize = this.connectionsList.getModel().getSize();
         InteractConnection ic = new InteractConnection(connectionsSize + 1, "http://localhost:8080");
         DefaultListModel model = (DefaultListModel) this.connectionsList.getModel();
@@ -395,7 +389,7 @@ public class ConnectionManager extends JDialog
 
     private void editServer()
     {
-        this.setConnectionTextBoxedEditable(true);
+        this.setConnectionTextBoxedEditable(true, true);
         this.connectionNameTextField.requestFocus();
     }
 

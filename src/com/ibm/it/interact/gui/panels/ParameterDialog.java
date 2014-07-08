@@ -43,7 +43,7 @@ public class ParameterDialog extends JDialog
     {
         this.log = logger;
         this.nvp = new NameValuePairImpl();
-        this.setTitle("Adding Name-Value Parameter...");
+        this.setTitle("Add Name-Value Parameter");
         this.init();
         typeComboBox.addActionListener(new ActionListener()
         {
@@ -167,7 +167,9 @@ public class ParameterDialog extends JDialog
                         "Invalid Key",
                         "Key not recognized", JOptionPane.ERROR_MESSAGE);
             }
-            else if (!Utils.isNotNullNotEmptyNotWhiteSpace(nvpd.getValue()))
+
+            String nvpdVal = nvpd.getValue();
+            if (nvpdVal == null)
             {
                 okToGo = false;
                 JOptionPane.showMessageDialog(this,

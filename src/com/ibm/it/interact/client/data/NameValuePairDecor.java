@@ -15,6 +15,7 @@ import java.awt.datatransfer.*;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Utility wrapper class for
@@ -63,6 +64,33 @@ public final class NameValuePairDecor implements Serializable, Transferable, Cli
     public final String getKey()
     {
         return this.getNameValuePair().getName();
+    }
+
+    public final boolean isNull()
+    {
+        // A parameter is null when it's value is null
+        boolean isNull = false;
+
+        switch (this.kind)
+        {
+            case "numeric":
+                Double valDbl = this.nvp.getValueAsNumeric();
+                if (valDbl == null)
+                    isNull = true;
+                break;
+            case "string":
+                String strVal = this.nvp.getValueAsString();
+                if (strVal == null || strVal.toLowerCase() == "null")
+                    isNull = true;
+                break;
+            default:
+                Date dt = this.nvp.getValueAsDate();
+                if (dt == null)
+                    isNull = true;
+                break;
+        }
+
+        return isNull;
     }
 
     public final String getValue()

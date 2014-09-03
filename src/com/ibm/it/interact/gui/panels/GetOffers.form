@@ -108,7 +108,7 @@
           <component id="8f941" class="javax.swing.JList" binding="offerParametersList" custom-create="true">
             <constraints/>
             <properties>
-              <background color="-3355393"/>
+              <background color="-4600075"/>
               <font size="10"/>
             </properties>
           </component>

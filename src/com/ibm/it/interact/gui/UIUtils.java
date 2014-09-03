@@ -95,16 +95,20 @@ public class UIUtils
             List<NameValuePairDecor> nvpList = new ArrayList<>(nvp.length);
             for (NameValuePair item : nvp)
             {
-                if (exclude != null)
+                NameValuePairDecor newNVP = new NameValuePairDecor(item);
+                if (!newNVP.isNull())
                 {
-                    if (!item.getName().equals(exclude))
+                    if (exclude != null)
                     {
-                        nvpList.add(new NameValuePairDecor(item));
+                        if (!item.getName().equals(exclude))
+                        {
+                            nvpList.add(newNVP);
+                        }
                     }
-                }
-                else
-                {
-                    nvpList.add(new NameValuePairDecor(item));
+                    else
+                    {
+                        nvpList.add(newNVP);
+                    }
                 }
             }
 

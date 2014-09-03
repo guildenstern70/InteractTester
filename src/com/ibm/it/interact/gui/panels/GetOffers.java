@@ -80,14 +80,13 @@ public final class GetOffers implements ITabbedPanel
     {
         this.client.getLogger().log(Level.INFO, "Selected 'offer change'...");
         this.client.getLogger().log(Level.INFO, "Offers has now " + String.valueOf(this.offers.size()) + " items.");
-        Integer selectedItem = (Integer) this.selectOfferComboBox.getSelectedItem();
-        if (selectedItem != null)
-        {
-            this.client.getLogger().log(Level.INFO, "Trying to get offer #" + String.valueOf(selectedItem));
-            OfferParams op = this.offers.get(selectedItem);
-            this.client.getLogger().log(Level.INFO, "Offer #" + String.valueOf(selectedItem) + " has " + op.getOfferDetails().length + " items.");
-            UIUtils.fillParamsList(this.offerParametersList, op.getOfferDetails(), false);
-        }
+        int selectedIndex = this.selectOfferComboBox.getSelectedIndex();
+
+        this.client.getLogger().log(Level.INFO, "Trying to get offer #" + String.valueOf(selectedIndex));
+        OfferParams op = this.offers.get(selectedIndex + 1);
+        this.client.getLogger().log(Level.INFO, "Offer #" + String.valueOf(selectedIndex) + " has " + op.getOfferDetails().length + " items.");
+        UIUtils.fillParamsList(this.offerParametersList, op.getOfferDetails(), false);
+
     }
 
     public String getInteractionPoint()

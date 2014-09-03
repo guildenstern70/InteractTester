@@ -59,7 +59,7 @@ public class OfferParams
         {
             j++;
             nvps[j] = new NameValuePairImpl();
-            nvps[j].setName("Offer Code");
+            nvps[j].setName("OFFERCODE1");
             nvps[j].setValueAsString(offerCode);
             nvps[j].setValueDataType("string");
         }

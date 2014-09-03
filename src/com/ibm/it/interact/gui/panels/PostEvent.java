@@ -15,6 +15,7 @@ package com.ibm.it.interact.gui.panels;
 
 import com.ibm.it.interact.client.Client;
 import com.ibm.it.interact.client.Utils;
+import com.ibm.it.interact.client.XLog;
 import com.ibm.it.interact.client.data.GetOffersData;
 import com.ibm.it.interact.client.data.PostEventData;
 import com.ibm.it.interact.client.data.RunData;
@@ -29,6 +30,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * Post Event panel
@@ -46,6 +48,7 @@ public final class PostEvent implements ITabbedPanel
     private JComboBox getFromOfferComboBox;
     private JTextField flowchartTextField;
     private final JFrame mainFrame;
+    private final XLog logger;
 
     // Business logic variables
     private final MainForm parent;
@@ -56,6 +59,7 @@ public final class PostEvent implements ITabbedPanel
         this.parent = mainForm;
         this.mainFrame = mainForm.getFrame();
         this.client = this.parent.getClient();
+        this.logger = this.client.getLogger();
 
         this.initializePopupParamsMenu();
 
@@ -198,6 +202,7 @@ public final class PostEvent implements ITabbedPanel
                 PostEventData pod = this.getDataFromUI();
                 if (pod != null)
                 {
+                    this.logger.log("Running PostEvent");
                     this.parent.showStatusMessage("Running PostEvent...");
                     rd.setPostEventData(pod);
                     this.client.runPostEvent(rd);
@@ -214,6 +219,7 @@ public final class PostEvent implements ITabbedPanel
 
     private void getParametersFromOffer(int offerNumber)
     {
+        this.logger.log("Getting parameters from offer " + String.valueOf(offerNumber));
         String sessionId = this.parent.getSessionId();
         String interactionPoint = this.parent.getInteractionPoint();
         Response resp;
@@ -235,15 +241,14 @@ public final class PostEvent implements ITabbedPanel
                 god.setInteractionPoint(interactionPoint);
                 god.setNumberOfOffers(MAX_NUMBER_OF_OFFERS);  // We try and get all offers here
                 rd.setGetOffersData(god);
+                this.logger.log("Running get offers...");
                 resp = this.client.runGetOffers(rd);
-
-                Map<Integer, OfferParams> offers = new HashMap<>();
-                int offerNum = 0;
 
                 OfferList[] offerLists = resp.getAllOfferLists();
 
                 if ((offerLists == null) || (offerLists.length == 0))
                 {
+                    this.logger.log(Level.WARNING, "This campaign has no offers.");
                     JOptionPane.showMessageDialog(this.getPanel(),
                             "No offer found",
                             "Interact did not provide any offer data with 'Get Offers'",
@@ -251,17 +256,29 @@ public final class PostEvent implements ITabbedPanel
                     return;
                 }
 
+                Map<Integer, OfferParams> offers = new HashMap<>();
+                int offerNum = 0;
+
                 for (OfferList of : offerLists)
                 {
                     for (Offer offer : of.getRecommendedOffers())
                     {
-                        OfferParams op = new OfferParams(offer, ++offerNum);
-                        offers.put(offerNum, op);
+                        offerNum += 1;
+                        this.logger.log("Adding offer #" + offerNum);
+                        offers.put(offerNum, new OfferParams(offer, offerNum));
                     }
                 }
 
+                this.logger.log("Selecting offer #" + offerNumber);
                 OfferParams op = offers.get(offerNumber);
-                UIUtils.fillParamsList(this.parametersList, op.getOfferDetails(), false);
+                if (op != null)
+                {
+                    UIUtils.fillParamsList(this.parametersList, op.getOfferDetails(), false);
+                }
+                else
+                {
+                    this.logger.log(Level.WARNING, "No offer is found with index=" + String.valueOf(offerNumber));
+                }
 
             }
             else

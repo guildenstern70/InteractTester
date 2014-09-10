@@ -155,33 +155,33 @@ public class ParameterDialog extends JDialog
 
     private void onOK()
     {
-        if (this.updateNvp())
+        this.updateNvp();
+
+        boolean okToGo = true;
+        NameValuePairDecor nvpd = new NameValuePairDecor(this.nvp);
+
+        if (!Utils.isNotNullNotEmptyNotWhiteSpace(nvpd.getKey()))
         {
-            boolean okToGo = true;
-            NameValuePairDecor nvpd = new NameValuePairDecor(this.nvp);
-
-            if (!Utils.isNotNullNotEmptyNotWhiteSpace(nvpd.getKey()))
-            {
-                okToGo = false;
-                JOptionPane.showMessageDialog(this,
-                        "Invalid Key",
-                        "Key not recognized", JOptionPane.ERROR_MESSAGE);
-            }
-
-            String nvpdVal = nvpd.getValue();
-            if (nvpdVal == null)
-            {
-                okToGo = false;
-                JOptionPane.showMessageDialog(this,
-                        "Invalid Value",
-                        "Value not recognized", JOptionPane.ERROR_MESSAGE);
-            }
-
-            if (okToGo)
-            {
-                dispose();
-            }
+            okToGo = false;
+            JOptionPane.showMessageDialog(this,
+                    "Key not recognized",
+                    "Invalid Key", JOptionPane.ERROR_MESSAGE);
         }
+
+        String nvpdVal = nvpd.getValue();
+        if (nvpdVal == null)
+        {
+            okToGo = false;
+            JOptionPane.showMessageDialog(this,
+                    "Value not recognized",
+                    "Invalid Value", JOptionPane.ERROR_MESSAGE);
+        }
+
+        if (okToGo)
+        {
+            dispose();
+        }
+
     }
 
     private void onCancel()
@@ -190,9 +190,8 @@ public class ParameterDialog extends JDialog
         dispose();
     }
 
-    private boolean updateNvp()
+    private void updateNvp()
     {
-        boolean updateWasCorrect = true;
 
         this.nvp.setName(this.keyTextField.getText());
         int index = this.typeComboBox.getSelectedIndex();
@@ -217,7 +216,6 @@ public class ParameterDialog extends JDialog
                 break;
         }
 
-        return updateWasCorrect;
     }
 
     public static ParameterDialog showDialog(JFrame parent, XLog log)

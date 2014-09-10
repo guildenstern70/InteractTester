@@ -24,9 +24,9 @@ import java.awt.event.MouseEvent;
  */
 public class EditItemAdapter extends MouseAdapter
 {
-    private JList parametersList;
-    private JFrame mainFrame;
-    private Client client;
+    private final JList parametersList;
+    private final JFrame mainFrame;
+    private final Client client;
 
     public EditItemAdapter(JList pList, JFrame pFrame, Client pClient)
     {

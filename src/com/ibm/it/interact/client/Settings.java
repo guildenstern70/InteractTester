@@ -32,7 +32,7 @@ public final class Settings
     private static final String CLIENT_WIDTH = "interact.tester.Width";
     private static final String CLIENT_HEIGHT = "interact.tester.Height";
 
-    public static final String VERSION = "0.4.3708";
+    public static final String VERSION = "0.5.1024";
 
     private static Settings settings;
     private final Properties props;
@@ -198,87 +198,80 @@ public final class Settings
 
     private void buildProperties()
     {
-        if (this.props != null)
+        this.props.clear();
+
+        // Logger: do not change
+        this.props.setProperty("handlers", "java.util.logging.ConsoleHandler");
+        this.props.setProperty(".level", "ALL");
+        this.props.setProperty("java.util.logging.ConsoleHandler.formatter", "com.ibm.it.logger.LogFormatter");
+
+        // Unica Servers
+        for (InteractConnection ic : this.unicaServers)
         {
-            this.props.clear();
-
-            // Logger: do not change
-            this.props.setProperty("handlers", "java.util.logging.ConsoleHandler");
-            this.props.setProperty(".level", "ALL");
-            this.props.setProperty("java.util.logging.ConsoleHandler.formatter", "com.ibm.it.logger.LogFormatter");
-
-            // Unica Servers
-            for (InteractConnection ic : this.unicaServers)
-            {
-                this.props.setProperty(INTERACT_SERVER + ic.getConnectionName(), ic.getConnectionUrl().toString());
-            }
-
-            // Generate random session id
-            if (this.generateSessionIdAtStartup)
-            {
-                this.props.setProperty(AUTOGENERATE_ID, "true");
-            }
-            else
-            {
-                this.props.setProperty(AUTOGENERATE_ID, "false");
-            }
-
-            // Last used Unica Server
-            this.props.setProperty(LAST_USED_URL, String.valueOf(this.lastUserServer));
-
-            // Client size
-            this.props.setProperty(CLIENT_WIDTH, String.valueOf(this.clientSize.getWidth()));
-            this.props.setProperty(CLIENT_HEIGHT, String.valueOf(this.clientSize.getHeight()));
-
+            this.props.setProperty(INTERACT_SERVER + ic.getConnectionName(), ic.getConnectionUrl().toString());
         }
+
+        // Generate random session id
+        if (this.generateSessionIdAtStartup)
+        {
+            this.props.setProperty(AUTOGENERATE_ID, "true");
+        }
+        else
+        {
+            this.props.setProperty(AUTOGENERATE_ID, "false");
+        }
+
+        // Last used Unica Server
+        this.props.setProperty(LAST_USED_URL, String.valueOf(this.lastUserServer));
+
+        // Client size
+        this.props.setProperty(CLIENT_WIDTH, String.valueOf(this.clientSize.getWidth()));
+        this.props.setProperty(CLIENT_HEIGHT, String.valueOf(this.clientSize.getHeight()));
 
     }
 
     private void syncWithProperties()
     {
-        if (this.props != null)
+        // Unica Servers
+        Set<String> propertyNames = this.props.stringPropertyNames();
+        this.unicaServers = new ArrayList<>();
+        for (String prop : propertyNames)
         {
-            // Unica Servers
-            Set<String> propertyNames = this.props.stringPropertyNames();
-            this.unicaServers = new ArrayList<>();
-            for (String prop : propertyNames)
+            if (prop.startsWith(INTERACT_SERVER))
             {
-                if (prop.startsWith(INTERACT_SERVER))
-                {
-                    String connName = prop.substring(16);
-                    String connUrl = this.props.getProperty(prop);
-                    InteractConnection ic = new InteractConnection(connName, connUrl);
-                    this.unicaServers.add(ic);
-                }
+                String connName = prop.substring(16);
+                String connUrl = this.props.getProperty(prop);
+                InteractConnection ic = new InteractConnection(connName, connUrl);
+                this.unicaServers.add(ic);
             }
-
-            // Generate random session id
-            String autoId = this.props.getProperty(AUTOGENERATE_ID);
-            this.generateSessionIdAtStartup = autoId.equals("true");
-
-            // Last used Unica Server
-            String lastUsed = this.props.getProperty(LAST_USED_URL);
-            try
-            {
-                this.lastUserServer = Integer.parseInt(lastUsed);
-            }
-            catch (NumberFormatException nex)
-            {
-                this.lastUserServer = 0;
-            }
-
-            // Client size
-            try
-            {
-                double clientWidth = Double.parseDouble(this.props.getProperty(CLIENT_WIDTH));
-                double clientHeight = Double.parseDouble(this.props.getProperty(CLIENT_HEIGHT));
-                this.clientSize = new Dimension((int) clientWidth, (int) clientHeight);
-            }
-            catch (NumberFormatException | NullPointerException nex)
-            {
-                this.clientSize = new Dimension(770, 660);
-            }
-
         }
+
+        // Generate random session id
+        String autoId = this.props.getProperty(AUTOGENERATE_ID);
+        this.generateSessionIdAtStartup = autoId.equals("true");
+
+        // Last used Unica Server
+        String lastUsed = this.props.getProperty(LAST_USED_URL);
+        try
+        {
+            this.lastUserServer = Integer.parseInt(lastUsed);
+        }
+        catch (NumberFormatException nex)
+        {
+            this.lastUserServer = 0;
+        }
+
+        // Client size
+        try
+        {
+            double clientWidth = Double.parseDouble(this.props.getProperty(CLIENT_WIDTH));
+            double clientHeight = Double.parseDouble(this.props.getProperty(CLIENT_HEIGHT));
+            this.clientSize = new Dimension((int) clientWidth, (int) clientHeight);
+        }
+        catch (NumberFormatException | NullPointerException nex)
+        {
+            this.clientSize = new Dimension(770, 660);
+        }
+
     }
 }

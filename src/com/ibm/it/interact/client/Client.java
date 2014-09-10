@@ -208,9 +208,7 @@ public final class Client
                     for (Offer offer : offers)
                     {
                         j++;
-                        StringBuilder sb = new StringBuilder("OFFER#");
-                        sb.append(j);
-                        String offerNum = sb.toString();
+                        String offerNum = "OFFER#" + j;
                         this.logger.log("");
                         this.logger.log("*** " + offerNum + ": " + offer.getOfferName());
                         String treatmentCode = offer.getTreatmentCode();

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Set;
 
-public class ConnectionManager extends JDialog
+class ConnectionManager extends JDialog
 {
     private JPanel contentPane;
     private JButton buttonOK;
@@ -80,7 +80,7 @@ public class ConnectionManager extends JDialog
             {
                 JOptionPane.showMessageDialog(this,
                         "The URL is not valid.",
-                        "Unrecognized URL format.", JOptionPane.ERROR_MESSAGE);
+                        "Unrecognized URL", JOptionPane.ERROR_MESSAGE);
                 this.interactServerURLTextField.setText("");
             }
         }

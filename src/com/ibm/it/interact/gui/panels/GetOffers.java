@@ -76,7 +76,7 @@ public final class GetOffers implements ITabbedPanel
         selectOfferComboBox.setEnabled(false);
     }
 
-    public void onComboChange()
+    void onComboChange()
     {
         this.client.getLogger().log(Level.INFO, "Selected 'offer change'...");
         this.client.getLogger().log(Level.INFO, "Offers has now " + String.valueOf(this.offers.size()) + " items.");
@@ -86,7 +86,6 @@ public final class GetOffers implements ITabbedPanel
         OfferParams op = this.offers.get(selectedIndex + 1);
         this.client.getLogger().log(Level.INFO, "Offer #" + String.valueOf(selectedIndex) + " has " + op.getOfferDetails().length + " items.");
         UIUtils.fillParamsList(this.offerParametersList, op.getOfferDetails(), false);
-
     }
 
     public String getInteractionPoint()
@@ -173,8 +172,7 @@ public final class GetOffers implements ITabbedPanel
         this.selectOfferComboBox.removeAllItems();
         for (int j = 0; j < offerNum; j++)
         {
-            Integer offerNumber = new Integer(j + 1);
-            this.selectOfferComboBox.addItem(offerNumber);
+            this.selectOfferComboBox.addItem(j + 1);
         }
 
         // Fill List with first offer
@@ -239,7 +237,7 @@ public final class GetOffers implements ITabbedPanel
             readyToRun = false;
             JOptionPane.showMessageDialog(this.getPanel(),
                     "Number of Offers cannot be null",
-                    "Invalid Nr. Of Offers", JOptionPane.WARNING_MESSAGE);
+                    "Invalid Offers", JOptionPane.WARNING_MESSAGE);
         }
 
         try
@@ -251,7 +249,7 @@ public final class GetOffers implements ITabbedPanel
             readyToRun = false;
             JOptionPane.showMessageDialog(this.getPanel(),
                     "Invalid number of offers",
-                    "Invalid Nr. Of Offers", JOptionPane.WARNING_MESSAGE);
+                    "Invalid Offers", JOptionPane.WARNING_MESSAGE);
         }
 
         return readyToRun;

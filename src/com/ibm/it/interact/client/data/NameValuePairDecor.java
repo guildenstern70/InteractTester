@@ -80,7 +80,7 @@ public final class NameValuePairDecor implements Serializable, Transferable, Cli
                 break;
             case "string":
                 String strVal = this.nvp.getValueAsString();
-                if (strVal == null || strVal.toLowerCase() == "null")
+                if (strVal == null || strVal.toLowerCase().equals("null"))
                     isNull = true;
                 break;
             default:

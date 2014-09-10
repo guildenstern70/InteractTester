@@ -14,7 +14,7 @@ import java.util.List;
  *
  *
  */
-public class OfferParams
+class OfferParams
 {
     private final int offerId;
     private final Offer unicaOffer;

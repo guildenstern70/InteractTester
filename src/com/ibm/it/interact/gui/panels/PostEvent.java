@@ -53,50 +53,18 @@ public final class PostEvent implements ITabbedPanel
     // Business logic variables
     private final MainForm parent;
     private final Client client;
+    private Map<Integer, OfferParams> offers;
 
     public PostEvent(MainForm mainForm)
     {
+        this.offers = null;
         this.parent = mainForm;
         this.mainFrame = mainForm.getFrame();
         this.client = this.parent.getClient();
         this.logger = this.client.getLogger();
 
         this.initializePopupParamsMenu();
-
-        runButton.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                run();
-            }
-        });
-        getFromGetOffersButton.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                int selectedOffer = getFromOfferComboBox.getSelectedIndex() + 1;
-                if (selectedOffer > 0)
-                {
-                    getParametersFromOffer(selectedOffer);
-                }
-            }
-        });
-        postEventPanel.addMouseListener(new MouseAdapter()
-        {
-            @Override
-            public void mouseClicked(MouseEvent e)
-            {
-                super.mouseClicked(e);
-                parametersList.clearSelection();
-            }
-        });
-        EditItemAdapter mouseAdapter1 = new EditItemAdapter(this.parametersList, this.mainFrame, this.client);
-        this.parametersList.addMouseListener(mouseAdapter1);
-
-        this.getFromOfferComboBox.setEnabled(false);
-        this.getFromGetOffersButton.setEnabled(false);
+        this.initializeEventsAndUI();
     }
 
     public void addOffers(int howManyOffers)
@@ -134,6 +102,12 @@ public final class PostEvent implements ITabbedPanel
         UIUtils.clearList(parametersList);
     }
 
+    /**
+     * Update UI from data.
+     * It is called from MainForm.java
+     *
+     * @param ped
+     */
     public void updateUIFromData(PostEventData ped)
     {
         String eventName = ped.getEventName();
@@ -145,6 +119,11 @@ public final class PostEvent implements ITabbedPanel
         UIUtils.fillParamsList(this.parametersList, ped.getPostEventParams(), true, "UACIExecuteFlowchartByName");
     }
 
+    /**
+     * Build a PostEventData object reading data from UI
+     *
+     * @return
+     */
     public PostEventData getDataFromUI()
     {
         PostEventData ped = new PostEventData();
@@ -194,25 +173,18 @@ public final class PostEvent implements ITabbedPanel
 
     private void run()
     {
-        if (this.client != null)
+        if (this.isReadyToRun()) // validation
         {
-            if (this.isReadyToRun()) // validation
+            RunData rd = new RunData(this.parent.getInteractServer(), this.parent.getSessionId());
+            PostEventData pod = this.getDataFromUI();
+            if (pod != null)
             {
-                RunData rd = new RunData(this.parent.getInteractServer(), this.parent.getSessionId());
-                PostEventData pod = this.getDataFromUI();
-                if (pod != null)
-                {
-                    this.logger.log("Running PostEvent");
-                    this.parent.showStatusMessage("Running PostEvent...");
-                    rd.setPostEventData(pod);
-                    this.client.runPostEvent(rd);
-                    this.parent.showStatusMessage("Ready.");
-                }
+                this.logger.log("Running PostEvent");
+                this.parent.showStatusMessage("Running PostEvent...");
+                rd.setPostEventData(pod);
+                this.client.runPostEvent(rd);
+                this.parent.showStatusMessage("Ready.");
             }
-        }
-        else
-        {
-            System.err.println("Critical: client is NULL.");
         }
 
     }
@@ -220,6 +192,31 @@ public final class PostEvent implements ITabbedPanel
     private void getParametersFromOffer(int offerNumber)
     {
         this.logger.log("Getting parameters from offer " + String.valueOf(offerNumber));
+
+        if (this.offers == null || this.offers.size() == 0)
+        {
+            this.logger.log("Trying to get offers from server...");
+            this.initializeOffersFromServer();
+            if (this.offers == null || this.offers.size() == 0)
+            {
+                this.logger.log("Cannot initialize offers from server.");
+            }
+            else
+            {
+                this.logger.log("Offers initialized.");
+                this.selectOfferAndUpdateUI(offerNumber);
+            }
+        }
+        else
+        {
+            this.logger.log("Reading Offers from memory...");
+            this.selectOfferAndUpdateUI(offerNumber);
+        }
+
+    }
+
+    private void initializeOffersFromServer()
+    {
         String sessionId = this.parent.getSessionId();
         String interactionPoint = this.parent.getInteractionPoint();
         Response resp;
@@ -227,69 +224,78 @@ public final class PostEvent implements ITabbedPanel
         if (!Utils.isNotNullNotEmptyNotWhiteSpace(sessionId))
         {
             JOptionPane.showMessageDialog(this.getPanel(),
+                    "Invalid Session ID",
                     "Error",
-                    "Invalid Session ID", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        if (this.client != null)
+        if (Utils.isNotNullNotEmptyNotWhiteSpace(interactionPoint))
         {
-            if (Utils.isNotNullNotEmptyNotWhiteSpace(interactionPoint))
-            {
-                RunData rd = new RunData(this.parent.getInteractServer(), this.parent.getSessionId());
-                GetOffersData god = new GetOffersData();
-                god.setInteractionPoint(interactionPoint);
-                god.setNumberOfOffers(MAX_NUMBER_OF_OFFERS);  // We try and get all offers here
-                rd.setGetOffersData(god);
-                this.logger.log("Running get offers...");
-                resp = this.client.runGetOffers(rd);
+            RunData rd = new RunData(this.parent.getInteractServer(), this.parent.getSessionId());
+            GetOffersData god = new GetOffersData();
+            god.setInteractionPoint(interactionPoint);
+            god.setNumberOfOffers(MAX_NUMBER_OF_OFFERS);  // We try and get all offers here
+            rd.setGetOffersData(god);
+            this.logger.log("Running get offers...");
+            resp = this.client.runGetOffers(rd);
+            this.offers = this.buildOffersFromResponse(resp);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this.getPanel(),
+                    "Please set 'Interaction Point' in Get Offers panel",
+                    "Invalid Interaction Point",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
-                OfferList[] offerLists = resp.getAllOfferLists();
+    private void selectOfferAndUpdateUI(int offerNumber)
+    {
+        this.logger.log("Selecting offer #" + offerNumber);
+        OfferParams op = this.offers.get(offerNumber);
+        if (op != null)
+        {
+            UIUtils.fillParamsList(this.parametersList, op.getOfferDetails(), false);
+        }
+        else
+        {
+            String msg = "No offer found with index = " + String.valueOf(offerNumber);
+            this.logger.log(Level.WARNING, msg);
+            JOptionPane.showMessageDialog(this.getPanel(),
+                    msg,
+                    "Offer Not Found",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
-                if ((offerLists == null) || (offerLists.length == 0))
-                {
-                    this.logger.log(Level.WARNING, "This campaign has no offers.");
-                    JOptionPane.showMessageDialog(this.getPanel(),
-                            "No offer found",
-                            "Interact did not provide any offer data with 'Get Offers'",
-                            JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
+    private Map<Integer, OfferParams> buildOffersFromResponse(Response resp)
+    {
+        Map<Integer, OfferParams> offers = new HashMap<>();
+        OfferList[] offerLists = resp.getAllOfferLists();
 
-                Map<Integer, OfferParams> offers = new HashMap<>();
-                int offerNum = 0;
-
-                for (OfferList of : offerLists)
-                {
-                    for (Offer offer : of.getRecommendedOffers())
-                    {
-                        offerNum += 1;
-                        this.logger.log("Adding offer #" + offerNum);
-                        offers.put(offerNum, new OfferParams(offer, offerNum));
-                    }
-                }
-
-                this.logger.log("Selecting offer #" + offerNumber);
-                OfferParams op = offers.get(offerNumber);
-                if (op != null)
-                {
-                    UIUtils.fillParamsList(this.parametersList, op.getOfferDetails(), false);
-                }
-                else
-                {
-                    this.logger.log(Level.WARNING, "No offer is found with index=" + String.valueOf(offerNumber));
-                }
-
-            }
-            else
-            {
-                JOptionPane.showMessageDialog(this.getPanel(),
-                        "Invalid Interaction Point",
-                        "Please set 'Interaction Point' in Get Offers panel",
-                        JOptionPane.ERROR_MESSAGE);
-            }
+        if ((offerLists == null) || (offerLists.length == 0))
+        {
+            this.logger.log("This campaign has no offers.");
+            JOptionPane.showMessageDialog(this.getPanel(),
+                    "Interact did not provide any offer data with 'Get Offers'",
+                    "No offer found",
+                    JOptionPane.ERROR_MESSAGE);
+            return null;
         }
 
+        int offerNum = 0;
+
+        for (OfferList of : offerLists)
+        {
+            for (Offer offer : of.getRecommendedOffers())
+            {
+                offerNum += 1;
+                this.logger.log("Adding offer #" + offerNum);
+                offers.put(offerNum, new OfferParams(offer, offerNum));
+            }
+        }
+        return offers;
     }
 
     private void createUIComponents()
@@ -297,5 +303,48 @@ public final class PostEvent implements ITabbedPanel
         this.parametersList = new JList();
         this.parametersList.setName("Parameters");
         this.parametersList.setModel(new DefaultListModel());
+    }
+
+    private void initializeEventsAndUI()
+    {
+        // Run Event
+        runButton.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                run();
+            }
+        });
+
+        // Get Offer Button Event
+        getFromGetOffersButton.addActionListener(new ActionListener()
+        {
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                int selectedOffer = getFromOfferComboBox.getSelectedIndex() + 1;
+                if (selectedOffer > 0)
+                {
+                    getParametersFromOffer(selectedOffer);
+                }
+            }
+        });
+
+        // Clear UI Event
+        postEventPanel.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseClicked(MouseEvent e)
+            {
+                super.mouseClicked(e);
+                parametersList.clearSelection();
+            }
+        });
+        EditItemAdapter mouseAdapter1 = new EditItemAdapter(this.parametersList, this.mainFrame, this.client);
+        this.parametersList.addMouseListener(mouseAdapter1);
+
+        this.getFromOfferComboBox.setEnabled(false);
+        this.getFromGetOffersButton.setEnabled(false);
     }
 }

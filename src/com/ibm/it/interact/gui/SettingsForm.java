@@ -13,7 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class SettingsForm extends JDialog
+class SettingsForm extends JDialog
 {
     private JPanel contentPane;
     private JButton buttonOK;

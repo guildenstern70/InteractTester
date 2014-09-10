@@ -1,12 +1,12 @@
 package com.ibm.it.interact.gui.panels;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  *
  *
  */
-public interface ITabbedPanel
+interface ITabbedPanel
 {
     String getTitle();
 

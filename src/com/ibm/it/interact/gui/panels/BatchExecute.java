@@ -96,7 +96,7 @@ public class BatchExecute implements ITabbedPanel
         return bed;
     }
 
-    public void run()
+    void run()
     {
         if (this.client != null)
         {

@@ -16,7 +16,7 @@ import java.awt.event.*;
 import java.net.URL;
 import java.util.Calendar;
 
-public class AboutForm extends JDialog
+class AboutForm extends JDialog
 {
     private JPanel contentPane;
     private JButton buttonOK;

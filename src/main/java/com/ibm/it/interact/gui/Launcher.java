@@ -22,7 +22,7 @@ import javax.swing.plaf.metal.MetalTheme;
  *
  *
  */
-class Launcher
+public class Launcher
 {
     public static void main(String[] args)
     {

@@ -16,6 +16,8 @@ import com.ibm.it.interact.gui.panels.BatchExecute;
 import com.ibm.it.interact.gui.panels.GetOffers;
 import com.ibm.it.interact.gui.panels.PostEvent;
 import com.ibm.it.interact.gui.panels.StartSession;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import com.unicacorp.interact.api.NameValuePair;
 import com.unicacorp.interact.api.Response;
 
@@ -84,7 +86,7 @@ public final class MainForm
 
     private MainForm(JFrame frm)
     {
-        //System.out.println("Welcome to " + TITLE + " v." + Settings.VERSION);
+        System.out.println("Welcome to " + TITLE + " v." + Settings.VERSION);
         this.frame = frm;
         connManagerButton.addActionListener(new ActionListener()
         {
@@ -293,11 +295,11 @@ public final class MainForm
 
     private void initializeMenus()
     {
-        jMenuBar = new javax.swing.JMenuBar();
+        jMenuBar = new JMenuBar();
         JMenu jMenuFile = new JMenu();
         JMenuItem jMenuFileNew = new JMenuItem();
         JMenuItem jMenuFileOpen = new JMenuItem();
-        jMenuFileSave = new javax.swing.JMenuItem();
+        jMenuFileSave = new JMenuItem();
         JMenuItem jMenuFileSaveAs = new JMenuItem();
         JSeparator jSeparator1 = new JSeparator();
         JMenuItem jMenuFileExportData = new JMenuItem();
@@ -341,9 +343,9 @@ public final class MainForm
         });
 
         jMenuFileNew.setText("New");
-        jMenuFileNew.addActionListener(new java.awt.event.ActionListener()
+        jMenuFileNew.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuFileNewActionPerformed(evt);
             }
@@ -356,9 +358,9 @@ public final class MainForm
         jMenuFile.add(jMenuFileNew);
 
         jMenuFileOpen.setText("Open...");
-        jMenuFileOpen.addActionListener(new java.awt.event.ActionListener()
+        jMenuFileOpen.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuFileOpenActionPerformed(evt);
             }
@@ -371,9 +373,9 @@ public final class MainForm
         jMenuFile.add(jMenuFileOpen);
 
         jMenuFileSave.setText("Save");
-        jMenuFileSave.addActionListener(new java.awt.event.ActionListener()
+        jMenuFileSave.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuFileSaveActionPerformed(evt);
             }
@@ -386,9 +388,9 @@ public final class MainForm
         jMenuFile.add(jMenuFileSave);
 
         jMenuFileSaveAs.setText("Save As...");
-        jMenuFileSaveAs.addActionListener(new java.awt.event.ActionListener()
+        jMenuFileSaveAs.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuFileSaveAsActionPerformed(evt);
             }
@@ -402,9 +404,9 @@ public final class MainForm
         jMenuFile.add(jSeparator1);
 
         jMenuFileExportData.setText("Export test data...");
-        jMenuFileExportData.addActionListener(new java.awt.event.ActionListener()
+        jMenuFileExportData.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuFileExportDataActionPerformed(evt);
             }
@@ -418,9 +420,9 @@ public final class MainForm
         jMenuFile.add(jSeparator6);
 
         jMenuSettings.setText("Settings...");
-        jMenuSettings.addActionListener(new java.awt.event.ActionListener()
+        jMenuSettings.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuFileSettingsActionPerformed(evt);
             }
@@ -434,9 +436,9 @@ public final class MainForm
         jMenuFile.add(jSeparator2);
 
         jMenuFileExit.setText("Exit");
-        jMenuFileExit.addActionListener(new java.awt.event.ActionListener()
+        jMenuFileExit.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuFileExitActionPerformed(evt);
             }
@@ -453,9 +455,9 @@ public final class MainForm
         jMenuTools.setText("Tools");
 
         jMenuToolsClearLog.setText("Clear log");
-        jMenuToolsClearLog.addActionListener(new java.awt.event.ActionListener()
+        jMenuToolsClearLog.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuToolsClearLogActionPerformed(evt);
             }
@@ -468,9 +470,9 @@ public final class MainForm
         jMenuTools.add(jMenuToolsClearLog);
 
         jMenuToolsSaveLog.setText("Save log...");
-        jMenuToolsSaveLog.addActionListener(new java.awt.event.ActionListener()
+        jMenuToolsSaveLog.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuToolsViewLogActionPerformed(evt);
             }
@@ -484,9 +486,9 @@ public final class MainForm
         jMenuTools.add(jSeparator4);
 
         jMenuToolsConnManager.setText("Connection Manager");
-        jMenuToolsConnManager.addActionListener(new java.awt.event.ActionListener()
+        jMenuToolsConnManager.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuToolsConnManagerActionPerformed(evt);
             }
@@ -499,9 +501,9 @@ public final class MainForm
         jMenuTools.add(jMenuToolsConnManager);
 
         jMenuToolsTestConnection.setText("Test connection");
-        jMenuToolsTestConnection.addActionListener(new java.awt.event.ActionListener()
+        jMenuToolsTestConnection.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuToolsTestConnectionActionPerformed(evt);
             }
@@ -515,9 +517,9 @@ public final class MainForm
         jMenuTools.add(jSeparator5);
 
         jMenuToolsGetProfile.setText("Get Profile");
-        jMenuToolsGetProfile.addActionListener(new java.awt.event.ActionListener()
+        jMenuToolsGetProfile.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuToolsGetProfileActionPerformed(evt);
             }
@@ -530,9 +532,9 @@ public final class MainForm
         jMenuTools.add(jMenuToolsGetProfile);
 
         jMenuToolsEndSession.setText("End Session");
-        jMenuToolsEndSession.addActionListener(new java.awt.event.ActionListener()
+        jMenuToolsEndSession.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuToolsEndSessionActionPerformed(evt);
             }
@@ -549,9 +551,9 @@ public final class MainForm
         jMenuHelp.setText("Help");
 
         jMenuHelpIBMHome.setText("IBM Home");
-        jMenuHelpIBMHome.addActionListener(new java.awt.event.ActionListener()
+        jMenuHelpIBMHome.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuHelpIBMHomeActionPerformed(evt);
             }
@@ -564,9 +566,9 @@ public final class MainForm
         jMenuHelp.add(jMenuHelpIBMHome);
 
         jMenuHelpUnicaHome.setText("Unica Home");
-        jMenuHelpUnicaHome.addActionListener(new java.awt.event.ActionListener()
+        jMenuHelpUnicaHome.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuHelpIBMHomeActionPerformed(evt);
             }
@@ -579,9 +581,9 @@ public final class MainForm
         jMenuHelp.add(jMenuHelpUnicaHome);
 
         jMenuHelpUnicaInteractHome.setText("Unica Interact Home");
-        jMenuHelpUnicaInteractHome.addActionListener(new java.awt.event.ActionListener()
+        jMenuHelpUnicaInteractHome.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuHelpIBMHomeActionPerformed(evt);
             }
@@ -595,9 +597,9 @@ public final class MainForm
 
         //http://www-01.ibm.com/support/docview.wss?crawler=1&uid=swg27027228
         jMenuHelpUnicaManual.setText("Unica Interact Documentation");
-        jMenuHelpUnicaManual.addActionListener(new java.awt.event.ActionListener()
+        jMenuHelpUnicaManual.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuHelpUnicaManualActionPerformed(evt);
             }
@@ -612,9 +614,9 @@ public final class MainForm
         jMenuHelp.add(jSeparator3);
 
         jMenuHelpAbout.setText("About");
-        jMenuHelpAbout.addActionListener(new java.awt.event.ActionListener()
+        jMenuHelpAbout.addActionListener(new ActionListener()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
             {
                 jMenuHelpAboutActionPerformed(evt);
             }
@@ -1096,4 +1098,103 @@ public final class MainForm
         }
     }
 
+    {
+// GUI initializer generated by IntelliJ IDEA GUI Designer
+// >>> IMPORTANT!! <<<
+// DO NOT EDIT OR ADD ANY CODE HERE!
+        $$$setupUI$$$();
+    }
+
+    /**
+     * Method generated by IntelliJ IDEA GUI Designer
+     * >>> IMPORTANT!! <<<
+     * DO NOT edit this method OR call it in your code!
+     *
+     * @noinspection ALL
+     */
+    private void $$$setupUI$$$()
+    {
+        pnlMain = new JPanel();
+        pnlMain.setLayout(new FormLayout("fill:max(d;4px):noGrow,left:4dlu:noGrow,fill:379px:grow,left:4dlu:noGrow,fill:45px:noGrow,left:4dlu:noGrow,fill:102px:noGrow,left:4dlu:noGrow,fill:27px:noGrow", "center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;4px):noGrow,top:4dlu:noGrow,center:max(d;470px):grow,top:4dlu:noGrow,center:22px:noGrow"));
+        pnlMain.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(14, 14, 14, 14), null));
+        lblStatusBar = new JLabel();
+        Font lblStatusBarFont = this.$$$getFont$$$(null, -1, 10, lblStatusBar.getFont());
+        if (lblStatusBarFont != null) lblStatusBar.setFont(lblStatusBarFont);
+        lblStatusBar.setText("Ready.");
+        CellConstraints cc = new CellConstraints();
+        pnlMain.add(lblStatusBar, cc.xyw(1, 7, 7));
+        interactURLComboBox = new JComboBox();
+        interactURLComboBox.setEditable(true);
+        pnlMain.add(interactURLComboBox, cc.xyw(3, 1, 5));
+        final JLabel label1 = new JLabel();
+        label1.setText("Interact Server:");
+        pnlMain.add(label1, cc.xy(1, 1));
+        sessionTextField = new JTextField();
+        sessionTextField.setHorizontalAlignment(4);
+        pnlMain.add(sessionTextField, cc.xyw(5, 3, 3, CellConstraints.FILL, CellConstraints.DEFAULT));
+        generateIdButton = new JButton();
+        generateIdButton.setText("...");
+        generateIdButton.setToolTipText("Generate a new Session ID");
+        pnlMain.add(generateIdButton, cc.xy(9, 3));
+        final JLabel label2 = new JLabel();
+        label2.setHorizontalAlignment(4);
+        label2.setHorizontalTextPosition(2);
+        label2.setText("Session ID:");
+        pnlMain.add(label2, cc.xy(3, 3));
+        connManagerButton = new JButton();
+        connManagerButton.setText("Button");
+        pnlMain.add(connManagerButton, cc.xy(9, 1));
+        final JSplitPane splitPane1 = new JSplitPane();
+        splitPane1.setOrientation(0);
+        pnlMain.add(splitPane1, cc.xyw(1, 5, 9, CellConstraints.DEFAULT, CellConstraints.FILL));
+        tabbedPane = new JTabbedPane();
+        tabbedPane.setBackground(SystemColor.control);
+        tabbedPane.setToolTipText("");
+        splitPane1.setLeftComponent(tabbedPane);
+        final JScrollPane scrollPane1 = new JScrollPane();
+        splitPane1.setRightComponent(scrollPane1);
+        scrollPane1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLoweredBevelBorder(), null));
+        txtConsole = new JTextArea();
+        txtConsole.setBackground(new Color(-4600075));
+        txtConsole.setEditable(false);
+        Font txtConsoleFont = this.$$$getFont$$$("Monospaced", -1, 11, txtConsole.getFont());
+        if (txtConsoleFont != null) txtConsole.setFont(txtConsoleFont);
+        scrollPane1.setViewportView(txtConsole);
+        label1.setLabelFor(interactURLComboBox);
+        label2.setLabelFor(sessionTextField);
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont)
+    {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null)
+        {
+            resultName = currentFont.getName();
+        }
+        else
+        {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1'))
+            {
+                resultName = fontName;
+            }
+            else
+            {
+                resultName = currentFont.getName();
+            }
+        }
+        return new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$()
+    {
+        return pnlMain;
+    }
 }

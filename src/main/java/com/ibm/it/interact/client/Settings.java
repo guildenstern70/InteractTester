@@ -8,10 +8,10 @@
 
 package com.ibm.it.interact.client;
 
+import com.ibm.it.interact.ContentUtils;
 import com.ibm.it.interact.client.data.InteractConnection;
 
 import java.awt.*;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,10 +32,10 @@ public final class Settings
     private static final String CLIENT_WIDTH = "interact.tester.Width";
     private static final String CLIENT_HEIGHT = "interact.tester.Height";
 
-    public static final String VERSION = "0.5.1024";
+    public static final String VERSION = "0.7.1";
 
     private static Settings settings;
-    private final Properties props;
+    private Properties props;
 
     private final XLog log;
 
@@ -65,18 +65,10 @@ public final class Settings
      */
     public void readProperties()
     {
-        try
-        {
-            this.log.log("Reading properties file...");
-            this.props.load(new FileInputStream(PROPERTIES_FILE_PATH));
-            this.log.log("... done");
-            this.syncWithProperties();
-        }
-        catch (IOException ex)
-        {
-            this.log.log(Level.SEVERE, ex.getMessage());
-            ex.printStackTrace();
-        }
+        this.log.log("Reading properties file...");
+        this.props = ContentUtils.getProperties(PROPERTIES_FILE_PATH);
+        this.log.log("... done");
+        this.syncWithProperties();
     }
 
     /**

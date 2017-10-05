@@ -1,8 +1,6 @@
 package com.ibm.it.interact.gui.panels;
 
-import javax.swing.JLabel;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 public class LabeledPopupMenu extends JPopupMenu
 {
